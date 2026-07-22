@@ -5,7 +5,7 @@ import { SectionHeading } from '../ui/SectionHeading.tsx';
 
 export function MandatoAbaReta() {
   return (
-    <AnimatedSection id="mandato-aba-reta" className="bg-navy-50 px-4 py-16 sm:px-6 sm:py-20">
+    <AnimatedSection id="mandato-aba-reta" className="bg-white px-4 py-16 sm:px-6 sm:py-20">
       <div className="mx-auto max-w-6xl">
         <SectionHeading
           eyebrow="Mandato Aba Reta"

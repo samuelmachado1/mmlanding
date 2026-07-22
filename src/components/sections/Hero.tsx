@@ -4,8 +4,12 @@ import { SectionHeading } from '../ui/SectionHeading.tsx';
 
 export function Hero() {
   return (
-    <AnimatedSection id="inicio" className="bg-white px-4 py-16 sm:px-6 sm:py-20">
+    <AnimatedSection id="inicio" className="bg-yellow-500 px-4 py-16 sm:px-6 sm:py-20">
       <div className="mx-auto max-w-6xl">
+        <p className="mb-4 text-center font-display text-6xl font-bold text-navy-500 sm:text-8xl">
+          {siteConfig.electoralNumber}
+        </p>
+
         <SectionHeading
           eyebrow={siteConfig.phase}
           title={heroContent.headline}
@@ -14,11 +18,7 @@ export function Hero() {
 
         <nav aria-label="Links rápidos" className="mb-10 flex flex-wrap justify-center gap-2">
           {heroQuickLinks.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              className="rounded-full border border-navy-200 px-4 py-2 text-sm font-medium text-navy-600 hover:border-accent-500 hover:text-accent-600"
-            >
+            <a key={link.href} href={link.href} className="link-chip">
               {link.label}
             </a>
           ))}
@@ -29,7 +29,7 @@ export function Hero() {
             <a
               key={action.href + action.label}
               href={action.href}
-              className="touch-target inline-flex items-center justify-center rounded-full bg-accent-500 px-5 py-3 text-sm font-semibold text-white hover:bg-accent-600"
+              className="btn-brand touch-target"
             >
               {action.label}
             </a>

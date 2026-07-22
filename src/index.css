@@ -1,1 +1,88 @@
 @import 'tailwindcss';
+
+@font-face {
+  font-family: 'PF Fuel Decay';
+  src:
+    local('PF Fuel Decay'),
+    local('PFFuelDecay'),
+    url('/fonts/PFFuelDecay.woff2') format('woff2'),
+    url('/fonts/PFFuelDecay.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Brother 1861 Printed';
+  src:
+    local('Brother 1861 Printed'),
+    local('Brother1861Printed'),
+    url('/fonts/Brother1861Printed.woff2') format('woff2'),
+    url('/fonts/Brother1861Printed.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme {
+  --color-navy-50: #f4eaf7;
+  --color-navy-100: #e8d4ef;
+  --color-navy-200: #d1a9df;
+  --color-navy-300: #b97ecf;
+  --color-navy-400: #9f53b8;
+  --color-navy-500: #70148c;
+  --color-navy-600: #5a1070;
+  --color-navy-700: #440c54;
+  --color-navy-800: #2e0838;
+  --color-navy-900: #17041c;
+
+  --color-accent-400: #f5a833;
+  --color-accent-500: #f18e04;
+  --color-accent-600: #c87203;
+
+  --color-yellow-400: #fde768;
+  --color-yellow-500: #fcd207;
+  --color-yellow-600: #caa806;
+
+  --color-cream: #f5f1e8;
+  --color-brand-black: #25211e;
+  --color-brand-red: #d5272d;
+  --color-brand-green: #39a21c;
+  --color-brand-blue: #0066ff;
+
+  --font-sans: 'Brother 1861 Printed', 'Roboto Slab', ui-serif, Georgia, serif;
+  --font-body: 'Brother 1861 Printed', 'Roboto Slab', ui-serif, Georgia, serif;
+  --font-display: 'PF Fuel Decay', 'Bebas Neue', ui-sans-serif, sans-serif;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-cream font-body text-brand-black antialiased;
+  }
+
+  ::selection {
+    @apply bg-yellow-500/40 text-navy-900;
+  }
+}
+
+@layer utilities {
+  .touch-target {
+    @apply min-h-11 min-w-11;
+  }
+
+  .btn-brand {
+    @apply inline-flex items-center justify-center rounded-full bg-navy-500 px-5 py-3 text-sm font-semibold text-yellow-500 transition-colors hover:bg-navy-600;
+  }
+
+  .btn-brand-outline {
+    @apply inline-flex items-center justify-center rounded-full border-2 border-navy-500 px-5 py-3 text-sm font-semibold text-navy-500 transition-colors hover:bg-navy-500 hover:text-yellow-500;
+  }
+
+  .link-chip {
+    @apply rounded-full border border-navy-300 bg-white/60 px-4 py-2 text-sm font-medium text-navy-600 transition-colors hover:border-navy-500 hover:bg-white hover:text-navy-500;
+  }
+}

@@ -8,12 +8,12 @@ export function Footer() {
       <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
         <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
           <div>
-            <p className="text-lg font-bold">{siteConfig.name}</p>
+            <p className="font-display text-lg font-bold">{siteConfig.name}</p>
             <p className="mt-2 max-w-sm text-sm text-navy-100">{siteConfig.tagline}</p>
             <p className="mt-4 text-sm text-navy-100">{siteConfig.email}</p>
           </div>
           <div className="flex flex-col gap-3">
-            <p className="text-sm font-semibold uppercase tracking-wide text-accent-400">Redes</p>
+            <p className="text-sm font-semibold uppercase tracking-wide text-yellow-500">Redes</p>
             <ul className="flex flex-wrap gap-3">
               {socialLinks.map((link) => (
                 <li key={link.name}>

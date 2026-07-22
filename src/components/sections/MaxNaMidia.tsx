@@ -4,7 +4,7 @@ import { SectionHeading } from '../ui/SectionHeading.tsx';
 
 export function MaxNaMidia() {
   return (
-    <AnimatedSection id="max-na-midia" className="bg-white px-4 py-16 sm:px-6 sm:py-20">
+    <AnimatedSection id="max-na-midia" className="bg-cream px-4 py-16 sm:px-6 sm:py-20">
       <div className="mx-auto max-w-6xl">
         <SectionHeading
           eyebrow="Max na Mídia"
@@ -53,7 +53,7 @@ export function MaxNaMidia() {
                   href={link.href}
                   target="_blank"
                   rel="noreferrer"
-                  className="touch-target inline-flex items-center gap-2 rounded-full border border-navy-200 px-4 py-2 text-sm font-medium text-navy-600 hover:border-accent-500 hover:text-accent-600"
+                  className="link-chip touch-target inline-flex items-center gap-2"
                 >
                   <link.icon className="h-4 w-4" aria-hidden />
                   {link.name}

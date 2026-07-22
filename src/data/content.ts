@@ -17,7 +17,17 @@ export const siteConfig = {
   name: 'Deputado Max Maciel',
   tagline: 'Coragem para defender o Distrito Federal',
   phase: 'Prestação de Contas de Mandato',
-  colors: { navy: '#1e3a5f', orange: '#f97316' },
+  electoralNumber: '50100',
+  colors: {
+    purple: '#70148c',
+    yellow: '#fcd207',
+    orange: '#f18e04',
+    red: '#d5272d',
+    green: '#39a21c',
+    blue: '#0066ff',
+    black: '#25211e',
+    cream: '#f5f1e8',
+  },
   whatsapp: {
     number: '5561999999999',
     message: 'Olá! Quero acompanhar o mandato do Deputado Max Maciel.',

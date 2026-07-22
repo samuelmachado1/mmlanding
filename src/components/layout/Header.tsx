@@ -6,13 +6,13 @@ export function Header() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-navy-100 bg-white backdrop-blur">
+    <header className="sticky top-0 z-40 border-b border-navy-100 bg-cream backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
         <a href="#inicio" className="flex flex-col leading-tight" aria-label="Ir para início">
           <span className="text-sm font-semibold uppercase tracking-wide text-accent-500">
             {siteConfig.phase}
           </span>
-          <span className="text-lg font-bold text-navy-500">{siteConfig.name}</span>
+          <span className="font-display text-lg font-bold text-navy-500">{siteConfig.name}</span>
         </a>
 
         <nav className="hidden items-center gap-6 md:flex" aria-label="Principal">
@@ -32,7 +32,7 @@ export function Header() {
             href={whatsappUrl()}
             target="_blank"
             rel="noreferrer"
-            className="touch-target hidden items-center justify-center rounded-full bg-accent-500 px-4 text-sm font-semibold text-white hover:bg-accent-600 sm:inline-flex"
+            className="btn-brand touch-target hidden px-4 sm:inline-flex"
           >
             WhatsApp
           </a>
@@ -52,7 +52,7 @@ export function Header() {
       {open ? (
         <nav
           id="mobile-menu"
-          className="border-t border-navy-100 bg-white px-4 py-4 md:hidden"
+          className="border-t border-navy-100 bg-cream px-4 py-4 md:hidden"
           aria-label="Mobile"
         >
           <ul className="flex flex-col gap-2">
@@ -72,7 +72,7 @@ export function Header() {
                 href={whatsappUrl()}
                 target="_blank"
                 rel="noreferrer"
-                className="touch-target flex items-center justify-center rounded-lg bg-accent-500 px-3 py-2 font-semibold text-white"
+                className="btn-brand touch-target flex justify-center px-3 py-2"
               >
                 WhatsApp
               </a>

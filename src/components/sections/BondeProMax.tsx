@@ -4,7 +4,7 @@ import { SectionHeading } from '../ui/SectionHeading.tsx';
 
 export function BondeProMax() {
   return (
-    <AnimatedSection id="bonde-pro-max" className="bg-white px-4 py-16 sm:px-6 sm:py-20">
+    <AnimatedSection id="bonde-pro-max" className="bg-navy-50 px-4 py-16 sm:px-6 sm:py-20">
       <div className="mx-auto max-w-6xl">
         <SectionHeading
           eyebrow="Bonde Pro Max"
@@ -21,7 +21,7 @@ export function BondeProMax() {
                   href={block.id === 'grupo-apoiadores' ? whatsappUrl('Quero entrar no grupo de apoiadores!') : block.href}
                   target={block.href.startsWith('http') ? '_blank' : undefined}
                   rel={block.href.startsWith('http') ? 'noreferrer' : undefined}
-                  className="mt-4 inline-flex rounded-full bg-accent-500 px-4 py-2 text-sm font-semibold text-white hover:bg-accent-600"
+                  className="btn-brand mt-4 px-4 py-2"
                 >
                   {block.cta}
                 </a>
