@@ -11,6 +11,7 @@ import type {
   MediaItem,
   StatItem,
   SocialLink,
+  SocialBarLink,
 } from '../types/index.ts';
 
 export const siteConfig = {
@@ -36,12 +37,13 @@ export const siteConfig = {
 } as const;
 
 export const navItems: NavItem[] = [
-  { label: 'Início', href: '#inicio' },
   { label: 'Quem é Max', href: '#quem-e-max' },
   { label: 'Mandato Aba Reta', href: '#mandato-aba-reta' },
   { label: 'Bonde Pro Max', href: '#bonde-pro-max' },
   { label: 'Doe', href: '#doe' },
   { label: 'Max na Mídia', href: '#max-na-midia' },
+  { label: 'Artigos', href: '#artigos' },
+  { label: 'Contato', href: 'mailto:contato@maxmaciel.df.br' },
 ];
 
 export const heroContent = {
@@ -216,6 +218,16 @@ export function whatsappUrl(customMessage?: string): string {
   const msg = encodeURIComponent(customMessage ?? siteConfig.whatsapp.message);
   return 'https://wa.me/' + siteConfig.whatsapp.number + '?text=' + msg;
 }
+
+export const socialBarLinks: SocialBarLink[] = [
+  { name: 'Instagram', href: 'https://instagram.com/maxmaciel', platform: 'instagram' },
+  { name: 'WhatsApp', href: 'https://wa.me/5561999999999', platform: 'whatsapp' },
+  { name: 'TikTok', href: 'https://tiktok.com/@maxmaciel', platform: 'tiktok' },
+  { name: 'YouTube', href: 'https://youtube.com/@maxmaciel', platform: 'youtube' },
+  { name: 'Facebook', href: 'https://facebook.com/maxmaciel', platform: 'facebook' },
+  { name: 'X', href: 'https://x.com/maxmaciel', platform: 'x' },
+];
+
 
 export const volunteerRegions = ['Plano Piloto', 'Ceilândia', 'Taguatinga', 'Samambaia', 'Gama', 'São Sebastião', 'Planaltina', 'Outra RA'];
 

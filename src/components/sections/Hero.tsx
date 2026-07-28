@@ -1,41 +1,28 @@
-import { heroContent, heroQuickLinks, heroFixedActions, siteConfig } from '../../data/content.ts';
-import { AnimatedSection } from '../ui/AnimatedSection.tsx';
-import { SectionHeading } from '../ui/SectionHeading.tsx';
+import { ChevronRight, Heart } from 'lucide-react';
+import frameHero from '../../assets/backgrounds/frame-hero-low.png';
 
 export function Hero() {
   return (
-    <AnimatedSection id="inicio" className="bg-yellow-500 px-4 py-16 sm:px-6 sm:py-20">
-      <div className="mx-auto max-w-6xl">
-        <p className="mb-4 text-center font-display text-6xl font-bold text-navy-500 sm:text-8xl">
-          {siteConfig.electoralNumber}
-        </p>
-
-        <SectionHeading
-          eyebrow={siteConfig.phase}
-          title={heroContent.headline}
-          description={heroContent.subheadline}
-        />
-
-        <nav aria-label="Links rápidos" className="mb-10 flex flex-wrap justify-center gap-2">
-          {heroQuickLinks.map((link) => (
-            <a key={link.href} href={link.href} className="link-chip">
-              {link.label}
-            </a>
-          ))}
-        </nav>
-
-        <div className="flex flex-wrap justify-center gap-3">
-          {heroFixedActions.map((action) => (
-            <a
-              key={action.href + action.label}
-              href={action.href}
-              className="btn-brand touch-target"
-            >
-              {action.label}
-            </a>
-          ))}
-        </div>
+    <section
+      id="inicio"
+      className="relative aspect-[2308/1478] w-full overflow-hidden bg-yellow-500 lg:aspect-auto lg:h-[calc(100dvh-120px)] lg:min-h-[calc(100dvh-120px)]"
+>
+      <img
+        src={frameHero}
+        alt=""
+        aria-hidden
+        className="absolute top-1/2 left-1/2 h-full w-full min-h-full min-w-full -translate-x-1/2 -translate-y-1/2 object-cover object-center"
+/>
+      <div className="absolute inset-x-0 bottom-[10%] z-1 flex items-center justify-center gap-3 px-4">
+        <a href="#doe" className="inline-flex h-12 w-[91px] shrink-0 items-center justify-center gap-1 rounded-lg bg-navy-500 text-sm font-semibold text-white">
+          <Heart className="h-4 w-4 shrink-0 text-white" aria-hidden />
+          Doe
+        </a>
+        <a href="#quem-e-max" className="inline-flex h-12 w-[154px] shrink-0 items-center justify-center gap-1 rounded-lg bg-brand-black text-sm font-semibold text-yellow-500">
+          Quem é Max
+          <ChevronRight className="h-4 w-4 shrink-0 text-yellow-500" aria-hidden />
+        </a>
       </div>
-    </AnimatedSection>
+    </section>
   );
 }

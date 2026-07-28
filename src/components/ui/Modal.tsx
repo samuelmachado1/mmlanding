@@ -44,7 +44,7 @@ export function Modal({ isOpen, onClose, title, children }: ModalProps) {
           <button
             type="button"
             onClick={onClose}
-            className="touch-target inline-flex items-center justify-center rounded-lg text-navy-500 hover:bg-navy-50"
+            className="min-h-11 min-w-11 inline-flex items-center justify-center rounded-lg text-navy-500 hover:bg-navy-50"
             aria-label="Fechar modal"
           >
             <X className="h-5 w-5" aria-hidden />

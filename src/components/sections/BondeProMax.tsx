@@ -21,7 +21,7 @@ export function BondeProMax() {
                   href={block.id === 'grupo-apoiadores' ? whatsappUrl('Quero entrar no grupo de apoiadores!') : block.href}
                   target={block.href.startsWith('http') ? '_blank' : undefined}
                   rel={block.href.startsWith('http') ? 'noreferrer' : undefined}
-                  className="btn-brand mt-4 px-4 py-2"
+                  className="inline-flex items-center justify-center rounded-full bg-navy-500 px-5 py-3 text-sm font-semibold text-yellow-500 transition-colors hover:bg-navy-600 mt-4 px-4 py-2"
                 >
                   {block.cta}
                 </a>

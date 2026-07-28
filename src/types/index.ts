@@ -49,6 +49,15 @@ export interface SocialLink {  name: string;
   icon: LucideIcon;
 }
 
+export type SocialPlatform = 'instagram' | 'whatsapp' | 'tiktok' | 'youtube' | 'facebook' | 'x';
+
+export interface SocialBarLink {
+  name: string;
+  href: string;
+  platform: SocialPlatform;
+}
+
+
 export interface HeroLeadForm {
   contact: string;
 }

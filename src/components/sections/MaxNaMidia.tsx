@@ -53,7 +53,7 @@ export function MaxNaMidia() {
                   href={link.href}
                   target="_blank"
                   rel="noreferrer"
-                  className="link-chip touch-target inline-flex items-center gap-2"
+                  className="min-h-11 min-w-11 rounded-full border border-navy-300 bg-white/60 px-4 py-2 text-sm font-medium text-navy-600 transition-colors hover:border-navy-500 hover:bg-white hover:text-navy-500 inline-flex items-center gap-2"
                 >
                   <link.icon className="h-4 w-4" aria-hidden />
                   {link.name}
