@@ -7,6 +7,10 @@ import type {
   NavItem,
   QuickLink,
   ContentBlock,
+  CrewCard,
+  ClippingInterview,
+  ClippingReport,
+  ZeroFareCard,
   AgendaTopic,
   MediaItem,
   StatItem,
@@ -154,6 +158,141 @@ export const bondeProMaxBlocks: ContentBlock[] = [
   },
 ];
 
+
+
+
+export const clippingContent = {
+  eyebrow: 'Max na mídia',
+  title: 'Maximizando o DF',
+  interviewsLabel: 'Destaque em entrevistas',
+  reportsLabel: 'Destaque em reportagens',
+  cta: 'Ver reportagens',
+  ctaHref: '#noticias',
+};
+
+export const clippingInterview: ClippingInterview = {
+  id: 'featured-interview',
+  badge: 'Entrevista completa',
+  title: 'Kim Kataguiri – entrevista completa RedeTV Notícias (03/06/2026)',
+  href: 'https://youtube.com/@maxmaciel',
+};
+
+export const clippingReports: ClippingReport[] = [
+  {
+    id: 'report-1',
+    title: 'Câmara dos Deputados avança com PEC que limita IPVA do carro',
+    source: 'Câmara Notícias',
+    href: '#',
+  },
+  {
+    id: 'report-2',
+    title: 'Câmara aprova fim da prescrição para condenados foragidos',
+    source: 'Folha de S.Paulo',
+    href: '#',
+  },
+  {
+    id: 'report-3',
+    title: 'Deputado Max Maciel apresenta projeto de Tarifa Zero no DF',
+    source: 'Portal Legislativo',
+    href: '#',
+  },
+];
+
+export const zeroFareContent = {
+  title: 'Tarifa Zero é possível',
+  description:
+    '6 destaques do nosso mandato que provam que uma cidade melhor é possível.',
+};
+
+export const zeroFareCards: ZeroFareCard[] = [
+  {
+    id: 'economia-anual',
+    type: 'stat',
+    value: 'R$ 500M',
+    label: 'Economia anual com tarifa zero no DF',
+  },
+  {
+    id: 'pessoas-beneficiadas',
+    type: 'stat',
+    value: '2.3M',
+    label: 'Pessoas beneficiadas pelo transporte gratuito',
+  },
+  {
+    id: 'reducao-carros',
+    type: 'stat',
+    value: '40%',
+    label: 'Redução de carros nas vias com tarifa zero',
+  },
+  {
+    id: 'emendas-escolas',
+    type: 'highlight',
+    title: 'Emendas para todas as escolas públicas do DF',
+    size: 'tall',
+  },
+  {
+    id: 'passe-livre',
+    type: 'highlight',
+    title: 'Passe livre estudantil ampliado para toda rede',
+    size: 'compact',
+  },
+  {
+    id: 'integracao-modais',
+    type: 'highlight',
+    title: 'Integração total entre metrô, BRT e ônibus',
+    size: 'compact',
+  },
+];
+
+export const crewContent = {
+  eyebrow: 'Ninguém maximiza o DF sozinho',
+  title: 'Bonde Pro Max',
+};
+
+export const crewCards: CrewCard[] = [
+  {
+    id: 'emendas-escolas',
+    title: 'Emendas nas Escolas',
+    description: 'Investimento direto em todas as escolas públicas do Distrito Federal.',
+    cta: 'Saiba mais',
+    href: '#mandato-aba-reta',
+  },
+  {
+    id: 'tarifa-zero',
+    title: 'Tarifa Zero',
+    description: 'Mobilidade como direito para quem depende do transporte público no DF.',
+    cta: 'Entrar no grupo',
+    href: '#tarifa-zero',
+  },
+  {
+    id: 'grupo-apoiadores',
+    title: 'Grupo de apoiadores',
+    description: 'Receba atualizações do mandato, votações e convites para audiências.',
+    cta: 'Participar',
+    href: '#grupo-apoiadores',
+  },
+  {
+    id: 'espalhe-material',
+    title: 'Espalhe o material',
+    description: 'Baixe artes, vídeos e textos prontos para compartilhar nas suas redes.',
+    cta: 'Ver materiais',
+    href: '#espalhe-material',
+  },
+  {
+    id: 'missoes',
+    title: 'Missões',
+    description: 'Participe de panfletagem, mutirões de escuta e mobilizações nas RAs.',
+    cta: 'Ver missões',
+    href: '#missoes',
+  },
+  {
+    id: 'apoie-manifesto',
+    title: 'Apoie o manifesto',
+    description: 'Assine e divulgue nossas propostas por um DF mais justo e transparente.',
+    cta: 'Assinar',
+    href: '#apoie-manifesto',
+  },
+];
+
 export const doeContent = {
   title: 'Apoie a luta por um DF melhor',
   description:
@@ -222,8 +361,8 @@ export function whatsappUrl(customMessage?: string): string {
 export const socialBarLinks: SocialBarLink[] = [
   { name: 'Instagram', href: 'https://instagram.com/maxmaciel', platform: 'instagram' },
   { name: 'WhatsApp', href: 'https://wa.me/5561999999999', platform: 'whatsapp' },
-  { name: 'TikTok', href: 'https://tiktok.com/@maxmaciel', platform: 'tiktok' },
   { name: 'YouTube', href: 'https://youtube.com/@maxmaciel', platform: 'youtube' },
+  { name: 'TikTok', href: 'https://tiktok.com/@maxmaciel', platform: 'tiktok' },
   { name: 'Facebook', href: 'https://facebook.com/maxmaciel', platform: 'facebook' },
   { name: 'X', href: 'https://x.com/maxmaciel', platform: 'x' },
 ];

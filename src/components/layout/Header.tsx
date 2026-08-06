@@ -7,14 +7,14 @@ export function Header() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="bg-yellow-500">
-      <div className="mx-auto flex max-w-[1366px] items-center justify-between">
+    <header className="overflow-visible bg-yellow-500">
+      <div className="mx-auto flex h-16 w-full max-w-[1366px] items-center justify-between px-4 sm:h-20 sm:px-8 lg:h-[120px]">
         <a
           href="#inicio"
           aria-label="Ir para início"
-          className="flex h-[120px] w-[256px] shrink-0 flex-none items-center justify-center p-0"
+          className="flex h-full shrink-0 items-center"
         >
-          <img src={logoHeader} alt="Max Maciel" className="h-full w-full object-contain" />
+          <img src={logoHeader} alt="Max Maciel" className="block h-full w-auto origin-left scale-[1.25]" />
         </a>
 
         <nav className="hidden items-center gap-8 lg:flex" aria-label="Principal">
@@ -27,7 +27,7 @@ export function Header() {
 
         <button
           type="button"
-          className="min-h-11 min-w-11 inline-flex items-center justify-center rounded-lg text-brand-black hover:text-navy-500 lg:hidden"
+          className="mr-0 inline-flex min-h-11 min-w-11 shrink-0 items-center justify-center rounded-lg text-brand-black hover:text-navy-500 lg:hidden"
           aria-expanded={open}
           aria-controls="mobile-menu"
           aria-label={open ? "Fechar menu" : "Abrir menu"}

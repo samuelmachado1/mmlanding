@@ -10,7 +10,7 @@ interface SplitSectionProps {
 export function SplitSection({ id, className, children }: SplitSectionProps) {
   return (
     <AnimatedSection id={id} className={className}>
-      <div className="mx-auto flex w-full max-w-[1440px] min-h-[clamp(32rem,61vw,54.9375rem)] flex-col lg:flex-row lg:items-stretch">{children}</div>
+      <div className="mx-auto flex w-full min-w-0 max-w-[1440px] min-h-[clamp(32rem,61vw,54.9375rem)] flex-col overflow-hidden lg:flex-row lg:items-stretch">{children}</div>
     </AnimatedSection>
   );
 }
