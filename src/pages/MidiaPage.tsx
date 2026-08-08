@@ -1,20 +1,34 @@
-import { PageLayout } from '../components/layout/PageLayout.tsx';
-import { midiaPage } from '../data/content.ts';
+import { useMemo, useState } from 'react';
+import { midiaPageContent } from '../data/content.ts';
+import {
+  InternalPageLayout,
+  PageCta,
+  PageHero,
+  PageSection,
+} from '../components/pages/InternalPageParts.tsx';
+import { MediaGrid, PageTabBar } from '../components/pages/PageBlocks.tsx';
 
 export default function MidiaPage() {
+  const { hero, tabs, items, cta } = midiaPageContent;
+  const [activeTab, setActiveTab] = useState('todos');
+
+  const filteredItems = useMemo(() => {
+    if (activeTab === 'todos') return items;
+    return items.filter((item) => item.tab === activeTab);
+  }, [activeTab, items]);
+
   return (
-    <PageLayout>
-      <h1 className="mb-8 font-body text-3xl font-extrabold text-brand-black">{midiaPage.title}</h1>
-      {midiaPage.sections.map((section) => (
-        <section key={section.title} className="mb-8">
-          <h2 className="mb-4 text-xl font-bold text-brand-black">{section.title}</h2>
-          <ul className="list-disc space-y-2 pl-5 text-brand-black/90">
-            {section.items.map((item) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
-        </section>
-      ))}
-    </PageLayout>
+    <InternalPageLayout>
+      <PageHero {...hero} />
+
+      <PageSection eyebrow="Cobertura" title="Acompanhe na imprensa" className="bg-cream">
+        <div className="space-y-8">
+          <PageTabBar tabs={tabs} activeId={activeTab} onChange={setActiveTab} />
+          <MediaGrid cards={filteredItems} />
+        </div>
+      </PageSection>
+
+      <PageCta {...cta} />
+    </InternalPageLayout>
   );
 }
