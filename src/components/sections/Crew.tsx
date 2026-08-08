@@ -1,6 +1,7 @@
 import { crewCards, crewContent } from '../../data/content.ts';
 import type { CrewCard } from '../../types/index.ts';
 import { AnimatedSection } from '../ui/AnimatedSection.tsx';
+import { NavLink } from '../ui/NavLink.tsx';
 
 const slash = String.fromCharCode(47);
 
@@ -14,12 +15,12 @@ function CrewCardItem({ card }: { card: CrewCard }) {
         {card.title}
       </h3>
       <p className={`pt-2 font-nav text-lg leading-7 text-white${slash}80`}>{card.description}</p>
-      <a
+      <NavLink
         href={card.href}
         className="mt-2 inline-flex h-12 items-center justify-center rounded-lg bg-yellow-500 px-4 font-nav text-base font-bold text-navy-500"
       >
         {card.cta}
-      </a>
+      </NavLink>
     </article>
   );
 }

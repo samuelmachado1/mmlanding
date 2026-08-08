@@ -5,6 +5,7 @@ import {
 } from '../../data/content.ts';
 import type { ClippingInterview, ClippingReport } from '../../types/index.ts';
 import { AnimatedSection } from '../ui/AnimatedSection.tsx';
+import { NavLink } from '../ui/NavLink.tsx';
 
 function isExternalHref(href: string): boolean {
   return href.startsWith('http://') || href.startsWith('https://');
@@ -99,12 +100,12 @@ export function Clipping() {
                   </li>
                 ))}
               </ul>
-              <a
+              <NavLink
                 href={clippingContent.ctaHref}
                 className="inline-flex h-12 w-fit items-center justify-center rounded-lg bg-yellow-500 px-4 font-nav text-base font-bold text-navy-500"
               >
                 {clippingContent.cta}
-              </a>
+              </NavLink>
             </div>
           </div>
         </div>

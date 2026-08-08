@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { AnimatedSection } from '../ui/AnimatedSection.tsx';
+import { NavLink } from '../ui/NavLink.tsx';
 
 interface SplitSectionProps {
   id: string;
@@ -39,10 +40,10 @@ export function SplitSectionContent({
       <h2 className="font-body text-[clamp(2.25rem,4.5vw,4.5rem)] leading-[1.05] font-extrabold text-brand-black">{title}</h2>
       <div className="max-w-[38rem] space-y-5 text-[clamp(0.9375rem,1.4vw,1.125rem)] leading-[1.65] text-brand-black">{children}</div>
       {cta ? (
-        <a href={cta.href} className="mt-auto inline-flex min-h-11 min-w-11 items-center gap-1 rounded-md bg-navy-500 px-[clamp(1.25rem,2vw,1.5rem)] py-[clamp(0.75rem,1.5vw,0.875rem)] font-nav text-[clamp(0.875rem,1.2vw,1rem)] font-semibold text-white transition-colors hover:bg-navy-600">
+        <NavLink href={cta.href} className="mt-auto inline-flex min-h-11 min-w-11 items-center gap-1 rounded-md bg-navy-500 px-[clamp(1.25rem,2vw,1.5rem)] py-[clamp(0.75rem,1.5vw,0.875rem)] font-nav text-[clamp(0.875rem,1.2vw,1rem)] font-semibold text-white transition-colors hover:bg-navy-600">
           {cta.label}
           {ctaIcon}
-        </a>
+        </NavLink>
       ) : null}
     </section>
   );

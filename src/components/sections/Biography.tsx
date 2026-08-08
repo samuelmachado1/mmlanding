@@ -20,7 +20,7 @@ export function Biography() {
       <SplitSectionContent
         eyebrow="CONHEÇA"
         title="Quem é Max Maciel"
-        cta={{ href: '#historia', label: 'Conheça a história >' }}
+        cta={{ href: '/quem-e-max', label: 'Conheça a história >' }}
       >
         <p>
           O DF que aparece nos cartões-postais não pode ser privilégio de poucos. Brasília também é{' '}

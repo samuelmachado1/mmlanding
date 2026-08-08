@@ -33,7 +33,7 @@ function ZeroFareCardItem({ card }: { card: ZeroFareCard }) {
 
 export function ZeroFare() {
   return (
-    <AnimatedSection id="tarifa-zero" className="bg-yellow-500">
+    <AnimatedSection id="tarifa-zero" className="bg-cream">
       <div className="mx-auto min-h-[clamp(32rem,61vw,54.9375rem)] w-full max-w-[1440px] px-6 py-12 sm:py-16 lg:py-20">
         <div className="mx-auto w-full max-w-[1318px]">
           <h2 className="font-nav text-[clamp(2rem,8vw,3.75rem)] font-black leading-[1.05] text-black">

@@ -14,7 +14,7 @@ export function Manifest() {
       <SplitSectionContent
         eyebrow="MANIFESTO"
         title="Vamos maximizar o Distrito Federal"
-        cta={{ href: '#apoie-manifesto', label: 'Apoie este manifesto' }}
+        cta={{ href: '/apoie', label: 'Apoie este manifesto' }}
         ctaIcon={<ChevronRight className="h-6 w-6 shrink-0" aria-hidden />}
       >
         <p>

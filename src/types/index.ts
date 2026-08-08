@@ -115,3 +115,109 @@ export interface ModalProps {
   title: string;
   children: ReactNode;
 }
+
+export interface PageContent {
+  title: string;
+  subtitle?: string;
+  paragraphs: string[];
+}
+
+export interface LawItem {
+  number: string;
+  title: string;
+  description: string;
+}
+
+export interface InvestmentRow {
+  area: string;
+  amount: string;
+  percent: string;
+}
+
+export interface PamphletItem {
+  title: string;
+  href: string;
+}
+
+export interface ChannelItem {
+  name: string;
+  href: string;
+}
+
+export interface MidiaSection {
+  title: string;
+  items: string[];
+}
+
+export interface PageLink {
+  label: string;
+  href: string;
+}
+
+export type PageHeroVariant = 'navy' | 'black' | 'red';
+
+export interface PageHeroContent {
+  eyebrow: string;
+  title: string;
+  subtitle: string;
+  variant?: PageHeroVariant;
+}
+
+export interface PageTimelineItem {
+  year: string;
+  title: string;
+  description: string;
+}
+
+export interface PrincipleCard {
+  icon: string;
+  title: string;
+  description: string;
+}
+
+export interface PageCtaContent {
+  title: string;
+  primary: PageLink;
+  secondary?: PageLink;
+  variant?: 'navy' | 'yellow';
+}
+
+export type ProposalStatus = 'Em tramitação' | 'Aprovado' | 'Apresentado';
+
+export interface ProposalCard {
+  icon: string;
+  category: string;
+  status: ProposalStatus;
+  title: string;
+  description: string;
+}
+
+export interface StatCard {
+  value: string;
+  label: string;
+}
+
+export interface ActionCard {
+  icon: string;
+  title: string;
+  description: string;
+  cta: string;
+  href: string;
+}
+
+export interface MissionCard {
+  points: string;
+  title: string;
+  difficulty: 'Fácil' | 'Médio' | 'Avançado';
+  description: string;
+}
+
+export interface MediaCard {
+  id: string;
+  category: string;
+  title: string;
+  source: string;
+  date: string;
+  href: string;
+  imageUrl?: string;
+}
