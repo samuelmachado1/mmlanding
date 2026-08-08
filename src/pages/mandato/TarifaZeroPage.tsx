@@ -1,18 +1,31 @@
-import { PageLayout } from '../../components/layout/PageLayout.tsx';
+import { Link } from 'react-router-dom';
 import { tarifaZeroPage } from '../../data/content.ts';
+import {
+  InternalPageLayout,
+  PageHero,
+  PageProse,
+  PageSection,
+} from '../../components/pages/InternalPageParts.tsx';
 
 export default function TarifaZeroPage() {
   return (
-    <PageLayout>
-      <h1 className="mb-2 font-body text-3xl font-extrabold text-brand-black">{tarifaZeroPage.title}</h1>
-      {tarifaZeroPage.subtitle ? (
-        <p className="mb-6 text-xl font-semibold text-navy-500">{tarifaZeroPage.subtitle}</p>
-      ) : null}
-      {tarifaZeroPage.paragraphs.map((paragraph) => (
-        <p key={paragraph.slice(0, 48)} className="mb-4 leading-relaxed text-brand-black/90">
-          {paragraph}
-        </p>
-      ))}
-    </PageLayout>
+    <InternalPageLayout>
+      <PageHero
+        eyebrow="Mandato"
+        title={tarifaZeroPage.title}
+        subtitle={tarifaZeroPage.subtitle ?? ''}
+        variant="black"
+      />
+
+      <PageSection eyebrow="Bandeira" title="O que parecia impossível se tornou inevitável">
+        <PageProse paragraphs={tarifaZeroPage.paragraphs} />
+        <Link
+          to="/mandato"
+          className="mt-8 inline-flex font-nav text-sm font-bold text-navy-500 underline underline-offset-4"
+        >
+          ← Voltar ao Mandato Aba Reta
+        </Link>
+      </PageSection>
+    </InternalPageLayout>
   );
 }
