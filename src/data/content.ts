@@ -508,6 +508,108 @@ export const mandatoHub = {
   ] satisfies PageLink[],
 };
 
+export const mandatoPageContent = {
+  hero: {
+    eyebrow: 'Mandato',
+    title: 'Mandato Aba Reta',
+    subtitle: 'Transporte, mobilidade e direitos para quem faz o DF funcionar todos os dias.',
+    variant: 'black' as const,
+  },
+  frentes: {
+    eyebrow: 'Frentes de trabalho',
+    title: 'O que estamos construindo',
+    links: [
+      {
+        icon: '🚌',
+        title: 'Tarifa Zero',
+        description: 'Gratuidade no transporte público aos domingos e feriados — e a luta pela Tarifa Zero todos os dias.',
+        href: '/mandato/tarifa-zero',
+        cta: 'Saiba mais',
+      },
+      {
+        icon: '📜',
+        title: 'Projetos de Lei',
+        description: 'Propostas legislativas para um DF mais justo, com representatividade de quem vive nas periferias.',
+        href: '/mandato/projetos-de-lei',
+        cta: 'Ver projetos',
+      },
+      {
+        icon: '🏛️',
+        title: 'CTMU',
+        description: 'Presidência da Comissão de Transporte e Mobilidade Urbana na Câmara Legislativa do DF.',
+        href: '/mandato/ctmu',
+        cta: 'Conhecer a comissão',
+      },
+    ],
+  },
+  proposals: {
+    eyebrow: 'Propostas',
+    title: 'Destaques do mandato',
+    tabs: [
+      { id: 'todos', label: 'Todos' },
+      { id: 'mobilidade', label: 'Mobilidade' },
+      { id: 'direitos', label: 'Direitos' },
+      { id: 'cultura', label: 'Cultura' },
+    ],
+    items: [
+      {
+        icon: '🚌',
+        category: 'Mobilidade',
+        status: 'Em tramitação' as const,
+        title: 'Tarifa Zero permanente no DF',
+        description: 'Projeto para ampliar a gratuidade no transporte público para todos os dias da semana.',
+        tab: 'mobilidade',
+      },
+      {
+        icon: '🎫',
+        category: 'Mobilidade',
+        status: 'Aprovado' as const,
+        title: 'Tarifa Zero aos domingos e feriados',
+        description: 'Mais de 37,8 milhões de acessos ao STPC/DF em 82 dias de benefício para os usuários.',
+        tab: 'mobilidade',
+      },
+      {
+        icon: '♿',
+        category: 'Direitos',
+        status: 'Apresentado' as const,
+        title: 'Acessibilidade no transporte público',
+        description: 'Fortalecimento das políticas de acessibilidade para pessoas com deficiência no DF.',
+        tab: 'direitos',
+      },
+      {
+        icon: '🎵',
+        category: 'Cultura',
+        status: 'Em tramitação' as const,
+        title: 'Cultura nas periferias',
+        description: 'Investimento em equipamentos culturais e fomento à produção artística nos territórios.',
+        tab: 'cultura',
+      },
+      {
+        icon: '👩‍🏫',
+        category: 'Direitos',
+        status: 'Apresentado' as const,
+        title: 'Políticas de gênero e raça',
+        description: 'Propostas alinhadas à formação em Gestão de Políticas Públicas em Gênero e Raça.',
+        tab: 'direitos',
+      },
+      {
+        icon: '🚇',
+        category: 'Mobilidade',
+        status: 'Em tramitação' as const,
+        title: 'Integração total do transporte',
+        description: 'Integração entre ônibus, metrô e outros modais para um deslocamento digno na capital.',
+        tab: 'mobilidade',
+      },
+    ],
+  },
+  cta: {
+    title: 'Acompanhe o mandato de perto',
+    primary: { label: 'Entrar no Bonde', href: '/bonde-pro-max' },
+    secondary: { label: 'Max na Mídia', href: '/midia' },
+    variant: 'yellow' as const,
+  },
+};
+
 export const tarifaZeroPage: PageContent = {
   title: 'Tarifa Zero',
   subtitle: 'O que parecia impossível se tornou inevitável',
