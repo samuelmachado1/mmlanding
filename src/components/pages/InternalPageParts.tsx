@@ -71,6 +71,18 @@ export function PageSection({ eyebrow, title, children, className = 'bg-cream' }
   );
 }
 
+export function PageProse({ paragraphs }: { paragraphs: string[] }) {
+  return (
+    <div className="max-w-3xl space-y-4">
+      {paragraphs.map((paragraph) => (
+        <p key={paragraph.slice(0, 48)} className="font-nav text-lg leading-relaxed text-brand-black/90">
+          {paragraph}
+        </p>
+      ))}
+    </div>
+  );
+}
+
 interface PageCtaProps {
   title: string;
   primary: { label: string; href: string };

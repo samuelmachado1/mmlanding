@@ -1,9 +1,11 @@
 import { Link } from 'react-router-dom';
 import type {
   ActionCard,
+  InvestmentRow,
   MediaCard,
   MissionCard,
   PageTimelineItem,
+  PamphletItem,
   PrincipleCard,
   ProposalCard,
   StatCard,
@@ -174,17 +176,12 @@ export function MediaGrid({ cards }: { cards: MediaCard[] }) {
   );
 }
 
-interface PageTab {
-  id: string;
-  label: string;
-}
-
 export function PageTabBar({
   tabs,
   activeId,
   onChange,
 }: {
-  tabs: PageTab[];
+  tabs: { id: string; label: string }[];
   activeId: string;
   onChange: (id: string) => void;
 }) {
@@ -206,5 +203,99 @@ export function PageTabBar({
         );
       })}
     </div>
+  );
+}
+
+export function InvestmentTable({
+  rows,
+  total,
+}: {
+  rows: InvestmentRow[];
+  total: InvestmentRow;
+}) {
+  return (
+    <div className="overflow-x-auto rounded-2xl border border-brand-black/10 bg-white">
+      <table className="w-full min-w-[36rem] border-collapse text-left">
+        <thead>
+          <tr className="border-b border-brand-black/10 bg-navy-500 text-cream">
+            <th className="px-5 py-4 font-nav text-sm font-bold uppercase tracking-wide">Área de Investimento</th>
+            <th className="px-5 py-4 font-nav text-sm font-bold uppercase tracking-wide">Valor alocado na LOA</th>
+            <th className="px-5 py-4 font-nav text-sm font-bold uppercase tracking-wide">% do Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row) => (
+            <tr key={row.area} className="border-b border-brand-black/5">
+              <td className="px-5 py-4 font-nav text-sm font-semibold text-brand-black">{row.area}</td>
+              <td className="px-5 py-4 font-nav text-sm text-brand-black/90">{row.amount}</td>
+              <td className="px-5 py-4 font-nav text-sm text-brand-black/90">{row.percent}</td>
+            </tr>
+          ))}
+          <tr className="bg-yellow-500">
+            <td className="px-5 py-4 font-nav text-sm font-black text-brand-black">{total.area}</td>
+            <td className="px-5 py-4 font-nav text-sm font-black text-brand-black">{total.amount}</td>
+            <td className="px-5 py-4 font-nav text-sm font-black text-brand-black">{total.percent}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+export function PamphletGrid({ items }: { items: PamphletItem[] }) {
+  return (
+    <ul className="grid gap-6 sm:grid-cols-2">
+      {items.map((item) => (
+        <li key={item.title}>
+          <a
+            href={item.href}
+            target="_blank"
+            rel="noreferrer"
+            className="group flex h-full flex-col rounded-2xl border border-brand-black/10 bg-white p-6 transition hover:border-navy-500"
+          >
+            <span className="text-3xl" aria-hidden>
+              📄
+            </span>
+            <h3 className="pt-3 font-nav text-lg font-bold text-brand-black group-hover:text-navy-500">
+              {item.title}
+            </h3>
+            <p className="pt-2 text-sm text-brand-black/60">Prévia em breve</p>
+            <span className="mt-auto pt-4 font-nav text-sm font-bold text-navy-500">Baixar →</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+export function ChannelGrid({
+  channels,
+}: {
+  channels: { name: string; href: string }[];
+}) {
+  const icons: Record<string, string> = {
+    Instagram: '📸',
+    WhatsApp: '💬',
+    Telegram: '✈️',
+  };
+
+  return (
+    <ul className="grid gap-4 sm:grid-cols-3">
+      {channels.map((channel) => (
+        <li key={channel.name}>
+          <a
+            href={channel.href}
+            target="_blank"
+            rel="noreferrer"
+            className="flex flex-col items-center rounded-2xl bg-white p-6 text-center transition hover:bg-navy-100"
+          >
+            <span className="text-3xl" aria-hidden>
+              {icons[channel.name] ?? '🔗'}
+            </span>
+            <span className="pt-3 font-nav text-base font-bold text-brand-black">{channel.name}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
   );
 }
