@@ -754,6 +754,82 @@ export const bondeProMaxPage: PageContent = {
   ],
 };
 
+export const bondePageContent = {
+  hero: {
+    eyebrow: 'Campanha',
+    title: 'Bonde Pro Max',
+    subtitle: 'Se você bota fé na gente e quer caminhar ao nosso lado, vem na manha junto com a gente.',
+    variant: 'navy' as const,
+  },
+  stats: {
+    eyebrow: 'Comunidade',
+    title: 'O Bonde em números',
+    items: [
+      { value: '35.758', label: 'Votos em 2022' },
+      { value: '3º', label: 'Deputado mais votado do DF' },
+      { value: '30+', label: 'Anos de luta nos territórios' },
+      { value: '∞', label: 'Espaço para quem quer participar' },
+    ],
+  },
+  actions: {
+    eyebrow: 'Como participar',
+    title: 'Escolha sua missão',
+    cards: [
+      {
+        icon: '📢',
+        title: 'Espalhe a palavra',
+        description: 'Compartilhe nossos materiais de campanha, postagens e vídeos nas suas redes.',
+        cta: 'Ver materiais',
+        href: '/materiais',
+      },
+      {
+        icon: '💬',
+        title: 'Entre nos canais',
+        description: 'Converse com a gente pelo Instagram, WhatsApp e Telegram.',
+        cta: 'Acessar canais',
+        href: '/contato',
+      },
+      {
+        icon: '🤝',
+        title: 'Apoie a campanha',
+        description: 'Cadastre-se para receber novidades e participar das ações do Bonde.',
+        cta: 'Quero apoiar',
+        href: '/apoie',
+      },
+    ],
+  },
+  missions: {
+    eyebrow: 'Missões',
+    title: 'Ganhe pontos pelo Bonde',
+    items: [
+      {
+        points: '+50',
+        title: 'Compartilhe um post',
+        difficulty: 'Fácil' as const,
+        description: 'Repasse uma publicação oficial da campanha nos seus stories ou feed.',
+      },
+      {
+        points: '+100',
+        title: 'Convide 3 amigos',
+        difficulty: 'Médio' as const,
+        description: 'Traga pessoas para os canais do Bonde e amplie nossa rede de apoio.',
+      },
+      {
+        points: '+200',
+        title: 'Organize uma roda de conversa',
+        difficulty: 'Avançado' as const,
+        description: 'Reúna vizinhos, colegas ou familiares para falar sobre o DF que queremos.',
+      },
+    ],
+  },
+  cta: {
+    title: 'Bora fazer história juntos?',
+    primary: { label: 'Entrar no Bonde', href: '/apoie' },
+    secondary: { label: 'Doe agora', href: '/doe' },
+    variant: 'yellow' as const,
+  },
+};
+
 export const materiaisPage = {
   title: 'Nossos materiais',
   intro: 'Leia e dissemine a palavra aba reta para construir o DF que queremos:',
@@ -798,6 +874,56 @@ export const midiaPage = {
     { title: 'Entrevistas em vídeo', items: videoItems.map((item) => item.title) },
     { title: 'Artigos', items: ['Em breve'] },
   ] satisfies MidiaSection[],
+};
+
+export const midiaPageContent = {
+  hero: {
+    eyebrow: 'Imprensa',
+    title: 'Max na Mídia',
+    subtitle: 'Notícias, entrevistas e artigos sobre o mandato e a campanha.',
+    variant: 'red' as const,
+  },
+  tabs: [
+    { id: 'todos', label: 'Todos' },
+    { id: 'noticias', label: 'Notícias' },
+    { id: 'videos', label: 'Entrevistas' },
+    { id: 'artigos', label: 'Artigos' },
+  ],
+  items: [
+    ...newsItems.map((item) => ({
+      id: `news-${item.id}`,
+      category: 'Notícia',
+      title: item.title,
+      source: item.source ?? 'Imprensa',
+      date: item.date ?? '2026',
+      href: item.href,
+      tab: 'noticias' as const,
+    })),
+    ...videoItems.map((item) => ({
+      id: `video-${item.id}`,
+      category: 'Entrevista',
+      title: item.title,
+      source: item.source ?? 'YouTube',
+      date: item.date ?? '2026',
+      href: item.href,
+      tab: 'videos' as const,
+    })),
+    {
+      id: 'article-1',
+      category: 'Artigo',
+      title: 'Em breve — novos artigos e colunas',
+      source: 'Max Maciel',
+      date: '2026',
+      href: '#',
+      tab: 'artigos' as const,
+    },
+  ],
+  cta: {
+    title: 'Quer cobrir a campanha?',
+    primary: { label: 'Fale conosco', href: '/contato' },
+    secondary: { label: 'Siga nas redes', href: 'https://instagram.com/maxmaciel' },
+    variant: 'navy' as const,
+  },
 };
 
 export const contatoPage = {

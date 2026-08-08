@@ -1,15 +1,32 @@
-import { PageLayout } from '../components/layout/PageLayout.tsx';
-import { bondeProMaxPage } from '../data/content.ts';
+import { bondePageContent } from '../data/content.ts';
+import {
+  InternalPageLayout,
+  PageCta,
+  PageHero,
+  PageSection,
+} from '../components/pages/InternalPageParts.tsx';
+import { ActionGrid, MissionGrid, StatGrid } from '../components/pages/PageBlocks.tsx';
 
 export default function BondeProMaxPage() {
+  const { hero, stats, actions, missions, cta } = bondePageContent;
+
   return (
-    <PageLayout>
-      <h1 className="mb-6 font-body text-3xl font-extrabold text-brand-black">{bondeProMaxPage.title}</h1>
-      {bondeProMaxPage.paragraphs.map((paragraph) => (
-        <p key={paragraph.slice(0, 48)} className="mb-4 leading-relaxed text-brand-black/90">
-          {paragraph}
-        </p>
-      ))}
-    </PageLayout>
+    <InternalPageLayout>
+      <PageHero {...hero} />
+
+      <PageSection eyebrow={stats.eyebrow} title={stats.title} className="bg-yellow-500">
+        <StatGrid stats={stats.items} />
+      </PageSection>
+
+      <PageSection eyebrow={actions.eyebrow} title={actions.title}>
+        <ActionGrid cards={actions.cards} />
+      </PageSection>
+
+      <PageSection eyebrow={missions.eyebrow} title={missions.title} className="bg-white">
+        <MissionGrid cards={missions.items} />
+      </PageSection>
+
+      <PageCta {...cta} />
+    </InternalPageLayout>
   );
 }
