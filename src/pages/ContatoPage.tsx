@@ -1,29 +1,50 @@
-import { PageLayout } from '../components/layout/PageLayout.tsx';
 import { canaisPage, contatoPage } from '../data/content.ts';
+import {
+  InternalPageLayout,
+  PageCta,
+  PageHero,
+  PageSection,
+} from '../components/pages/InternalPageParts.tsx';
+import { ChannelGrid } from '../components/pages/PageBlocks.tsx';
 
 export default function ContatoPage() {
   return (
-    <PageLayout>
-      <h1 className="mb-4 font-body text-3xl font-extrabold text-brand-black">{contatoPage.title}</h1>
-      <p className="mb-8 text-brand-black/80">{contatoPage.intro}</p>
-      <ul className="mb-8 space-y-2">
-        {canaisPage.channels.map((channel) => (
-          <li key={channel.name}>
-            <a href={channel.href} className="font-nav font-semibold text-navy-500 underline" target="_blank" rel="noreferrer">
-              {channel.name}
+    <InternalPageLayout>
+      <PageHero
+        eyebrow="Fale conosco"
+        title={contatoPage.title}
+        subtitle={contatoPage.intro}
+        variant="navy"
+      />
+
+      <PageSection eyebrow="Redes" title="Nossos canais">
+        <ChannelGrid channels={canaisPage.channels} />
+      </PageSection>
+
+      <PageSection eyebrow="Direto" title="E-mail e telefone" className="bg-white">
+        <div className="grid gap-6 sm:grid-cols-2">
+          <div className="rounded-2xl border border-brand-black/10 bg-cream p-6">
+            <p className="font-nav text-sm font-bold uppercase tracking-wide text-navy-500">E-mail</p>
+            <a
+              href={`mailto:${contatoPage.email}`}
+              className="mt-2 block font-nav text-xl font-bold text-brand-black underline underline-offset-4"
+            >
+              {contatoPage.email}
             </a>
-          </li>
-        ))}
-      </ul>
-      <p className="text-brand-black/90">
-        <strong>E-mail:</strong>{' '}
-        <a href={`mailto:${contatoPage.email}`} className="text-navy-500 underline">
-          {contatoPage.email}
-        </a>
-      </p>
-      <p className="mt-2 text-brand-black/90">
-        <strong>Telefone:</strong> {contatoPage.phone}
-      </p>
-    </PageLayout>
+          </div>
+          <div className="rounded-2xl border border-brand-black/10 bg-cream p-6">
+            <p className="font-nav text-sm font-bold uppercase tracking-wide text-navy-500">Telefone</p>
+            <p className="mt-2 font-nav text-xl font-bold text-brand-black">{contatoPage.phone}</p>
+          </div>
+        </div>
+      </PageSection>
+
+      <PageCta
+        title="Vem pro Bonde!"
+        primary={{ label: 'Quero apoiar', href: '/apoie' }}
+        secondary={{ label: 'Ver materiais', href: '/materiais' }}
+        variant="yellow"
+      />
+    </InternalPageLayout>
   );
 }
