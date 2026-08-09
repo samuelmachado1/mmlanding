@@ -210,6 +210,7 @@ export interface MissionCard {
   title: string;
   difficulty: 'Fácil' | 'Médio' | 'Avançado';
   description: string;
+  cta?: string;
 }
 
 export interface MediaCard {
@@ -220,4 +221,5 @@ export interface MediaCard {
   date: string;
   href: string;
   imageUrl?: string;
+  tab: string;
 }

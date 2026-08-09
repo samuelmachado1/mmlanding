@@ -36,13 +36,13 @@ const heroVariants = {
 
 export function PageHero({ eyebrow, title, subtitle, variant = 'navy' }: PageHeroProps) {
   return (
-    <section className={`${heroVariants[variant]} px-6 py-16 sm:px-8 sm:py-20`}>
+    <section className={`${heroVariants[variant]} px-6 py-20 sm:px-8`}>
       <div className="mx-auto max-w-6xl">
         <p className="font-nav text-[15px] font-semibold uppercase tracking-[0.1em] text-cream/80">{eyebrow}</p>
-        <h1 className="pt-3 font-nav text-[clamp(2.5rem,6vw,3.75rem)] font-black leading-[1.1] text-yellow-500">
+        <h1 className="pt-3 font-nav text-[clamp(2.5rem,6vw,3.75rem)] font-black leading-[1.25] text-yellow-500">
           {title}
         </h1>
-        <p className="mt-4 max-w-2xl font-nav text-lg leading-relaxed text-cream/80">{subtitle}</p>
+        <p className="mt-4 max-w-2xl font-nav text-lg leading-[1.625] text-cream/80">{subtitle}</p>
       </div>
     </section>
   );
@@ -57,7 +57,7 @@ interface PageSectionProps {
 
 export function PageSection({ eyebrow, title, children, className = 'bg-cream' }: PageSectionProps) {
   return (
-    <section className={`${className} px-6 py-16 sm:px-8 sm:py-20`}>
+    <section className={`${className} px-6 py-20 sm:px-8`}>
       <div className="mx-auto max-w-6xl">
         {eyebrow ? (
           <p className="font-nav text-[17px] font-semibold uppercase tracking-[0.05em] text-navy-500">{eyebrow}</p>
@@ -95,7 +95,7 @@ export function PageCta({ title, primary, secondary, variant = 'navy' }: PageCta
 
   return (
     <section
-      className={`px-6 py-14 sm:px-8 sm:py-16 ${isNavy ? 'bg-navy-500' : 'bg-yellow-500'}`}
+      className={`px-6 py-16 sm:px-8 ${isNavy ? 'bg-navy-500' : 'bg-yellow-500'}`}
     >
       <div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-6 sm:flex-row sm:items-center">
         <h2

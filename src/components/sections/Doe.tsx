@@ -7,7 +7,7 @@ export function Doe() {
       <div className="mx-auto max-w-6xl">
         <div className="mb-10 max-w-2xl text-center mx-auto">
           <p className="mb-2 text-sm font-semibold uppercase tracking-wide text-yellow-500">Doe</p>
-          <h2 className="font-display text-3xl font-extrabold tracking-tight sm:text-4xl">{doeContent.title}</h2>
+          <h2 className="font-nav text-3xl font-black tracking-tight sm:text-4xl">{doeContent.title}</h2>
           <p className="mt-3 text-lg text-navy-100">{doeContent.description}</p>
         </div>
         <div className="mx-auto max-w-xl rounded-2xl bg-navy-600 p-6 text-center sm:p-8">

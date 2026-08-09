@@ -25,6 +25,12 @@ import type {
   PageLink,
 } from '../types/index.ts';
 
+import midiaRedetv from '../assets/pictures/midia/redetv.png';
+import midiaCamaraPec from '../assets/pictures/midia/camara-pec.png';
+import midiaFolha from '../assets/pictures/midia/folha.png';
+import midiaGlobo from '../assets/pictures/midia/globo.png';
+import midiaPodcast from '../assets/pictures/midia/podcast.png';
+
 export const siteConfig = {
   name: 'Deputado Max Maciel',
   tagline: 'Coragem para defender o Distrito Federal',
@@ -173,15 +179,16 @@ export const clippingContent = {
   title: 'Maximizando o DF',
   interviewsLabel: 'Destaque em entrevistas',
   reportsLabel: 'Destaque em reportagens',
-  cta: 'Ver reportagens',
+  cta: 'Ver mais notícias',
   ctaHref: '/midia',
 };
 
 export const clippingInterview: ClippingInterview = {
   id: 'featured-interview',
   badge: 'Entrevista completa',
-  title: 'Kim Kataguiri – entrevista completa RedeTV Notícias (03/06/2026)',
-  href: 'https://youtube.com/@maxmaciel',
+  title: 'Max Maciel – ENTREVISTA COMPLETA REDETV NOTICIAS (03/06/2026)',
+  href: '#',
+  imageUrl: midiaRedetv,
 };
 
 export const clippingReports: ClippingReport[] = [
@@ -190,18 +197,21 @@ export const clippingReports: ClippingReport[] = [
     title: 'Câmara dos Deputados avança com PEC que limita IPVA do carro',
     source: 'Câmara Notícias',
     href: '#',
+    imageUrl: midiaCamaraPec,
   },
   {
     id: 'report-2',
     title: 'Câmara aprova fim da prescrição para condenados foragidos',
     source: 'Folha de S.Paulo',
     href: '#',
+    imageUrl: midiaFolha,
   },
   {
     id: 'report-3',
-    title: 'Deputado Max Maciel apresenta projeto de Tarifa Zero no DF',
-    source: 'Portal Legislativo',
+    title: 'Câmara aprova fim da prescrição para condenados foragidos',
+    source: 'Folha de S.Paulo',
     href: '#',
+    imageUrl: midiaFolha,
   },
 ];
 
@@ -257,46 +267,50 @@ export const crewContent = {
 
 export const crewCards: CrewCard[] = [
   {
-    id: 'emendas-escolas',
-    title: 'Emendas nas Escolas',
-    description: 'Investimento direto em todas as escolas públicas do Distrito Federal.',
-    cta: 'Saiba mais',
-    href: '/maximizando-df',
-  },
-  {
-    id: 'tarifa-zero',
-    title: 'Tarifa Zero',
-    description: 'Mobilidade como direito para quem depende do transporte público no DF.',
-    cta: 'Saiba mais',
-    href: '/mandato/tarifa-zero',
+    id: 'espalhe-material',
+    title: 'Espalhe nosso material',
+    description:
+      'Leve nossas ideias para as ruas e para as redes. Baixe cards, vídeos e materiais para compartilhar com sua comunidade.',
+    cta: 'Acessar materiais',
+    href: '/materiais',
   },
   {
     id: 'grupo-apoiadores',
     title: 'Grupo de apoiadores',
-    description: 'Receba atualizações do mandato, votações e convites para audiências.',
-    cta: 'Participar',
+    description:
+      'Entre no grupo, acompanhe as novidades e participe das próximas mobilizações do Bonde.',
+    cta: 'Entrar no bonde',
     href: '/bonde-pro-max',
   },
   {
-    id: 'espalhe-material',
-    title: 'Espalhe o material',
-    description: 'Baixe artes, vídeos e textos prontos para compartilhar nas suas redes.',
-    cta: 'Ver materiais',
-    href: '/materiais',
-  },
-  {
-    id: 'missoes',
-    title: 'Missões',
-    description: 'Participe de panfletagem, mutirões de escuta e mobilizações nas RAs.',
-    cta: 'Ver missões',
-    href: '/apoie',
+    id: 'saude-qualidade',
+    title: 'Saúde de Qualidade',
+    description: 'Mais recursos para UBSs e hospitais regionais do DF',
+    cta: 'Saiba mais',
+    href: '/maximizando-df',
   },
   {
     id: 'apoie-manifesto',
     title: 'Apoie o manifesto',
-    description: 'Assine e divulgue nossas propostas por um DF mais justo e transparente.',
-    cta: 'Assinar',
+    description:
+      'Mostre que você também acredita em um DF no qual a periferia esteja no centro das decisões.',
+    cta: 'Quero apoiar',
     href: '/apoie',
+  },
+  {
+    id: 'missoes',
+    title: 'Missões',
+    description:
+      'Participe de ações simples que fazem diferença: compartilhar uma proposta, conversar com sua comunidade ou mobilizar seu território.',
+    cta: 'Ver missões',
+    href: '/bonde-pro-max',
+  },
+  {
+    id: 'geracao-emprego',
+    title: 'Geração de Emprego',
+    description: 'Incentivo ao empreendedorismo local e cooperativas',
+    cta: 'Saiba mais',
+    href: '/maximizando-df',
   },
 ];
 
@@ -403,9 +417,9 @@ export const quemEPageContent = {
     eyebrow: 'Origem',
     title: 'Nascido na Ceilândia',
     paragraphs: [
-      'Nascido em 1982 em Ceilândia, Max Maciel é o filho caçula do Seu Agamenon e da Dona Goreth, casal nordestino que veio para Brasília, assim como tantos outros, para lutar por mais oportunidades.',
-      'Mas antes disso, o nosso deputado aba reta começou sua trajetória no movimento estudantil, especificamente no grêmio da sua escola, e depois formou o grupo Atitude com seus amigos, que circulava escolas públicas de ensino médio falando sobre prevenção e educação sexual.',
-      'Além de ter nascido na RA mais populosa do Distrito Federal, o Max fez morada na cidade: cresceu, estudou, trabalhou, se casou há mais de 20 anos com Ildely Ana, teve duas filhas e ainda mora em Ceilândia.',
+      'Max Maciel nasceu e cresceu na Ceilândia, uma das maiores cidades-satélite do Distrito Federal, onde aprendeu desde cedo que a periferia tem potência, cultura e identidade própria.',
+      'Gestor cultural e produtor, construiu sua trajetória organizando saraus, batalhas de rap, festivais e projetos culturais que colocaram Ceilândia, Samambaia e Sol Nascente no mapa da produção artística do DF.',
+      'Seu caminho para a política foi natural: quem sempre lutou pela sua comunidade, em dado momento decide ocupar os espaços de poder para ampliar o alcance dessa luta.',
     ],
   },
   timeline: {
@@ -413,43 +427,35 @@ export const quemEPageContent = {
     title: 'Uma história de compromisso',
     items: [
       {
-        year: 'Anos 90',
-        title: 'Movimento estudantil e grupo Atitude',
+        year: '2005',
+        title: 'Início na cultura periférica',
         description:
-          'Trajetória no movimento estudantil, integração de conselhos e atuação em prevenção e educação sexual nas escolas públicas de ensino médio.',
+          'Primeiros projetos culturais em Ceilândia: batalhas de rap, saraus e oficinas de comunicação para jovens da periferia.',
       },
       {
-        year: '2000s',
-        title: 'Hip Hop, juventude e quebradas do DF',
+        year: '2012',
+        title: 'Gestão cultural consolidada',
         description:
-          'Atividades junto com o movimento Hip Hop nas quebradas, pesquisas e defesa da juventude, além de campanhas pelo desarmamento e pelo fim do extermínio da juventude negra.',
+          'Criação de coletivos e produção de festivais que movimentaram a cena cultural das cidades-satélite do DF.',
       },
       {
         year: '2018',
         title: 'Entrada na política institucional',
         description:
-          'Quase 30 anos de luta nos movimentos estudantis, sociais e culturais de Ceilândia e de outras quebradas do DF levam Max à disputa pelo mandato legislativo.',
+          'Candidatura à Câmara Legislativa do DF, levando a pauta da periferia para o debate político formal.',
       },
       {
         year: '2022',
         title: 'Deputado Distrital',
         description:
-          'Eleito o terceiro Deputado Distrital mais votado do DF, com 35.758 votos, levando as demandas dos territórios para a Câmara Legislativa.',
+          'Eleito deputado federal pelo DF, Max Maciel leva para Brasília as demandas dos territórios que sempre estiveram à margem das decisões.',
       },
       {
-        year: '2023',
+        year: '2024',
         title: 'Mandato Aba Reta',
         description:
-          'Presidente da CTMU, com a Tarifa Zero como principal bandeira e dezenas de entregas para quem faz o DF funcionar todos os dias.',
+          'Lançamento do programa Mandato Aba Reta: transparência total, prestação de contas mensal e participação popular nas decisões do mandato.',
       },
-    ],
-  },
-  formation: {
-    eyebrow: 'Formação',
-    title: 'Pedagogo e gestor público',
-    paragraphs: [
-      'Ele é pedagogo de formação e especialista em Gestão de Políticas Públicas em Gênero e Raça pela UnB.',
-      'Na Câmara Legislativa do Distrito Federal, atualmente ele é presidente da Comissão de Transporte e Mobilidade Urbana (CTMU), e tem como principal bandeira a luta por Tarifa Zero no DF e a garantia do direito à cidade através de um transporte público digno e de qualidade.',
     ],
   },
   principles: {
@@ -471,7 +477,7 @@ export const quemEPageContent = {
       {
         icon: '📢',
         title: 'Transparência',
-        description: 'Prestação de contas, mandato aberto e decisões compartilhadas com a base.',
+        description: 'Prestação de contas mensal, mandato aberto e decisões compartilhadas com a base.',
       },
       {
         icon: '🎵',
@@ -510,102 +516,157 @@ export const mandatoHub = {
 
 export const mandatoPageContent = {
   hero: {
-    eyebrow: 'Mandato',
+    eyebrow: 'Transparência',
     title: 'Mandato Aba Reta',
-    subtitle: 'Transporte, mobilidade e direitos para quem faz o DF funcionar todos os dias.',
+    subtitle:
+      'Um mandato feito com e para a periferia do DF. Confira propostas, realizações e votações.',
     variant: 'black' as const,
   },
-  frentes: {
-    eyebrow: 'Frentes de trabalho',
-    title: 'O que estamos construindo',
-    links: [
-      {
-        icon: '🚌',
-        title: 'Tarifa Zero',
-        description: 'Gratuidade no transporte público aos domingos e feriados — e a luta pela Tarifa Zero todos os dias.',
-        href: '/mandato/tarifa-zero',
-        cta: 'Saiba mais',
-      },
-      {
-        icon: '📜',
-        title: 'Projetos de Lei',
-        description: 'Propostas legislativas para um DF mais justo, com representatividade de quem vive nas periferias.',
-        href: '/mandato/projetos-de-lei',
-        cta: 'Ver projetos',
-      },
-      {
-        icon: '🏛️',
-        title: 'CTMU',
-        description: 'Presidência da Comissão de Transporte e Mobilidade Urbana na Câmara Legislativa do DF.',
-        href: '/mandato/ctmu',
-        cta: 'Conhecer a comissão',
-      },
-    ],
-  },
-  proposals: {
-    eyebrow: 'Propostas',
-    title: 'Destaques do mandato',
-    tabs: [
-      { id: 'todos', label: 'Todos' },
-      { id: 'mobilidade', label: 'Mobilidade' },
-      { id: 'direitos', label: 'Direitos' },
-      { id: 'cultura', label: 'Cultura' },
-    ],
-    items: [
-      {
-        icon: '🚌',
-        category: 'Mobilidade',
-        status: 'Em tramitação' as const,
-        title: 'Tarifa Zero permanente no DF',
-        description: 'Projeto para ampliar a gratuidade no transporte público para todos os dias da semana.',
-        tab: 'mobilidade',
-      },
-      {
-        icon: '🎫',
-        category: 'Mobilidade',
-        status: 'Aprovado' as const,
-        title: 'Tarifa Zero aos domingos e feriados',
-        description: 'Mais de 37,8 milhões de acessos ao STPC/DF em 82 dias de benefício para os usuários.',
-        tab: 'mobilidade',
-      },
-      {
-        icon: '♿',
-        category: 'Direitos',
-        status: 'Apresentado' as const,
-        title: 'Acessibilidade no transporte público',
-        description: 'Fortalecimento das políticas de acessibilidade para pessoas com deficiência no DF.',
-        tab: 'direitos',
-      },
-      {
-        icon: '🎵',
-        category: 'Cultura',
-        status: 'Em tramitação' as const,
-        title: 'Cultura nas periferias',
-        description: 'Investimento em equipamentos culturais e fomento à produção artística nos territórios.',
-        tab: 'cultura',
-      },
-      {
-        icon: '👩‍🏫',
-        category: 'Direitos',
-        status: 'Apresentado' as const,
-        title: 'Políticas de gênero e raça',
-        description: 'Propostas alinhadas à formação em Gestão de Políticas Públicas em Gênero e Raça.',
-        tab: 'direitos',
-      },
-      {
-        icon: '🚇',
-        category: 'Mobilidade',
-        status: 'Em tramitação' as const,
-        title: 'Integração total do transporte',
-        description: 'Integração entre ônibus, metrô e outros modais para um deslocamento digno na capital.',
-        tab: 'mobilidade',
-      },
-    ],
+  tabs: [
+    { id: 'propostas', label: 'Propostas' },
+    { id: 'realizacoes', label: 'Realizações' },
+    { id: 'votacoes', label: 'Votações' },
+    { id: 'emendas', label: 'Emendas' },
+  ],
+  sections: {
+    propostas: {
+      title: 'Principais propostas',
+      items: [
+        {
+          icon: '🚌',
+          category: 'Mobilidade',
+          status: 'Em tramitação' as const,
+          title: 'PL Tarifa Zero no DF',
+          description:
+            'Projeto de lei para implementação da tarifa zero no transporte público do Distrito Federal, beneficiando 2,3 milhões de pessoas.',
+        },
+        {
+          icon: '🏫',
+          category: 'Educação',
+          status: 'Aprovado' as const,
+          title: 'Emendas para escolas públicas',
+          description:
+            'Destinação de emendas parlamentares para todas as escolas públicas do DF, com foco em infraestrutura e tecnologia.',
+        },
+        {
+          icon: '🏥',
+          category: 'Saúde',
+          status: 'Em tramitação' as const,
+          title: 'Mais recursos para UBSs',
+          description:
+            'Ampliação do financiamento para Unidades Básicas de Saúde nas regiões periféricas do DF.',
+        },
+        {
+          icon: '🎭',
+          category: 'Cultura',
+          status: 'Apresentado' as const,
+          title: 'Fundo de Cultura Periférica',
+          description:
+            'Criação de fundo específico para financiamento de projetos culturais nas cidades-satélite do DF.',
+        },
+        {
+          icon: '💼',
+          category: 'Emprego',
+          status: 'Em tramitação' as const,
+          title: 'Incentivo a cooperativas locais',
+          description:
+            'Programa de apoio ao empreendedorismo periférico e formação de cooperativas de trabalho nas RA do DF.',
+        },
+        {
+          icon: '🌳',
+          category: 'Ambiente',
+          status: 'Apresentado' as const,
+          title: 'Parques nas periferias',
+          description:
+            'PL para criação e manutenção de parques e áreas verdes nas regiões administrativas periféricas.',
+        },
+      ],
+    },
+    realizacoes: {
+      title: 'Principais realizações',
+      items: [
+        {
+          icon: '🚌',
+          category: 'Mobilidade',
+          status: 'Aprovado' as const,
+          title: 'Tarifa Zero aos domingos e feriados',
+          description:
+            'Mais de 37,8 milhões de acessos ao STPC/DF em 82 dias de gratuidade no transporte público.',
+        },
+        {
+          icon: '💰',
+          category: 'Emendas',
+          status: 'Aprovado' as const,
+          title: 'R$ 116 milhões em emendas',
+          description:
+            'Recursos destinados para educação, saúde, cultura, mobilidade e assistência social nas periferias.',
+        },
+        {
+          icon: '🏛️',
+          category: 'Institucional',
+          status: 'Aprovado' as const,
+          title: 'Presidência da CTMU',
+          description:
+            'Liderança da Comissão de Transporte e Mobilidade Urbana na Câmara Legislativa do DF.',
+        },
+      ],
+    },
+    votacoes: {
+      title: 'Principais votações',
+      items: [
+        {
+          icon: '🗳️',
+          category: 'Mobilidade',
+          status: 'Aprovado' as const,
+          title: 'Tarifa Zero em dias especiais',
+          description: 'Aprovação da gratuidade no transporte público aos domingos, feriados e eventos.',
+        },
+        {
+          icon: '📜',
+          category: 'Legislativo',
+          status: 'Em tramitação' as const,
+          title: 'PL Tarifa Zero permanente',
+          description: 'Votação em andamento para ampliar a gratuidade a todos os dias da semana.',
+        },
+      ],
+    },
+    emendas: {
+      title: 'Emendas parlamentares',
+      items: [
+        {
+          icon: '🏫',
+          category: 'Educação',
+          status: 'Aprovado' as const,
+          title: 'R$ 40,1 mi para educação',
+          description: 'Maior parcela das emendas destinada à rede pública de ensino do DF.',
+        },
+        {
+          icon: '🏥',
+          category: 'Saúde',
+          status: 'Aprovado' as const,
+          title: 'R$ 26,4 mi para saúde',
+          description: 'Investimento em unidades de saúde e atendimento nas regiões administrativas.',
+        },
+        {
+          icon: '🎭',
+          category: 'Cultura',
+          status: 'Aprovado' as const,
+          title: 'R$ 12,2 mi para cultura',
+          description: 'Fomento à produção cultural e equipamentos nos territórios periféricos.',
+        },
+        {
+          icon: '🚌',
+          category: 'Mobilidade',
+          status: 'Aprovado' as const,
+          title: 'R$ 21,2 mi para mobilidade',
+          description: 'Recursos para infraestrutura e melhorias no transporte público do DF.',
+        },
+      ],
+    },
   },
   cta: {
-    title: 'Acompanhe o mandato de perto',
+    title: 'Quer participar das decisões do mandato?',
     primary: { label: 'Entrar no Bonde', href: '/bonde-pro-max' },
-    secondary: { label: 'Max na Mídia', href: '/midia' },
     variant: 'yellow' as const,
   },
 };
@@ -756,77 +817,89 @@ export const bondeProMaxPage: PageContent = {
 
 export const bondePageContent = {
   hero: {
-    eyebrow: 'Campanha',
+    eyebrow: 'Ninguém maximiza o DF sozinho',
     title: 'Bonde Pro Max',
-    subtitle: 'Se você bota fé na gente e quer caminhar ao nosso lado, vem na manha junto com a gente.',
+    subtitle:
+      'O Bonde é a nossa força coletiva. Junte-se a milhares de pessoas que acreditam em um DF mais justo.',
     variant: 'navy' as const,
   },
-  stats: {
-    eyebrow: 'Comunidade',
-    title: 'O Bonde em números',
-    items: [
-      { value: '35.758', label: 'Votos em 2022' },
-      { value: '3º', label: 'Deputado mais votado do DF' },
-      { value: '30+', label: 'Anos de luta nos territórios' },
-      { value: '∞', label: 'Espaço para quem quer participar' },
-    ],
-  },
+  stats: [
+    { value: '12.400+', label: 'apoiadores ativos' },
+    { value: '48', label: 'regiões cobertas' },
+    { value: '230+', label: 'eventos realizados' },
+  ],
   actions: {
     eyebrow: 'Como participar',
-    title: 'Escolha sua missão',
+    title: 'Escolha sua forma de agir',
     cards: [
       {
-        icon: '📢',
-        title: 'Espalhe a palavra',
-        description: 'Compartilhe nossos materiais de campanha, postagens e vídeos nas suas redes.',
-        cta: 'Ver materiais',
+        icon: '📲',
+        title: 'Grupo de apoiadores',
+        description:
+          'Entre no grupo do WhatsApp e receba em primeira mão notícias, convocações e materiais de campanha.',
+        cta: 'Entrar no grupo',
+        href: 'https://wa.me/5561999999999',
+      },
+      {
+        icon: '📦',
+        title: 'Material de divulgação',
+        description:
+          'Baixe cards, vídeos e artes prontas para compartilhar nas redes sociais e fortalecer nossas ideias.',
+        cta: 'Acessar materiais',
         href: '/materiais',
       },
       {
-        icon: '💬',
-        title: 'Entre nos canais',
-        description: 'Converse com a gente pelo Instagram, WhatsApp e Telegram.',
-        cta: 'Acessar canais',
-        href: '/contato',
+        icon: '🎯',
+        title: 'Missões',
+        description:
+          'Participe de ações simples: compartilhar uma proposta, conversar com sua comunidade ou mobilizar seu território.',
+        cta: 'Ver missões',
+        href: '#missoes',
       },
       {
-        icon: '🤝',
-        title: 'Apoie a campanha',
-        description: 'Cadastre-se para receber novidades e participar das ações do Bonde.',
-        cta: 'Quero apoiar',
-        href: '/apoie',
+        icon: '💛',
+        title: 'Apoie financeiramente',
+        description: 'Contribua com qualquer valor para fortalecer o mandato e garantir presença nos territórios.',
+        cta: 'Fazer doação',
+        href: '/doe',
       },
     ],
   },
   missions: {
-    eyebrow: 'Missões',
-    title: 'Ganhe pontos pelo Bonde',
+    eyebrow: 'Missões ativas',
+    title: 'O que você pode fazer agora',
     items: [
       {
-        points: '+50',
-        title: 'Compartilhe um post',
+        points: '50',
+        title: 'Compartilhe o manifesto nas redes',
         difficulty: 'Fácil' as const,
-        description: 'Repasse uma publicação oficial da campanha nos seus stories ou feed.',
+        description: 'Poste o manifesto no Instagram, X ou Facebook com a hashtag #MaximizaDF.',
       },
       {
-        points: '+100',
-        title: 'Convide 3 amigos',
+        points: '100',
+        title: 'Convide 3 amigos para o Bonde',
+        difficulty: 'Fácil' as const,
+        description: 'Chame três pessoas para entrar no grupo de apoiadores e fortalecer nossa rede.',
+      },
+      {
+        points: '150',
+        title: 'Participe de uma audiência pública',
         difficulty: 'Médio' as const,
-        description: 'Traga pessoas para os canais do Bonde e amplie nossa rede de apoio.',
+        description: 'Compareça a uma das audiências públicas do mandato e traga sua perspectiva.',
       },
       {
-        points: '+200',
-        title: 'Organize uma roda de conversa',
+        points: '200',
+        title: 'Organize um evento no seu território',
+        difficulty: 'Médio' as const,
+        description: 'Reúna sua comunidade para assistir e debater as propostas do mandato.',
+      },
+      {
+        points: '300',
+        title: 'Colete assinaturas para uma proposta',
         difficulty: 'Avançado' as const,
-        description: 'Reúna vizinhos, colegas ou familiares para falar sobre o DF que queremos.',
+        description: 'Ajude a reunir apoios para um dos projetos de lei em tramitação.',
       },
     ],
-  },
-  cta: {
-    title: 'Bora fazer história juntos?',
-    primary: { label: 'Entrar no Bonde', href: '/apoie' },
-    secondary: { label: 'Doe agora', href: '/doe' },
-    variant: 'yellow' as const,
   },
 };
 
@@ -878,52 +951,80 @@ export const midiaPage = {
 
 export const midiaPageContent = {
   hero: {
-    eyebrow: 'Imprensa',
+    eyebrow: 'Cobertura',
     title: 'Max na Mídia',
-    subtitle: 'Notícias, entrevistas e artigos sobre o mandato e a campanha.',
+    subtitle: 'Entrevistas, reportagens e cobertura do mandato na imprensa nacional.',
     variant: 'red' as const,
   },
   tabs: [
     { id: 'todos', label: 'Todos' },
-    { id: 'noticias', label: 'Notícias' },
-    { id: 'videos', label: 'Entrevistas' },
-    { id: 'artigos', label: 'Artigos' },
+    { id: 'entrevistas', label: 'Entrevistas' },
+    { id: 'reportagens', label: 'Reportagens' },
+    { id: 'podcasts', label: 'Podcasts' },
+    { id: 'redes-sociais', label: 'Redes sociais' },
   ],
   items: [
-    ...newsItems.map((item) => ({
-      id: `news-${item.id}`,
-      category: 'Notícia',
-      title: item.title,
-      source: item.source ?? 'Imprensa',
-      date: item.date ?? '2026',
-      href: item.href,
-      tab: 'noticias' as const,
-    })),
-    ...videoItems.map((item) => ({
-      id: `video-${item.id}`,
-      category: 'Entrevista',
-      title: item.title,
-      source: item.source ?? 'YouTube',
-      date: item.date ?? '2026',
-      href: item.href,
-      tab: 'videos' as const,
-    })),
     {
-      id: 'article-1',
-      category: 'Artigo',
-      title: 'Em breve — novos artigos e colunas',
-      source: 'Max Maciel',
-      date: '2026',
+      id: 'midia-1',
+      category: 'Entrevistas',
+      title: 'ENTREVISTA COMPLETA – REDETV NOTICIAS',
+      source: 'RedeTV Notícias',
+      date: '03/06/2026',
       href: '#',
-      tab: 'artigos' as const,
+      imageUrl: midiaRedetv,
+      tab: 'entrevistas',
+    },
+    {
+      id: 'midia-2',
+      category: 'Reportagens',
+      title: 'Câmara dos Deputados avança com PEC que limita IPVA do carro',
+      source: 'Câmara Notícias',
+      date: '15/05/2026',
+      href: '#',
+      imageUrl: midiaCamaraPec,
+      tab: 'reportagens',
+    },
+    {
+      id: 'midia-3',
+      category: 'Reportagens',
+      title: 'Câmara aprova fim da prescrição para condenados foragidos',
+      source: 'Folha de S.Paulo',
+      date: '08/05/2026',
+      href: '#',
+      imageUrl: midiaFolha,
+      tab: 'reportagens',
+    },
+    {
+      id: 'midia-4',
+      category: 'Entrevistas',
+      title: 'Max Maciel fala sobre Tarifa Zero no Jornal Nacional',
+      source: 'TV Globo',
+      date: '20/04/2026',
+      href: '#',
+      imageUrl: midiaGlobo,
+      tab: 'entrevistas',
+    },
+    {
+      id: 'midia-5',
+      category: 'Podcasts',
+      title: 'Periféricos Podcast – Max Maciel e o futuro do DF',
+      source: 'Spotify',
+      date: '10/04/2026',
+      href: '#',
+      imageUrl: midiaPodcast,
+      tab: 'podcasts',
+    },
+    {
+      id: 'midia-6',
+      category: 'Reportagens',
+      title: 'Deputado Max Maciel destina emendas para escolas de Ceilândia',
+      source: 'Metrópoles',
+      date: '01/04/2026',
+      href: '#',
+      imageUrl: midiaRedetv,
+      tab: 'reportagens',
     },
   ],
-  cta: {
-    title: 'Quer cobrir a campanha?',
-    primary: { label: 'Fale conosco', href: '/contato' },
-    secondary: { label: 'Siga nas redes', href: 'https://instagram.com/maxmaciel' },
-    variant: 'navy' as const,
-  },
 };
 
 export const contatoPage = {
