@@ -3,7 +3,8 @@
   "outputDirectory": "dist",
   "framework": "vite",
   "rewrites": [
-    { "source": "/((?!api/).*)", "destination": "/index.html" }
+    { "source": "/coming-soon.html", "destination": "/coming-soon.html" },
+    { "source": "/((?!api/|coming-soon\\.html).*)", "destination": "/index.html" }
   ],
   "headers": [
     {
