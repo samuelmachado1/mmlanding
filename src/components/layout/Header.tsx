@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { AppLink } from '../ui/AppLink.tsx';
 import { Heart, Menu, X } from 'lucide-react';
 import { internalNavItems, navItems } from '../../data/content.ts';
 import type { NavItem } from '../../types/index.ts';
@@ -21,7 +21,7 @@ function getInternalNavLinkClass(_item: NavItem): string {
 
 function DoeCtaButton({ className, onClick }: { className?: string; onClick?: () => void }) {
   return (
-    <Link
+    <AppLink
       to="/doe"
       onClick={onClick}
       className={
@@ -31,7 +31,7 @@ function DoeCtaButton({ className, onClick }: { className?: string; onClick?: ()
     >
       <Heart className="size-4 shrink-0" aria-hidden />
       Doe
-    </Link>
+    </AppLink>
   );
 }
 
@@ -52,13 +52,13 @@ export function Header({ variant = 'landing' }: HeaderProps) {
     <header className={`overflow-visible bg-yellow-500 ${isInternal ? 'shadow-sm' : ''}`}>
       <div className={barOuterClass}>
         <div className={barClass}>
-        <Link to="/" aria-label="Ir para início" className="relative z-10 mt-[10px] flex shrink-0 items-center overflow-visible">
+        <AppLink to="/" aria-label="Ir para início" className="relative z-10 mt-[10px] flex shrink-0 items-center overflow-visible">
           <img
             src={logoHeader}
             alt="Max Maciel"
             className={logoClassName}
           />
-        </Link>
+        </AppLink>
 
         <nav className="hidden items-center gap-4 lg:flex" aria-label="Principal">
           {items.map((item) => (

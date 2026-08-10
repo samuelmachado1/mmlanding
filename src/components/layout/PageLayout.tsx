@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { Link } from 'react-router-dom';
+import { AppLink } from '../ui/AppLink.tsx';
 import { Header } from './Header.tsx';
 import { SocialBar } from './SocialBar.tsx';
 import { Footer } from './Footer.tsx';
@@ -18,9 +18,9 @@ export function PageLayout({ children }: PageLayoutProps) {
       <main className="mx-auto w-full max-w-3xl px-4 py-10 sm:px-6">
         {children}
         <p className="mt-10">
-          <Link to="/" className="font-nav text-sm font-medium text-navy-500 underline">
+          <AppLink to="/" className="font-nav text-sm font-medium text-navy-500 underline">
             ← Voltar ao início
-          </Link>
+          </AppLink>
         </p>
       </main>
       <Footer />

@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { Link } from 'react-router-dom';
+import { AppLink } from '../ui/AppLink.tsx';
 import { Header } from '../layout/Header.tsx';
 import { SocialBar } from '../layout/SocialBar.tsx';
 import { Footer } from '../layout/Footer.tsx';
@@ -147,9 +147,9 @@ function NavCtaButton({
 
   if (href.startsWith('/')) {
     return (
-      <Link to={href} className={className}>
+      <AppLink to={href} className={className}>
         {children}
-      </Link>
+      </AppLink>
     );
   }
 

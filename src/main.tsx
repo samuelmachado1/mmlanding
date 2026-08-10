@@ -7,10 +7,10 @@ import { LaunchGate } from './components/LaunchGate.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <LaunchGate>
-      <BrowserRouter>
+    <BrowserRouter>
+      <LaunchGate>
         <App />
-      </BrowserRouter>
-    </LaunchGate>
+      </LaunchGate>
+    </BrowserRouter>
   </StrictMode>,
 );

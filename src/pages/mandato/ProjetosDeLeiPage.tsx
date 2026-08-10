@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { AppLink } from '../../components/ui/AppLink.tsx';
 import { projetosDeLei, projetosDeLeiIntro } from '../../data/content.ts';
 import {
   InternalPageLayout,
@@ -31,12 +31,12 @@ export default function ProjetosDeLeiPage() {
             </li>
           ))}
         </ul>
-        <Link
+        <AppLink
           to="/mandato"
           className="mt-8 inline-flex font-nav text-sm font-bold text-navy-500 underline underline-offset-4"
         >
           ← Voltar ao Mandato Aba Reta
-        </Link>
+        </AppLink>
       </PageSection>
     </InternalPageLayout>
   );

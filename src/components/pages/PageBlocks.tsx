@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { AppLink } from '../ui/AppLink.tsx';
 import type { ReactNode } from 'react';
 import type {
   ActionCard,
@@ -155,9 +155,9 @@ function ActionLink({
 
   if (href.startsWith('/')) {
     return (
-      <Link to={href} className={className}>
+      <AppLink to={href} className={className}>
         {children}
-      </Link>
+      </AppLink>
     );
   }
 
@@ -254,12 +254,12 @@ export function ActionGrid({ cards }: { cards: ActionCard[] }) {
           </span>
           <h3 className="pt-3 font-nav text-lg font-bold text-brand-black">{card.title}</h3>
           <p className="flex-1 pt-2 text-sm leading-relaxed text-brand-black/80">{card.description}</p>
-          <Link
+          <AppLink
             to={card.href}
             className="mt-6 inline-flex font-nav text-sm font-bold text-navy-500 underline underline-offset-4"
           >
             {card.cta} →
-          </Link>
+          </AppLink>
         </li>
       ))}
     </ul>

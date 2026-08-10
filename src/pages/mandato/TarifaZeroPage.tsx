@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { AppLink } from '../../components/ui/AppLink.tsx';
 import { tarifaZeroPage } from '../../data/content.ts';
 import {
   InternalPageLayout,
@@ -19,12 +19,12 @@ export default function TarifaZeroPage() {
 
       <PageSection eyebrow="Bandeira" title="O que parecia impossível se tornou inevitável">
         <PageProse paragraphs={tarifaZeroPage.paragraphs} />
-        <Link
+        <AppLink
           to="/mandato"
           className="mt-8 inline-flex font-nav text-sm font-bold text-navy-500 underline underline-offset-4"
         >
           ← Voltar ao Mandato Aba Reta
-        </Link>
+        </AppLink>
       </PageSection>
     </InternalPageLayout>
   );

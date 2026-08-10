@@ -1,5 +1,6 @@
-import type { ReactNode } from 'react';
-import { shouldShowSite } from '../lib/launch-gate.ts';
+import { useEffect, useState, type ReactNode } from 'react';
+import { useLocation } from 'react-router-dom';
+import { checkLaunchAccess, isSiteAccessGated } from '../lib/launch-gate.ts';
 import ComingSoonPage from '../pages/ComingSoonPage.tsx';
 
 interface LaunchGateProps {
@@ -7,15 +8,41 @@ interface LaunchGateProps {
 }
 
 export function LaunchGate({ children }: LaunchGateProps) {
-  const canShowSite = shouldShowSite(
-    __SITE_LAUNCHED__,
-    __LAUNCH_DATE__,
-    __PREVIEW_SECRET__,
-    __IS_PROD_BUILD__,
-  );
+  const { search } = useLocation();
+  const gated = isSiteAccessGated();
+  const [status, setStatus] = useState<'loading' | 'allowed' | 'denied'>(gated ? 'loading' : 'allowed');
 
-  if (!canShowSite) {
-    return <ComingSoonPage />;
+  useEffect(() => {
+    if (!gated) {
+      setStatus('allowed');
+      return;
+    }
+
+    let cancelled = false;
+
+    checkLaunchAccess(search).then((allowed) => {
+      if (cancelled) return;
+
+      if (allowed) {
+        setStatus('allowed');
+        return;
+      }
+
+      setStatus('denied');
+      window.location.replace('/coming-soon.html');
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [gated, search]);
+
+  if (!gated) {
+    return children;
+  }
+
+  if (status === 'loading' || status === 'denied') {
+    return status === 'denied' ? <ComingSoonPage /> : null;
   }
 
   return children;

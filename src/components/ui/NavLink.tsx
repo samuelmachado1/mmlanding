@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { Link } from 'react-router-dom';
+import { AppLink } from './AppLink.tsx';
 
 interface NavLinkProps {
   href: string;
@@ -11,9 +11,9 @@ interface NavLinkProps {
 export function NavLink({ href, className, onClick, children }: NavLinkProps) {
   if (href.startsWith('/')) {
     return (
-      <Link to={href} className={className} onClick={onClick}>
+      <AppLink to={href} className={className} onClick={onClick}>
         {children}
-      </Link>
+      </AppLink>
     );
   }
 
