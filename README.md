@@ -46,7 +46,8 @@ Copie `.env.example` para `.env.local` e preencha:
 1. Conecte o repositório na [Vercel](https://vercel.com/)
 2. Crie um **Blob store** no projeto e vincule `BLOB_READ_WRITE_TOKEN`
 3. Configure as demais variáveis de ambiente
-4. O cron em `vercel.json` chama `/api/cron/refresh-clippings` a cada 2h
+
+> **Cron automático desativado** no plano Hobby (máx. 1 execução/dia). O endpoint `/api/cron/refresh-clippings` permanece disponível para refresh manual. Para agendar depois, adicione `crons` em `vercel.json` com schedule diário (`0 12 * * *`) ou migre para Pro.
 
 ### Lançamento faseado (prévia em produção)
 
