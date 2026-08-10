@@ -75,6 +75,8 @@ O middleware define um cookie de 7 dias — depois da primeira visita, não prec
 - Opção 2: definir `SITE_LAUNCHED=true` no dashboard da Vercel (liberação imediata)
 
 > O middleware roda na Vercel e com `vercel dev`. O `npm run dev` (só Vite) não aplica o bloqueio — ideal para desenvolvimento local.
+>
+> **Importante:** `LAUNCH_DATE`, `SITE_LAUNCHED` e `PREVIEW_SECRET` precisam estar em **Environment Variables → Production** antes do build. Após alterar, faça **Redeploy**. O app também aplica um bloqueio no client (build-time) como fallback.
 
 ### 4. Refresh manual (local ou produção)
 

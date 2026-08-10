@@ -2,21 +2,25 @@ const PREVIEW_COOKIE = '__max_preview';
 
 const STATIC_PATHS = new Set(['/coming-soon.html', '/favicon.svg', '/logo.svg', '/icons.svg']);
 
-function isSiteLaunched(env: Record<string, string | undefined>): boolean {
-  if (env.SITE_LAUNCHED === 'true') return true;
-  if (env.SITE_LAUNCHED === 'false' && !env.LAUNCH_DATE) return false;
-
-  const launchDate = env.LAUNCH_DATE;
-  if (!launchDate) return true;
-
-  const today = new Intl.DateTimeFormat('en-CA', {
+function formatDateInBrazil(date: Date): string {
+  return new Intl.DateTimeFormat('en-CA', {
     timeZone: 'America/Sao_Paulo',
     year: 'numeric',
     month: '2-digit',
     day: '2-digit',
-  }).format(new Date());
+  }).format(date);
+}
 
-  return today >= launchDate;
+function isSiteLaunched(env: Record<string, string | undefined>): boolean {
+  if (env.SITE_LAUNCHED === 'true') return true;
+
+  const launchDate = env.LAUNCH_DATE;
+  if (!launchDate) {
+    if (env.SITE_LAUNCHED === 'false') return false;
+    return env.VERCEL_ENV !== 'production';
+  }
+
+  return formatDateInBrazil(new Date()) >= launchDate;
 }
 
 async function hashPreviewSecret(secret: string): Promise<string> {
@@ -116,15 +120,7 @@ export default async function middleware(request: Request): Promise<Response> {
     return Response.json({ error: 'Not available yet' }, { status: 403 });
   }
 
-  if (url.pathname === '/coming-soon.html') {
-    return fetch(request);
-  }
-
-  const rewriteUrl = new URL('/coming-soon.html', request.url);
-  return fetch(rewriteUrl.toString(), {
-    headers: request.headers,
-    method: request.method,
-  });
+  return Response.redirect(new URL('/coming-soon.html', request.url), 307);
 }
 
 export const config = {
