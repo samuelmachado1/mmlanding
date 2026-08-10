@@ -21,7 +21,7 @@ export function Footer() {
                     href={link.href}
                     target="_blank"
                     rel="noreferrer"
-                    className="touch-target inline-flex items-center gap-2 rounded-lg bg-navy-600 px-3 py-2 text-sm hover:bg-navy-700"
+                    className="min-h-11 min-w-11 inline-flex items-center gap-2 rounded-lg bg-navy-600 px-3 py-2 text-sm hover:bg-navy-700"
                     aria-label={link.name}
                   >
                     <link.icon className="h-4 w-4" aria-hidden />
