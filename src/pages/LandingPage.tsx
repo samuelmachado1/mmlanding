@@ -11,11 +11,11 @@ import { ZeroFare } from '../components/sections/ZeroFare.tsx';
 export default function LandingPage() {
   return (
     <>
-      <div className="sticky top-0 z-40 w-full">
+      <div className="sticky top-0 z-40 w-full overflow-visible">
         <Header />
         <SocialBar />
       </div>
-      <main className="flex-1 w-full overflow-x-hidden">
+      <main className="w-full">
         <Hero />
         <Manifest />
         <Biography />

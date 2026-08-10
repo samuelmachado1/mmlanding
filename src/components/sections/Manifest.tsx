@@ -9,11 +9,17 @@ export function Manifest() {
   return (
     <SplitSection
       id="manifesto"
-      className="bg-yellow-500 px-0 py-12 sm:py-16 lg:py-20"
+      className="bg-yellow-500 px-0 py-0"
     >
       <SplitSectionContent
-        eyebrow="MANIFESTO"
-        title="Vamos maximizar o Distrito Federal"
+        eyebrow="Manifesto"
+        title={
+          <>
+            Vamos maximizar
+            <br />
+            o Distrito Federal
+          </>
+        }
         cta={{ href: '/apoie', label: 'Apoie este manifesto' }}
         ctaIcon={<ChevronRight className="h-6 w-6 shrink-0" aria-hidden />}
       >

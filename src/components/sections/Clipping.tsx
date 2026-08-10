@@ -1,11 +1,12 @@
 import {
   clippingContent,
-  clippingInterview,
-  clippingReports,
 } from '../../data/content.ts';
 import type { ClippingInterview, ClippingReport } from '../../types/index.ts';
+import { useClippings } from '../../hooks/useClippings.ts';
 import { AnimatedSection } from '../ui/AnimatedSection.tsx';
 import { NavLink } from '../ui/NavLink.tsx';
+import { ClippingSkeleton } from './ClippingSkeleton.tsx';
+import { PAGE_GRID_INNER, PAGE_GRID_OUTER } from '../layout/pageGrid.ts';
 
 function isExternalHref(href: string): boolean {
   return href.startsWith('http://') || href.startsWith('https://');
@@ -13,7 +14,7 @@ function isExternalHref(href: string): boolean {
 
 function SectionLabel({ children }: { children: string }) {
   return (
-    <span className="inline-flex bg-yellow-500 px-3 py-1 font-nav text-[10px] font-bold leading-[15px] tracking-[1px] text-brand-black uppercase">
+    <span className="flex w-full bg-yellow-500 px-3 py-1 font-nav text-[10px] font-bold leading-[15px] tracking-[1px] text-brand-black uppercase">
       {children}
     </span>
   );
@@ -39,7 +40,7 @@ function InterviewCard({ interview }: { interview: ClippingInterview }) {
         ) : (
           <div className="aspect-[424/283] w-full rounded bg-white/10" aria-hidden />
         )}
-        <span className="absolute bottom-0 left-0 bg-yellow-500 px-3 py-2 font-nav text-lg font-bold leading-[22px] text-brand-black">
+        <span className="absolute bottom-0 left-0 bg-yellow-500 px-3 py-2 font-nav text-lg font-bold leading-[22px] text-brand-black uppercase">
           {interview.badge}
         </span>
       </div>
@@ -76,38 +77,45 @@ function ReportCard({ report }: { report: ClippingReport }) {
 }
 
 export function Clipping() {
+  const { loading, interview, reports } = useClippings();
+
   return (
     <AnimatedSection id="max-na-midia" className="bg-brand-red">
-      <div className="mx-auto flex w-full max-w-[1440px] min-h-[clamp(32rem,61vw,54.9375rem)] flex-col px-4 py-12 sm:px-6 sm:py-16 lg:py-20">
-        <div className="mx-auto flex min-h-0 lg:min-h-[580px] w-full max-w-[1318px] flex-1 flex-col">
+      <div className={`py-12 sm:py-16 lg:py-20 ${PAGE_GRID_OUTER}`}>
+        <div className={`flex min-h-[clamp(32rem,61vw,54.9375rem)] flex-col ${PAGE_GRID_INNER}`}>
           <p className="font-nav text-lg font-semibold leading-5 tracking-[0.05em] text-cream uppercase">
             {clippingContent.eyebrow}
           </p>
-          <h2 className="pt-4 font-nav text-[clamp(2rem,8vw,3.75rem)] font-black leading-[1.05] text-yellow-500">
-            {clippingContent.title}
+          <h2 className="pt-4 font-nav text-[clamp(2rem,5vw,3.75rem)] font-black leading-none text-yellow-500">
+            <span className="block">Maximizando</span>
+            <span className="block">o DF</span>
           </h2>
-          <div className="flex flex-col gap-6 pt-8 lg:flex-row lg:gap-6">
-            <div className="flex flex-1 flex-col gap-3">
-              <SectionLabel>{clippingContent.interviewsLabel}</SectionLabel>
-              <InterviewCard interview={clippingInterview} />
+          {loading ? (
+            <ClippingSkeleton />
+          ) : (
+            <div className="flex flex-col gap-6 pt-8 lg:flex-row lg:gap-6">
+              <div className="flex flex-1 flex-col gap-3">
+                <SectionLabel>{clippingContent.interviewsLabel}</SectionLabel>
+                <InterviewCard interview={interview} />
+              </div>
+              <div className="flex flex-1 flex-col gap-3">
+                <SectionLabel>{clippingContent.reportsLabel}</SectionLabel>
+                <ul className="flex flex-col gap-4">
+                  {reports.map((report) => (
+                    <li key={report.id}>
+                      <ReportCard report={report} />
+                    </li>
+                  ))}
+                </ul>
+                <NavLink
+                  href={clippingContent.ctaHref}
+                  className="inline-flex h-12 w-fit items-center justify-center rounded-lg bg-yellow-500 px-4 font-nav text-base font-bold text-navy-500"
+                >
+                  {clippingContent.cta}
+                </NavLink>
+              </div>
             </div>
-            <div className="flex flex-1 flex-col gap-3">
-              <SectionLabel>{clippingContent.reportsLabel}</SectionLabel>
-              <ul className="flex flex-col gap-4">
-                {clippingReports.map((report) => (
-                  <li key={report.id}>
-                    <ReportCard report={report} />
-                  </li>
-                ))}
-              </ul>
-              <NavLink
-                href={clippingContent.ctaHref}
-                className="inline-flex h-12 w-fit items-center justify-center rounded-lg bg-yellow-500 px-4 font-nav text-base font-bold text-navy-500"
-              >
-                {clippingContent.cta}
-              </NavLink>
-            </div>
-          </div>
+          )}
         </div>
       </div>
     </AnimatedSection>
