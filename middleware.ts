@@ -12,11 +12,13 @@ function formatDateInBrazil(date: Date): string {
 }
 
 function isSiteLaunched(env: Record<string, string | undefined>): boolean {
-  if (env.SITE_LAUNCHED === 'true') return true;
+  const siteLaunched = env.SITE_LAUNCHED?.trim() ?? '';
+  const launchDate = env.LAUNCH_DATE?.trim() ?? '';
 
-  const launchDate = env.LAUNCH_DATE;
+  if (siteLaunched === 'true') return true;
+
   if (!launchDate) {
-    if (env.SITE_LAUNCHED === 'false') return false;
+    if (siteLaunched === 'false') return false;
     return env.VERCEL_ENV !== 'production';
   }
 
@@ -96,7 +98,7 @@ export default async function middleware(request: Request): Promise<Response> {
   }
 
   const env = process.env;
-  const previewSecret = env.PREVIEW_SECRET;
+  const previewSecret = env.PREVIEW_SECRET?.trim();
   const previewHash = previewSecret ? await hashPreviewSecret(previewSecret) : null;
   const launched = isSiteLaunched(env);
   const hasPreview = hasValidPreviewAccess(request, previewSecret, previewHash);
