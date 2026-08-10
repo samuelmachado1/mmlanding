@@ -63,6 +63,16 @@ export const navItems: NavItem[] = [
   { label: 'Contato', href: '/contato' },
 ];
 
+export const internalNavItems: NavItem[] = [
+  { label: 'Quem é Max', href: '/quem-e-max' },
+  { label: 'Mandato Aba Reta', href: '/mandato' },
+  { label: 'Bonde Pro Max', href: '/bonde-pro-max' },
+  { label: 'Doe', href: '/doe' },
+  { label: 'Max na Mídia', href: '/midia' },
+  { label: 'Artigos', href: '/materiais' },
+  { label: 'Contato', href: '/contato' },
+];
+
 export const heroContent = {
   headline: 'Coragem para defender o Distrito Federal',
   subheadline:
@@ -932,11 +942,45 @@ export const apoiePage = {
   note: 'TODO: verificar campos com Caio.',
 };
 
-export const doePage: PageContent = {
-  title: 'Doe',
-  paragraphs: [
-    'Você também pode apoiar nossa campanha financeiramente!',
-    'Doe e nos ajude a arrecadar recursos financeiros para espalhar ainda mais a campanha de reeleição do nosso Aba Reta favorito.',
+export const doePageContent = {
+  hero: {
+    eyebrow: 'Fortaleça o mandato',
+    title: 'Doe para o Bonde',
+    subtitle:
+      'Cada contribuição financia presença nos territórios, produção de conteúdo e a estrutura do mandato.',
+    variant: 'red' as const,
+  },
+  amounts: [10, 30, 50, 100, 200],
+  defaultAmount: 30,
+  form: {
+    title: 'Escolha o valor da sua doação',
+    subtitle: 'Qualquer valor faz diferença. Obrigado por acreditar no Bonde.',
+    selectedLabel: 'Valor selecionado',
+    customLabel: 'Outro valor:',
+    namePlaceholder: 'Seu nome completo',
+    emailPlaceholder: 'E-mail',
+    cpfPlaceholder: 'CPF',
+    legalNote: 'Doação regulamentada pelo TSE. CNPJ do comitê financeiro em breve.',
+  },
+  impactCards: [
+    {
+      emoji: '🗺️',
+      title: 'Presença no território',
+      description:
+        'Financiar eventos, visitas e escutatórias nos cantos do DF onde a população precisa ser ouvida.',
+    },
+    {
+      emoji: '📢',
+      title: 'Produção de conteúdo',
+      description:
+        'Vídeos, podcasts e materiais que informam e mobilizam a comunidade em torno das nossas propostas.',
+    },
+    {
+      emoji: '⚖️',
+      title: 'Assessoria legislativa',
+      description:
+        'Técnicos para elaborar projetos de lei robustos e acompanhar votações no Congresso.',
+    },
   ],
 };
 

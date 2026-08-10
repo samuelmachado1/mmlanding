@@ -6,17 +6,26 @@ import { Footer } from '../layout/Footer.tsx';
 
 interface InternalPageLayoutProps {
   children: ReactNode;
+  socialBarPlacement?: 'header' | 'before-footer';
+  footerVariant?: 'navy' | 'black';
 }
 
-export function InternalPageLayout({ children }: InternalPageLayoutProps) {
+export function InternalPageLayout({
+  children,
+  socialBarPlacement = 'before-footer',
+  footerVariant = 'black',
+}: InternalPageLayoutProps) {
+  const showSocialInHeader = socialBarPlacement === 'header';
+
   return (
     <>
-      <div className="sticky top-0 z-40 w-full">
-        <Header />
-        <SocialBar />
+      <div className="sticky top-0 z-40 w-full overflow-visible">
+        <Header variant="internal" />
+        {showSocialInHeader ? <SocialBar /> : null}
       </div>
-      <main className="w-full overflow-x-hidden">{children}</main>
-      <Footer />
+      <main className="w-full">{children}</main>
+      {socialBarPlacement === 'before-footer' ? <SocialBar /> : null}
+      <Footer variant={footerVariant} />
     </>
   );
 }

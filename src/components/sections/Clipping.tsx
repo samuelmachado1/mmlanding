@@ -1,11 +1,11 @@
 import {
   clippingContent,
-  clippingInterview,
-  clippingReports,
 } from '../../data/content.ts';
 import type { ClippingInterview, ClippingReport } from '../../types/index.ts';
+import { useClippings } from '../../hooks/useClippings.ts';
 import { AnimatedSection } from '../ui/AnimatedSection.tsx';
 import { NavLink } from '../ui/NavLink.tsx';
+import { ClippingSkeleton } from './ClippingSkeleton.tsx';
 
 function isExternalHref(href: string): boolean {
   return href.startsWith('http://') || href.startsWith('https://');
@@ -76,6 +76,8 @@ function ReportCard({ report }: { report: ClippingReport }) {
 }
 
 export function Clipping() {
+  const { loading, interview, reports } = useClippings();
+
   return (
     <AnimatedSection id="max-na-midia" className="bg-brand-red">
       <div className="mx-auto flex w-full max-w-[1440px] min-h-[clamp(32rem,61vw,54.9375rem)] flex-col px-4 py-12 sm:px-6 sm:py-16 lg:py-20">
@@ -87,28 +89,32 @@ export function Clipping() {
             <span className="block">Maximizando</span>
             <span className="block">o DF</span>
           </h2>
-          <div className="flex flex-col gap-6 pt-8 lg:flex-row lg:gap-6">
-            <div className="flex flex-1 flex-col gap-3">
-              <SectionLabel>{clippingContent.interviewsLabel}</SectionLabel>
-              <InterviewCard interview={clippingInterview} />
+          {loading ? (
+            <ClippingSkeleton />
+          ) : (
+            <div className="flex flex-col gap-6 pt-8 lg:flex-row lg:gap-6">
+              <div className="flex flex-1 flex-col gap-3">
+                <SectionLabel>{clippingContent.interviewsLabel}</SectionLabel>
+                <InterviewCard interview={interview} />
+              </div>
+              <div className="flex flex-1 flex-col gap-3">
+                <SectionLabel>{clippingContent.reportsLabel}</SectionLabel>
+                <ul className="flex flex-col gap-4">
+                  {reports.map((report) => (
+                    <li key={report.id}>
+                      <ReportCard report={report} />
+                    </li>
+                  ))}
+                </ul>
+                <NavLink
+                  href={clippingContent.ctaHref}
+                  className="inline-flex h-12 w-fit items-center justify-center rounded-lg bg-yellow-500 px-4 font-nav text-base font-bold text-navy-500"
+                >
+                  {clippingContent.cta}
+                </NavLink>
+              </div>
             </div>
-            <div className="flex flex-1 flex-col gap-3">
-              <SectionLabel>{clippingContent.reportsLabel}</SectionLabel>
-              <ul className="flex flex-col gap-4">
-                {clippingReports.map((report) => (
-                  <li key={report.id}>
-                    <ReportCard report={report} />
-                  </li>
-                ))}
-              </ul>
-              <NavLink
-                href={clippingContent.ctaHref}
-                className="inline-flex h-12 w-fit items-center justify-center rounded-lg bg-yellow-500 px-4 font-nav text-base font-bold text-navy-500"
-              >
-                {clippingContent.cta}
-              </NavLink>
-            </div>
-          </div>
+          )}
         </div>
       </div>
     </AnimatedSection>
