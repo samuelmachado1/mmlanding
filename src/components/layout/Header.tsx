@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { AppLink } from '../ui/AppLink.tsx';
-import { Heart, Menu, X } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { internalNavItems, navItems } from '../../data/content.ts';
 import type { NavItem } from '../../types/index.ts';
 import { NavLink } from '../ui/NavLink.tsx';
@@ -17,22 +17,6 @@ const internalNavLinkClass =
 
 function getInternalNavLinkClass(_item: NavItem): string {
   return internalNavLinkClass;
-}
-
-function DoeCtaButton({ className, onClick }: { className?: string; onClick?: () => void }) {
-  return (
-    <AppLink
-      to="/doe"
-      onClick={onClick}
-      className={
-        className ??
-        'inline-flex h-[37px] items-center gap-1 rounded-[10px] bg-navy-500 px-3 py-2 font-nav text-[13.5px] font-bold leading-5 text-white transition hover:bg-navy-600'
-      }
-    >
-      <Heart className="size-4 shrink-0" aria-hidden />
-      Doe
-    </AppLink>
-  );
 }
 
 interface HeaderProps {
@@ -66,7 +50,6 @@ export function Header({ variant = 'landing' }: HeaderProps) {
               {item.label}
             </NavLink>
           ))}
-          {isInternal ? <DoeCtaButton /> : null}
         </nav>
 
         <button
@@ -100,14 +83,6 @@ export function Header({ variant = 'landing' }: HeaderProps) {
                 </NavLink>
               </li>
             ))}
-            {isInternal ? (
-              <li className="pt-2">
-                <DoeCtaButton
-                  className="inline-flex h-11 w-full items-center justify-center gap-1 rounded-[10px] bg-navy-500 px-3 py-2 font-nav text-base font-bold text-white"
-                  onClick={() => setOpen(false)}
-                />
-              </li>
-            ) : null}
           </ul>
         </nav>
       ) : null}
