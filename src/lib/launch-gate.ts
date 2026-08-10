@@ -14,28 +14,32 @@ export function isSiteLaunched(
   launchDate: string,
   isProductionBuild: boolean,
 ): boolean {
-  if (siteLaunched === 'true') return true;
+  const launched = siteLaunched.trim();
+  const date = launchDate.trim();
 
-  if (!launchDate) {
-    if (siteLaunched === 'false') return false;
+  if (launched === 'true') return true;
+
+  if (!date) {
+    if (launched === 'false') return false;
     return !isProductionBuild;
   }
 
-  return formatDateInBrazil(new Date()) >= launchDate;
+  return formatDateInBrazil(new Date()) >= date;
 }
 
 export function hasPreviewAccess(previewSecret: string): boolean {
-  if (!previewSecret) return false;
+  const secret = previewSecret.trim();
+  if (!secret) return false;
 
   const url = new URL(window.location.href);
   const previewParam = url.searchParams.get('preview');
 
-  if (previewParam === previewSecret) {
-    sessionStorage.setItem(PREVIEW_STORAGE_KEY, previewSecret);
+  if (previewParam === secret) {
+    sessionStorage.setItem(PREVIEW_STORAGE_KEY, secret);
     return true;
   }
 
-  return sessionStorage.getItem(PREVIEW_STORAGE_KEY) === previewSecret;
+  return sessionStorage.getItem(PREVIEW_STORAGE_KEY) === secret;
 }
 
 export function shouldShowSite(
