@@ -5,6 +5,7 @@ import { internalNavItems, navItems } from '../../data/content.ts';
 import type { NavItem } from '../../types/index.ts';
 import { NavLink } from '../ui/NavLink.tsx';
 import logoHeader from '../../assets/logos/logo-header.png';
+import { PAGE_GRID_INNER, PAGE_GRID_OUTER } from './pageGrid.ts';
 
 const logoClassName = 'block h-auto w-[255px] max-w-none';
 
@@ -44,10 +45,8 @@ export function Header({ variant = 'landing' }: HeaderProps) {
   const items = isInternal ? internalNavItems : navItems;
   const linkClass = isInternal ? getInternalNavLinkClass : () => landingNavLinkClass;
 
-  const barOuterClass = isInternal ? 'px-6 sm:px-8' : '';
-  const barClass = isInternal
-    ? 'mx-auto flex h-[101px] max-w-6xl items-center justify-between gap-4 overflow-visible'
-    : 'mx-auto flex h-[101px] w-full max-w-[1366px] items-center justify-between gap-4 overflow-visible px-6';
+  const barOuterClass = PAGE_GRID_OUTER;
+  const barClass = `flex h-[101px] ${PAGE_GRID_INNER} items-center justify-between gap-4 overflow-visible`;
 
   return (
     <header className={`overflow-visible bg-yellow-500 ${isInternal ? 'shadow-sm' : ''}`}>
@@ -86,7 +85,7 @@ export function Header({ variant = 'landing' }: HeaderProps) {
       {open ? (
         <nav
           id="mobile-menu"
-          className={`bg-yellow-500 py-4 lg:hidden ${isInternal ? 'px-6 sm:px-8' : 'px-4'}`}
+          className={`bg-yellow-500 py-4 lg:hidden ${PAGE_GRID_OUTER}`}
           aria-label="Mobile"
         >
           <ul className="flex flex-col gap-2">

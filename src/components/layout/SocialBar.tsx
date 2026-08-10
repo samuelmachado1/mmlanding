@@ -1,12 +1,13 @@
 import { socialBarLinks } from '../../data/content.ts';
 import { SocialIcon } from '../ui/SocialIcon.tsx';
+import { PAGE_GRID_INNER, PAGE_GRID_OUTER } from './pageGrid.ts';
 
 export function SocialBar() {
   return (
     <div className="shrink-0 bg-navy-500">
-      <div className="px-6 sm:px-8">
+      <div className={PAGE_GRID_OUTER}>
         <div
-          className="mx-auto flex w-full max-w-6xl flex-col items-center gap-0.5 py-1.5 sm:h-14 sm:flex-row sm:items-center sm:gap-4 sm:py-0"
+          className={`flex flex-col items-center gap-0.5 py-1.5 sm:h-14 sm:flex-row sm:items-center sm:gap-4 sm:py-0 ${PAGE_GRID_INNER}`}
         >
         <p
           className="whitespace-nowrap text-center font-nav text-[10px] font-bold leading-tight text-cream sm:min-w-0 sm:flex-1 sm:text-left sm:text-2xl sm:leading-none"

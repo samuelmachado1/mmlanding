@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import { AnimatedSection } from '../ui/AnimatedSection.tsx';
 import { NavLink } from '../ui/NavLink.tsx';
+import { PAGE_GRID_INNER, PAGE_GRID_OUTER } from './pageGrid.ts';
 
 interface SplitSectionProps {
   id: string;
@@ -11,7 +12,11 @@ interface SplitSectionProps {
 export function SplitSection({ id, className, children }: SplitSectionProps) {
   return (
     <AnimatedSection id={id} className={className}>
-      <div className="mx-auto flex w-full min-w-0 max-w-[1440px] min-h-[clamp(32rem,61vw,54.9375rem)] flex-col overflow-hidden lg:flex-row lg:items-stretch">{children}</div>
+      <div className={PAGE_GRID_OUTER}>
+        <div className={`flex min-w-0 min-h-[clamp(32rem,61vw,54.9375rem)] flex-col overflow-hidden lg:flex-row lg:items-stretch ${PAGE_GRID_INNER}`}>
+          {children}
+        </div>
+      </div>
     </AnimatedSection>
   );
 }
@@ -35,7 +40,7 @@ export function SplitSectionContent({
   children,
 }: SplitSectionContentProps) {
   return (
-    <section className="flex flex-[1_1_50%] flex-col items-start px-6 py-20">
+    <section className="flex flex-[1_1_50%] flex-col items-start py-20">
       <p className="font-nav text-lg font-semibold leading-5 tracking-[0.05em] text-navy-500 uppercase">
         {eyebrow}
       </p>

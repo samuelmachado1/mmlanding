@@ -1,4 +1,5 @@
 import { footerLinks, siteConfig, socialLinks } from '../../data/content.ts';
+import { PAGE_GRID_INNER, PAGE_GRID_OUTER } from './pageGrid.ts';
 
 interface FooterProps {
   variant?: 'navy' | 'black';
@@ -16,7 +17,8 @@ export function Footer({ variant = 'navy' }: FooterProps) {
           : 'border-t border-navy-100 bg-navy-500 text-white'
       }
     >
-      <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
+      <div className={PAGE_GRID_OUTER}>
+        <div className={`py-10 ${PAGE_GRID_INNER}`}>
         <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
           <div>
             <p className="font-nav text-lg font-bold">{siteConfig.name}</p>
@@ -66,6 +68,7 @@ export function Footer({ variant = 'navy' }: FooterProps) {
               </li>
             ))}
           </ul>
+        </div>
         </div>
       </div>
     </footer>

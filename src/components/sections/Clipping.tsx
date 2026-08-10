@@ -6,6 +6,7 @@ import { useClippings } from '../../hooks/useClippings.ts';
 import { AnimatedSection } from '../ui/AnimatedSection.tsx';
 import { NavLink } from '../ui/NavLink.tsx';
 import { ClippingSkeleton } from './ClippingSkeleton.tsx';
+import { PAGE_GRID_INNER, PAGE_GRID_OUTER } from '../layout/pageGrid.ts';
 
 function isExternalHref(href: string): boolean {
   return href.startsWith('http://') || href.startsWith('https://');
@@ -80,8 +81,8 @@ export function Clipping() {
 
   return (
     <AnimatedSection id="max-na-midia" className="bg-brand-red">
-      <div className="mx-auto flex w-full max-w-[1440px] min-h-[clamp(32rem,61vw,54.9375rem)] flex-col px-4 py-12 sm:px-6 sm:py-16 lg:py-20">
-        <div className="mx-auto flex min-h-0 lg:min-h-[580px] w-full max-w-[1318px] flex-1 flex-col">
+      <div className={`py-12 sm:py-16 lg:py-20 ${PAGE_GRID_OUTER}`}>
+        <div className={`flex min-h-[clamp(32rem,61vw,54.9375rem)] flex-col ${PAGE_GRID_INNER}`}>
           <p className="font-nav text-lg font-semibold leading-5 tracking-[0.05em] text-cream uppercase">
             {clippingContent.eyebrow}
           </p>
