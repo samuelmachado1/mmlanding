@@ -37,6 +37,9 @@ Copie `.env.example` para `.env.local` e preencha:
 | `GOOGLE_CSE_ID` | Search Engine ID (`cx`) |
 | `CRON_SECRET` | Segredo para proteger o endpoint de cron |
 | `BLOB_READ_WRITE_TOKEN` | Token do Vercel Blob (produção) |
+| `LAUNCH_DATE` | Data de abertura pública (`YYYY-MM-DD`, fuso `America/Sao_Paulo`) |
+| `SITE_LAUNCHED` | `true` para abrir antes da data; `false` para manter bloqueado |
+| `PREVIEW_SECRET` | Segredo para testar o site em produção antes do lançamento |
 
 ### 3. Deploy na Vercel
 
@@ -44,6 +47,33 @@ Copie `.env.example` para `.env.local` e preencha:
 2. Crie um **Blob store** no projeto e vincule `BLOB_READ_WRITE_TOKEN`
 3. Configure as demais variáveis de ambiente
 4. O cron em `vercel.json` chama `/api/cron/refresh-clippings` a cada 2h
+
+### Lançamento faseado (prévia em produção)
+
+O `middleware.ts` bloqueia o site até a data de lançamento. Visitantes veem uma página "Em breve"; a equipe testa em produção com URL secreta.
+
+**Configuração na Vercel (Production):**
+
+```
+LAUNCH_DATE=2026-08-15
+SITE_LAUNCHED=false
+PREVIEW_SECRET=um-segredo-longo-e-aleatorio
+```
+
+**Testar em produção (antes do dia 15):**
+
+```
+https://seu-dominio.com/?preview=um-segredo-longo-e-aleatorio
+```
+
+O middleware define um cookie de 7 dias — depois da primeira visita, não precisa do `?preview=` em cada página.
+
+**Abrir para o público no dia 15:**
+
+- Opção 1: aguardar a meia-noite (horário de Brasília) — o middleware libera automaticamente
+- Opção 2: definir `SITE_LAUNCHED=true` no dashboard da Vercel (liberação imediata)
+
+> O middleware roda na Vercel e com `vercel dev`. O `npm run dev` (só Vite) não aplica o bloqueio — ideal para desenvolvimento local.
 
 ### 4. Refresh manual (local ou produção)
 

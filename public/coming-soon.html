@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>Em breve | Deputado Max Maciel</title>
+    <style>
+      @font-face {
+        font-family: 'PF Fuel Decay';
+        src: url('/fonts/PFFuelDecay.woff2') format('woff2');
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap;
+      }
+
+      @font-face {
+        font-family: 'Brother 1861 Printed';
+        src: url('/fonts/Brother1861Printed.woff2') format('woff2');
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap;
+      }
+
+      :root {
+        color-scheme: light;
+        --purple: #70148c;
+        --purple-dark: #440c54;
+        --yellow: #fcd207;
+        --cream: #f5f1e8;
+        --black: #25211e;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+      }
+
+      body {
+        min-height: 100dvh;
+        display: grid;
+        place-items: center;
+        padding: 2rem 1.25rem;
+        background:
+          radial-gradient(circle at top right, rgba(252, 210, 7, 0.18), transparent 42%),
+          linear-gradient(160deg, var(--purple-dark), var(--purple));
+        color: var(--cream);
+        font-family: 'Brother 1861 Printed', Georgia, serif;
+      }
+
+      main {
+        width: min(100%, 36rem);
+        text-align: center;
+      }
+
+      .logo {
+        width: min(12rem, 70vw);
+        margin: 0 auto 2rem;
+        display: block;
+      }
+
+      h1 {
+        font-family: 'PF Fuel Decay', sans-serif;
+        font-size: clamp(2.5rem, 10vw, 4rem);
+        line-height: 0.95;
+        letter-spacing: 0.02em;
+        color: var(--yellow);
+        margin-bottom: 1rem;
+      }
+
+      p {
+        font-size: clamp(1rem, 3.5vw, 1.25rem);
+        line-height: 1.5;
+        color: rgba(245, 241, 232, 0.92);
+      }
+
+      .badge {
+        display: inline-block;
+        margin-top: 2rem;
+        padding: 0.5rem 1rem;
+        border-radius: 999px;
+        background: rgba(37, 33, 30, 0.35);
+        border: 1px solid rgba(252, 210, 7, 0.35);
+        color: var(--yellow);
+        font-size: 0.95rem;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <img class="logo" src="/logo.svg" alt="Deputado Max Maciel" width="192" height="64" />
+      <h1>Em breve</h1>
+      <p>Novo site em preparação. Volte em breve para conhecer as novidades.</p>
+      <span class="badge">Distrito Federal</span>
+    </main>
+  </body>
+</html>
