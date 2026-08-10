@@ -1,36 +1,35 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { mandatoPageContent } from '../data/content.ts';
 import {
   InternalPageLayout,
   PageCta,
   PageHero,
-  PageSection,
 } from '../components/pages/InternalPageParts.tsx';
-import { ActionGrid, PageTabBar, ProposalGrid } from '../components/pages/PageBlocks.tsx';
+import { MandatoTabBar, ProposalGrid } from '../components/pages/PageBlocks.tsx';
+
+type MandatoTabId = keyof typeof mandatoPageContent.sections;
 
 export default function MandatoPage() {
-  const { hero, frentes, proposals, cta } = mandatoPageContent;
-  const [activeTab, setActiveTab] = useState('todos');
-
-  const filteredProposals = useMemo(() => {
-    if (activeTab === 'todos') return proposals.items;
-    return proposals.items.filter((item) => item.tab === activeTab);
-  }, [activeTab, proposals.items]);
+  const { hero, tabs, sections, cta } = mandatoPageContent;
+  const [activeTab, setActiveTab] = useState<MandatoTabId>('propostas');
+  const section = sections[activeTab];
 
   return (
     <InternalPageLayout>
       <PageHero {...hero} />
 
-      <PageSection eyebrow={frentes.eyebrow} title={frentes.title}>
-        <ActionGrid cards={frentes.links} />
-      </PageSection>
+      <MandatoTabBar tabs={tabs} activeId={activeTab} onChange={(id) => setActiveTab(id as MandatoTabId)} />
 
-      <PageSection eyebrow={proposals.eyebrow} title={proposals.title} className="bg-white">
-        <div className="space-y-8">
-          <PageTabBar tabs={proposals.tabs} activeId={activeTab} onChange={setActiveTab} />
-          <ProposalGrid cards={filteredProposals} />
+      <section className="bg-cream px-6 py-16 sm:px-8">
+        <div className="mx-auto max-w-6xl">
+          <h2 className="font-nav text-[clamp(1.75rem,4vw,2.25rem)] font-black leading-tight text-brand-black">
+            {section.title}
+          </h2>
+          <div className="pt-10">
+            <ProposalGrid cards={section.items} />
+          </div>
         </div>
-      </PageSection>
+      </section>
 
       <PageCta {...cta} />
     </InternalPageLayout>

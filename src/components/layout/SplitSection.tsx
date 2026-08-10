@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import { AnimatedSection } from '../ui/AnimatedSection.tsx';
 import { NavLink } from '../ui/NavLink.tsx';
+import { PAGE_GRID_INNER, PAGE_GRID_OUTER } from './pageGrid.ts';
 
 interface SplitSectionProps {
   id: string;
@@ -11,14 +12,18 @@ interface SplitSectionProps {
 export function SplitSection({ id, className, children }: SplitSectionProps) {
   return (
     <AnimatedSection id={id} className={className}>
-      <div className="mx-auto flex w-full min-w-0 max-w-[1440px] min-h-[clamp(32rem,61vw,54.9375rem)] flex-col overflow-hidden lg:flex-row lg:items-stretch">{children}</div>
+      <div className={PAGE_GRID_OUTER}>
+        <div className={`flex min-w-0 min-h-[clamp(32rem,61vw,54.9375rem)] flex-col overflow-hidden lg:flex-row lg:items-stretch ${PAGE_GRID_INNER}`}>
+          {children}
+        </div>
+      </div>
     </AnimatedSection>
   );
 }
 
 interface SplitSectionContentProps {
   eyebrow: string;
-  title: string;
+  title: ReactNode;
   cta?: {
     href: string;
     label: string;
@@ -35,12 +40,21 @@ export function SplitSectionContent({
   children,
 }: SplitSectionContentProps) {
   return (
-    <section className="flex flex-[1_1_50%] flex-col items-start gap-[clamp(1.5rem,3vw,3rem)] px-[clamp(1.5rem,3.3vw,3rem)] py-[clamp(2.5rem,5.5vw,5rem)]">
-      <p className="text-[clamp(0.75rem,1.2vw,0.875rem)] font-medium tracking-[0.12em] text-brand-black/55 uppercase">{eyebrow}</p>
-      <h2 className="font-body text-[clamp(2.25rem,4.5vw,4.5rem)] leading-[1.05] font-extrabold text-brand-black">{title}</h2>
-      <div className="max-w-[38rem] space-y-5 text-[clamp(0.9375rem,1.4vw,1.125rem)] leading-[1.65] text-brand-black">{children}</div>
+    <section className="flex flex-[1_1_50%] flex-col items-start py-20">
+      <p className="font-nav text-lg font-semibold leading-5 tracking-[0.05em] text-navy-500 uppercase">
+        {eyebrow}
+      </p>
+      <h2 className="pt-4 font-nav text-[clamp(2rem,5vw,3.75rem)] font-black leading-none text-brand-black">
+        {title}
+      </h2>
+      <div className="max-w-[635px] space-y-7 pt-8 font-nav text-lg leading-7 text-brand-black">
+        {children}
+      </div>
       {cta ? (
-        <NavLink href={cta.href} className="mt-auto inline-flex min-h-11 min-w-11 items-center gap-1 rounded-md bg-navy-500 px-[clamp(1.25rem,2vw,1.5rem)] py-[clamp(0.75rem,1.5vw,0.875rem)] font-nav text-[clamp(0.875rem,1.2vw,1rem)] font-semibold text-white transition-colors hover:bg-navy-600">
+        <NavLink
+          href={cta.href}
+          className="mt-8 inline-flex h-12 items-center gap-1 rounded-lg bg-navy-500 px-4 font-nav text-base font-bold text-white transition-colors hover:bg-navy-600"
+        >
           {cta.label}
           {ctaIcon}
         </NavLink>

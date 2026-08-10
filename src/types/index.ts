@@ -4,6 +4,7 @@ import type { LucideIcon } from 'lucide-react';
 export interface NavItem {
   label: string;
   href: string;
+  highlight?: boolean;
 }
 export interface QuickLink {
   label: string;
@@ -122,6 +123,12 @@ export interface PageContent {
   paragraphs: string[];
 }
 
+export interface DoeImpactCard {
+  emoji: string;
+  title: string;
+  description: string;
+}
+
 export interface LawItem {
   number: string;
   title: string;
@@ -210,6 +217,7 @@ export interface MissionCard {
   title: string;
   difficulty: 'Fácil' | 'Médio' | 'Avançado';
   description: string;
+  cta?: string;
 }
 
 export interface MediaCard {
@@ -220,4 +228,12 @@ export interface MediaCard {
   date: string;
   href: string;
   imageUrl?: string;
+  tab: string;
+}
+
+export interface ClippingsPayload {
+  fetchedAt: string;
+  items: MediaCard[];
+  interview: ClippingInterview | null;
+  reports: ClippingReport[];
 }
