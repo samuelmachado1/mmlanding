@@ -49,7 +49,7 @@ export default function ApoiePage() {
 
       <PageCta
         title="Quer ir além?"
-        primary={{ label: 'Doe à campanha', href: '/doe' }}
+        primary={{ label: 'Entrar no Bonde', href: '/bonde-pro-max' }}
         secondary={{ label: 'Ver materiais', href: '/materiais' }}
         variant="yellow"
       />

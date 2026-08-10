@@ -57,7 +57,6 @@ export const navItems: NavItem[] = [
   { label: 'Quem é Max', href: '/quem-e-max' },
   { label: 'Mandato Aba Reta', href: '/mandato' },
   { label: 'Bonde Pro Max', href: '/bonde-pro-max' },
-  { label: 'Doe', href: '/doe' },
   { label: 'Max na Mídia', href: '/midia' },
   { label: 'Materiais', href: '/materiais' },
   { label: 'Contato', href: '/contato' },
@@ -67,7 +66,6 @@ export const internalNavItems: NavItem[] = [
   { label: 'Quem é Max', href: '/quem-e-max' },
   { label: 'Mandato Aba Reta', href: '/mandato' },
   { label: 'Bonde Pro Max', href: '/bonde-pro-max' },
-  { label: 'Doe', href: '/doe' },
   { label: 'Max na Mídia', href: '/midia' },
   { label: 'Artigos', href: '/materiais' },
   { label: 'Contato', href: '/contato' },
@@ -82,7 +80,6 @@ export const heroContent = {
 export const heroQuickLinks: QuickLink[] = [
   { label: 'Quem é Max', href: '#quem-e-max' },
   { label: 'Bonde Pro Max', href: '#bonde-pro-max' },
-  { label: 'Doe', href: '#doe' },
   { label: 'Notícias', href: '#noticias' },
   { label: 'Maximizando o DF', href: '#maximizando-df' },
   { label: 'Tarifa Zero é possível', href: '#tarifa-zero' },
@@ -509,7 +506,6 @@ export const quemEPageContent = {
   cta: {
     title: 'Faça parte desta história',
     primary: { label: 'Entrar no Bonde', href: '/bonde-pro-max' },
-    secondary: { label: 'Doe agora', href: '/doe' },
     variant: 'navy' as const,
   },
 };
@@ -865,13 +861,6 @@ export const bondePageContent = {
           'Participe de ações simples: compartilhar uma proposta, conversar com sua comunidade ou mobilizar seu território.',
         cta: 'Ver missões',
         href: '#missoes',
-      },
-      {
-        icon: '💛',
-        title: 'Apoie financeiramente',
-        description: 'Contribua com qualquer valor para fortalecer o mandato e garantir presença nos territórios.',
-        cta: 'Fazer doação',
-        href: '/doe',
       },
     ],
   },

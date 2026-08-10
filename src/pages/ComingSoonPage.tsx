@@ -9,7 +9,7 @@ export default function ComingSoonPage() {
           Novo site em preparação. Volte em breve para conhecer as novidades.
         </p>
         <span className="mt-8 inline-block rounded-full border border-yellow-500/35 bg-brand-black/35 px-4 py-2 text-sm uppercase tracking-widest text-yellow-500">
-          Distrito Federal
+          Max Maciel
         </span>
       </main>
     </div>

@@ -29,7 +29,7 @@ export default function MaximizandoDfPage() {
       <PageCta
         title="Faça parte da continuidade"
         primary={{ label: 'Apoie a campanha', href: '/apoie' }}
-        secondary={{ label: 'Doe agora', href: '/doe' }}
+        secondary={{ label: 'Entrar no Bonde', href: '/bonde-pro-max' }}
         variant="yellow"
       />
     </InternalPageLayout>
