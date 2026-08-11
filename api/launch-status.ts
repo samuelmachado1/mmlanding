@@ -14,7 +14,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   const previewSecret = process.env.PREVIEW_SECRET?.trim();
-  const previewHash = previewSecret ? await hashPreviewSecret(previewSecret) : null;
+  const previewHash = previewSecret ? hashPreviewSecret(previewSecret) : null;
   const host = req.headers.host ?? 'localhost';
   const protocol = host.includes('localhost') ? 'http' : 'https';
   const url = new URL(req.url ?? '/api/launch-status', `${protocol}://${host}`);

@@ -1,3 +1,5 @@
+export const PREVIEW_SESSION_KEY = '__max_preview_access';
+
 export function formatDateInBrazil(date: Date): string {
   return new Intl.DateTimeFormat('en-CA', {
     timeZone: 'America/Sao_Paulo',
@@ -33,11 +35,32 @@ export function isSiteAccessGated(
   return !isSiteLaunched(siteLaunched, launchDate, isProductionBuild);
 }
 
+export function hasStoredPreviewAccess(): boolean {
+  try {
+    return sessionStorage.getItem(PREVIEW_SESSION_KEY) === '1';
+  } catch {
+    return false;
+  }
+}
+
+export function markPreviewAccessGranted(): void {
+  try {
+    sessionStorage.setItem(PREVIEW_SESSION_KEY, '1');
+  } catch {
+    // Ignore storage errors (private mode, etc.)
+  }
+}
+
 export async function checkLaunchAccess(search = window.location.search): Promise<boolean> {
+  if (hasStoredPreviewAccess()) {
+    return true;
+  }
+
   const params = new URLSearchParams(search);
   const preview = params.get('preview');
 
   if (preview && __PREVIEW_SECRET__ && preview === __PREVIEW_SECRET__) {
+    markPreviewAccessGranted();
     return true;
   }
 
@@ -50,7 +73,12 @@ export async function checkLaunchAccess(search = window.location.search): Promis
     if (!response.ok) return false;
 
     const data = (await response.json()) as { allowed?: boolean };
-    return Boolean(data.allowed);
+    if (data.allowed) {
+      markPreviewAccessGranted();
+      return true;
+    }
+
+    return false;
   } catch {
     return false;
   }

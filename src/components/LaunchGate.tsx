@@ -1,16 +1,24 @@
 import { useEffect, useState, type ReactNode } from 'react';
-import { useLocation } from 'react-router-dom';
-import { checkLaunchAccess, isSiteAccessGated } from '../lib/launch-gate.ts';
+import {
+  checkLaunchAccess,
+  hasStoredPreviewAccess,
+  isSiteAccessGated,
+} from '../lib/launch-gate.ts';
 import ComingSoonPage from '../pages/ComingSoonPage.tsx';
 
 interface LaunchGateProps {
   children: ReactNode;
 }
 
+function initialStatus(gated: boolean): 'loading' | 'allowed' | 'denied' {
+  if (!gated) return 'allowed';
+  if (hasStoredPreviewAccess()) return 'allowed';
+  return 'loading';
+}
+
 export function LaunchGate({ children }: LaunchGateProps) {
-  const { search } = useLocation();
   const gated = isSiteAccessGated();
-  const [status, setStatus] = useState<'loading' | 'allowed' | 'denied'>(gated ? 'loading' : 'allowed');
+  const [status, setStatus] = useState<'loading' | 'allowed' | 'denied'>(() => initialStatus(gated));
 
   useEffect(() => {
     if (!gated) {
@@ -18,9 +26,14 @@ export function LaunchGate({ children }: LaunchGateProps) {
       return;
     }
 
+    if (hasStoredPreviewAccess()) {
+      setStatus('allowed');
+      return;
+    }
+
     let cancelled = false;
 
-    checkLaunchAccess(search).then((allowed) => {
+    checkLaunchAccess(window.location.search).then((allowed) => {
       if (cancelled) return;
 
       if (allowed) {
@@ -35,7 +48,7 @@ export function LaunchGate({ children }: LaunchGateProps) {
     return () => {
       cancelled = true;
     };
-  }, [gated, search]);
+  }, [gated]);
 
   if (!gated) {
     return children;
