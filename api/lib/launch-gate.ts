@@ -1,3 +1,5 @@
+import { createHash } from 'node:crypto';
+
 export const PREVIEW_COOKIE = '__max_preview';
 
 export function formatDateInBrazil(date: Date): string {
@@ -23,12 +25,8 @@ export function isSiteLaunchedFromEnv(env: Record<string, string | undefined>): 
   return formatDateInBrazil(new Date()) >= launchDate;
 }
 
-export async function hashPreviewSecret(secret: string): Promise<string> {
-  const data = new TextEncoder().encode(secret);
-  const digest = await crypto.subtle.digest('SHA-256', data);
-  return Array.from(new Uint8Array(digest))
-    .map((byte) => byte.toString(16).padStart(2, '0'))
-    .join('');
+export function hashPreviewSecret(secret: string): string {
+  return createHash('sha256').update(secret).digest('hex');
 }
 
 export function getPreviewCookieFromHeader(cookieHeader: string | null): string | null {
