@@ -36,6 +36,11 @@ export function isSiteAccessGated(
 export async function checkLaunchAccess(search = window.location.search): Promise<boolean> {
   const params = new URLSearchParams(search);
   const preview = params.get('preview');
+
+  if (preview && __PREVIEW_SECRET__ && preview === __PREVIEW_SECRET__) {
+    return true;
+  }
+
   const apiUrl = preview
     ? `/api/launch-status?preview=${encodeURIComponent(preview)}`
     : '/api/launch-status';

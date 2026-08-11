@@ -3,7 +3,7 @@ import {
   hasValidPreviewAccess,
   hashPreviewSecret,
   isSiteLaunchedFromEnv,
-} from '../lib/launch-gate.ts';
+} from './lib/launch-gate.ts';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   const launched = isSiteLaunchedFromEnv(process.env);
