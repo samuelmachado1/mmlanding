@@ -9,6 +9,7 @@ import CtmUPage from './pages/mandato/CtmUPage.tsx';
 import MaximizandoDfPage from './pages/MaximizandoDfPage.tsx';
 import BondeProMaxPage from './pages/BondeProMaxPage.tsx';
 import MateriaisPage from './pages/MateriaisPage.tsx';
+import ApoiePage from './pages/ApoiePage.tsx';
 import MidiaPage from './pages/MidiaPage.tsx';
 import ArtigosPage from './pages/ArtigosPage.tsx';
 import ContatoPage from './pages/ContatoPage.tsx';
@@ -26,8 +27,9 @@ export default function App() {
         <Route path="/mandato/ctmu" element={<CtmUPage />} />
         <Route path="/maximizando-df" element={<MaximizandoDfPage />} />
         <Route path="/bonde-pro-max" element={<BondeProMaxPage />} />
-        <Route path="/materiais" element={<MateriaisPage />} />
-        <Route path="/midia" element={<MidiaPage />} />
+      <Route path="/materiais" element={<MateriaisPage />} />
+      <Route path="/apoie" element={<ApoiePage />} />
+      <Route path="/midia" element={<MidiaPage />} />
         <Route path="/artigos" element={<ArtigosPage />} />
         <Route path="/contato" element={<ContatoPage />} />
       </Routes>

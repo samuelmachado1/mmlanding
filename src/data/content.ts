@@ -8,6 +8,7 @@ import type {
   QuickLink,
   ContentBlock,
   CrewCard,
+  CrewMaterialForm,
   ClippingInterview,
   ClippingReport,
   ZeroFareCard,
@@ -49,8 +50,7 @@ export const siteConfig = {
     cream: '#f5f1e8',
   },
   whatsapp: {
-    number: '5561999999999',
-    message: 'Olá! Quero acompanhar o mandato do Deputado Max Maciel.',
+    groupUrl: 'https://chat.whatsapp.com/GEYO2eHXSKwKVJcRa2UL7t?s=cl&p=i&mlu=4',
   },
   email: 'contato@maxmaciel.df.br',
 } as const;
@@ -91,6 +91,7 @@ export const heroQuickLinks: QuickLink[] = [
 ];
 
 export const heroFixedActions: QuickLink[] = [
+  { label: 'Apoie o manifesto', href: '#apoie-manifesto' },
   { label: 'Compartilhe', href: '#espalhe-material' },
   { label: 'Exercite o direito de manifestar', href: '#bonde-pro-max' },
 ];
@@ -163,7 +164,14 @@ export const bondeProMaxBlocks: ContentBlock[] = [
     title: 'Grupo de apoiadores',
     description: 'Receba atualizações do mandato, votações e convites para audiências no WhatsApp e Telegram.',
     cta: 'Entrar no grupo',
-    href: 'https://chat.whatsapp.com/exemplo',
+    href: siteConfig.whatsapp.groupUrl,
+  },
+  {
+    id: 'apoie-manifesto',
+    title: 'Apoie o manifesto',
+    description: 'Assine e divulgue nossas propostas por um DF mais justo, acessível e transparente.',
+    cta: 'Assinar manifesto',
+    href: '#apoie-manifesto',
   },
   {
     id: 'missoes',
@@ -271,7 +279,7 @@ export const crewContent = {
 export const crewCards: CrewCard[] = [
   {
     id: 'espalhe-material',
-    title: 'Espalhe nosso material',
+    title: 'Espalhe nosso material nas redes',
     description:
       'Leve nossas ideias para as ruas e para as redes. Baixe cards, vídeos e materiais para compartilhar com sua comunidade.',
     cta: 'Acessar materiais',
@@ -286,6 +294,14 @@ export const crewCards: CrewCard[] = [
     href: '/bonde-pro-max',
   },
   {
+    id: 'apoie-manifesto',
+    title: 'Apoie o manifesto',
+    description:
+      'Mostre que você também acredita em um DF no qual a periferia esteja no centro das decisões.',
+    cta: 'Quero apoiar',
+    href: '/apoie',
+  },
+  {
     id: 'missoes',
     title: 'Missões',
     description:
@@ -294,6 +310,15 @@ export const crewCards: CrewCard[] = [
     href: '/bonde-pro-max',
   },
 ];
+
+export const crewMaterialForm = {
+  id: 'fortalecer-o-corre',
+  title: 'Espalhe nosso material nas ruas',
+  description:
+    'Cola com a gente! Preenche os dados abaixo que a gente separa seu material e leva até você.',
+  cta: 'Cola com a gente',
+  href: 'https://docs.google.com/forms/d/e/1FAIpQLSfN6eMANJTcC4tQULeIbmuQh4HYVOoww0qUsPMgkRiVqvGsNw/viewform',
+} satisfies CrewMaterialForm;
 
 export const doeContent = {
   title: 'Doe',
@@ -355,14 +380,13 @@ export const socialLinks: SocialLink[] = [
   { name: 'YouTube', href: 'https://www.youtube.com/@MaxMacielDF', icon: MessageCircle },
 ];
 
-export function whatsappUrl(customMessage?: string): string {
-  const msg = encodeURIComponent(customMessage ?? siteConfig.whatsapp.message);
-  return 'https://wa.me/' + siteConfig.whatsapp.number + '?text=' + msg;
+export function whatsappUrl(): string {
+  return siteConfig.whatsapp.groupUrl;
 }
 
 export const socialBarLinks: SocialBarLink[] = [
   { name: 'Instagram', href: 'https://www.instagram.com/maxmacieldf', platform: 'instagram' },
-  { name: 'WhatsApp', href: 'https://wa.me/5561999999999', platform: 'whatsapp' },
+  { name: 'WhatsApp', href: siteConfig.whatsapp.groupUrl, platform: 'whatsapp' },
   { name: 'YouTube', href: 'https://www.youtube.com/@MaxMacielDF', platform: 'youtube' },
   { name: 'TikTok', href: 'https://www.tiktok.com/@maxmacieldf', platform: 'tiktok' },
   { name: 'Facebook', href: 'https://www.facebook.com/maxmacieldf', platform: 'facebook' },
@@ -687,7 +711,7 @@ export const bondePageContent = {
         description:
           'Entre no grupo do WhatsApp e receba em primeira mão notícias, convocações e materiais de campanha.',
         cta: 'Entrar no grupo',
-        href: 'https://wa.me/5561999999999',
+        href: siteConfig.whatsapp.groupUrl,
       },
       {
         icon: '📦',
@@ -770,7 +794,7 @@ export const canaisPage = {
   intro: 'Vem trocar uma ideia com a gente através dos nossos canais:',
   channels: [
     { name: 'Instagram', href: 'https://www.instagram.com/maxmacieldf' },
-    { name: 'WhatsApp', href: 'https://wa.me/5561999999999' },
+    { name: 'WhatsApp', href: siteConfig.whatsapp.groupUrl },
     { name: 'Telegram', href: 'https://t.me/+A1v342WcNVRjNGFh' },
   ] satisfies ChannelItem[],
 };
