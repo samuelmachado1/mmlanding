@@ -8,6 +8,7 @@ import type {
   QuickLink,
   ContentBlock,
   CrewCard,
+  CrewMaterialForm,
   ClippingInterview,
   ClippingReport,
   ZeroFareCard,
@@ -24,6 +25,7 @@ import type {
   MidiaSection,
   PageLink,
   HighlightStatCard,
+  Article,
 } from '../types/index.ts';
 
 import midiaRedetv from '../assets/pictures/midia/redetv.png';
@@ -48,8 +50,7 @@ export const siteConfig = {
     cream: '#f5f1e8',
   },
   whatsapp: {
-    number: '5561999999999',
-    message: 'Olá! Quero acompanhar o mandato do Deputado Max Maciel.',
+    groupUrl: 'https://chat.whatsapp.com/GEYO2eHXSKwKVJcRa2UL7t?s=cl&p=i&mlu=4',
   },
   email: 'contato@maxmaciel.df.br',
 } as const;
@@ -60,7 +61,7 @@ export const navItems: NavItem[] = [
   { label: 'Maximizando o DF', href: '/maximizando-df' },
   { label: 'Bonde Pro Max', href: '/bonde-pro-max' },
   { label: 'Max na Mídia', href: '/midia' },
-  { label: 'Materiais', href: '/materiais' },
+  { label: 'Artigos', href: '/artigos' },
   { label: 'Contato', href: '/contato' },
 ];
 
@@ -70,7 +71,7 @@ export const internalNavItems: NavItem[] = [
   { label: 'Maximizando o DF', href: '/maximizando-df' },
   { label: 'Bonde Pro Max', href: '/bonde-pro-max' },
   { label: 'Max na Mídia', href: '/midia' },
-  { label: 'Materiais', href: '/materiais' },
+  { label: 'Artigos', href: '/artigos' },
   { label: 'Contato', href: '/contato' },
 ];
 
@@ -163,7 +164,7 @@ export const bondeProMaxBlocks: ContentBlock[] = [
     title: 'Grupo de apoiadores',
     description: 'Receba atualizações do mandato, votações e convites para audiências no WhatsApp e Telegram.',
     cta: 'Entrar no grupo',
-    href: 'https://chat.whatsapp.com/exemplo',
+    href: siteConfig.whatsapp.groupUrl,
   },
   {
     id: 'apoie-manifesto',
@@ -278,7 +279,7 @@ export const crewContent = {
 export const crewCards: CrewCard[] = [
   {
     id: 'espalhe-material',
-    title: 'Espalhe nosso material',
+    title: 'Espalhe nosso material nas redes',
     description:
       'Leve nossas ideias para as ruas e para as redes. Baixe cards, vídeos e materiais para compartilhar com sua comunidade.',
     cta: 'Acessar materiais',
@@ -309,6 +310,15 @@ export const crewCards: CrewCard[] = [
     href: '/bonde-pro-max',
   },
 ];
+
+export const crewMaterialForm = {
+  id: 'fortalecer-o-corre',
+  title: 'Espalhe nosso material nas ruas',
+  description:
+    'Cola com a gente! Preenche os dados abaixo que a gente separa seu material e leva até você.',
+  cta: 'Cola com a gente',
+  href: 'https://docs.google.com/forms/d/e/1FAIpQLSfN6eMANJTcC4tQULeIbmuQh4HYVOoww0qUsPMgkRiVqvGsNw/viewform',
+} satisfies CrewMaterialForm;
 
 export const doeContent = {
   title: 'Doe',
@@ -370,14 +380,13 @@ export const socialLinks: SocialLink[] = [
   { name: 'YouTube', href: 'https://www.youtube.com/@MaxMacielDF', icon: MessageCircle },
 ];
 
-export function whatsappUrl(customMessage?: string): string {
-  const msg = encodeURIComponent(customMessage ?? siteConfig.whatsapp.message);
-  return 'https://wa.me/' + siteConfig.whatsapp.number + '?text=' + msg;
+export function whatsappUrl(): string {
+  return siteConfig.whatsapp.groupUrl;
 }
 
 export const socialBarLinks: SocialBarLink[] = [
   { name: 'Instagram', href: 'https://www.instagram.com/maxmacieldf', platform: 'instagram' },
-  { name: 'WhatsApp', href: 'https://wa.me/5561999999999', platform: 'whatsapp' },
+  { name: 'WhatsApp', href: siteConfig.whatsapp.groupUrl, platform: 'whatsapp' },
   { name: 'YouTube', href: 'https://www.youtube.com/@MaxMacielDF', platform: 'youtube' },
   { name: 'TikTok', href: 'https://www.tiktok.com/@maxmacieldf', platform: 'tiktok' },
   { name: 'Facebook', href: 'https://www.facebook.com/maxmacieldf', platform: 'facebook' },
@@ -388,8 +397,6 @@ export const socialBarLinks: SocialBarLink[] = [
 export const volunteerRegions = ['Plano Piloto', 'Ceilândia', 'Taguatinga', 'Samambaia', 'Gama', 'São Sebastião', 'Planaltina', 'Outra RA'];
 
 export const footerLinks = [
-  { label: 'Apoie a campanha', href: '/apoie' },
-  { label: 'Doe', href: '/doe' },
   { label: 'Contato', href: '/contato' },
 ];
 
@@ -470,6 +477,7 @@ export const mandatoPageContent = {
         title: 'Tarifa Zero aos domingos e feriados',
         description:
           'Mais de 37,8 milhões de acessos ao STPC/DF em 82 dias de gratuidade no transporte público.',
+        href: '/mandato/tarifa-zero',
       },
       {
         icon: '📜',
@@ -478,6 +486,7 @@ export const mandatoPageContent = {
         title: '14 leis sancionadas',
         description:
           'Em quase 4 anos de Gabinete Aba Reta, leis que mudam a realidade do DF com vontade do Poder Executivo.',
+        href: '/mandato/projetos-de-lei',
       },
       {
         icon: '💰',
@@ -486,6 +495,7 @@ export const mandatoPageContent = {
         title: 'R$ 116 milhões em emendas',
         description:
           'Recursos destinados para educação, saúde, cultura, mobilidade e assistência social nas periferias.',
+        href: '/maximizando-df',
       },
       {
         icon: '🏛️',
@@ -494,6 +504,7 @@ export const mandatoPageContent = {
         title: 'Presidência da CTMU',
         description:
           'Liderança da Comissão de Transporte e Mobilidade Urbana na Câmara Legislativa do DF.',
+        href: '/mandato/ctmu',
       },
     ],
   },
@@ -680,6 +691,16 @@ export const bondePageContent = {
     { value: '48', label: 'regiões cobertas' },
     { value: '230+', label: 'eventos realizados' },
   ],
+  avatarStudio: {
+    eyebrow: 'Seu avatar no bonde',
+    title: 'Crie seu personagem aba reta',
+    description:
+      'Monte seu avatar no estilo Bonde Pro Max, como nos exemplos ao lado, e compartilhe nas redes para mostrar que você faz parte dessa caminhada.',
+    embedUrl: '',
+    embedTitle: 'Criador de avatares Bonde Pro Max',
+    embedUnavailableMessage:
+      'O criador de avatares estará disponível em breve. Enquanto isso, acompanhe o Bonde Pro Max pelos canais oficiais.',
+  },
   actions: {
     eyebrow: 'Como participar',
     title: 'Escolha sua forma de agir',
@@ -690,7 +711,7 @@ export const bondePageContent = {
         description:
           'Entre no grupo do WhatsApp e receba em primeira mão notícias, convocações e materiais de campanha.',
         cta: 'Entrar no grupo',
-        href: 'https://wa.me/5561999999999',
+        href: siteConfig.whatsapp.groupUrl,
       },
       {
         icon: '📦',
@@ -699,6 +720,14 @@ export const bondePageContent = {
           'Baixe cards, vídeos e artes prontas para compartilhar nas redes sociais e fortalecer nossas ideias.',
         cta: 'Acessar materiais',
         href: '/materiais',
+      },
+      {
+        icon: '🎨',
+        title: 'Crie seu avatar',
+        description:
+          'Personalize seu personagem aba reto ou aba reta e use nas redes para mostrar que você está no Bonde.',
+        cta: 'Criar avatar',
+        href: '#criar-avatar',
       },
       {
         icon: '🎯',
@@ -765,8 +794,8 @@ export const canaisPage = {
   intro: 'Vem trocar uma ideia com a gente através dos nossos canais:',
   channels: [
     { name: 'Instagram', href: 'https://www.instagram.com/maxmacieldf' },
-    { name: 'WhatsApp', href: 'https://wa.me/5561999999999' },
-    { name: 'Telegram', href: 'https://t.me/maxmaciel' },
+    { name: 'WhatsApp', href: siteConfig.whatsapp.groupUrl },
+    { name: 'Telegram', href: 'https://t.me/+A1v342WcNVRjNGFh' },
   ] satisfies ChannelItem[],
 };
 
@@ -818,12 +847,56 @@ export const doePageContent = {
   ],
 };
 
+export const artigos: Article[] = [
+  {
+    id: 'algoritmo-da-privatizacao',
+    title: 'O algoritmo da privatização',
+    paragraphs: [
+      'Em um mundo em que a inteligência artificial promete prever o futuro, não precisamos de um prompt sofisticado para saber o que pode acontecer com o Metrô do Distrito Federal. O roteiro já é um velho conhecido: primeiro diminuem os investimentos, a manutenção deixa de acompanhar as necessidades do sistema, os equipamentos envelhecem, a qualidade do serviço piora e a população perde a confiança no transporte público. É justamente nesse momento que surge o discurso de que a privatização seria a única solução.',
+      'Esse processo não acontece por acaso. Afinal, sucatear também é uma escolha política. O descarrilamento registrado no Metrô-DF somente reforça a urgência dos alertas que a Comissão de Transporte e Mobilidade Urbana tem feito à Secretaria de Mobilidade do DF, ao Tribunal de Contas do Distrito Federal e ao Ministério Público.',
+      'É grave que um descarrilamento tenha acontecido, ao que tudo indica, por uma peça que caiu de uma composição. Felizmente, não houve feridos, mas é o prenuncio de que se nada for feito para mudar, algo pior pode acontecer. Desde 2023, a CTMU vem apontando após inspeções: frota envelhecida, redução do número de trens disponíveis, equipes de manutenção sobrecarregadas e um sistema que, diante da dificuldade para obter peças de reposição, passou a depender da canibalização de composições para continuar funcionando.',
+      'Dos 32 trens da frota, apenas 19 circulam regularmente. Em alguns momentos deste ano, o sistema chegou a operar com apenas 12 composições nos horários de maior demanda. Outros dez trens aguardam manutenção e quatro sequer têm condições de voltar à operação, servindo apenas para fornecer peças às demais composições. Agora, mais um trem ficará fora de operação por tempo indeterminado.',
+      'A investigação dirá a relação entre esses fatos. O que já se pode afirmar é que o episódio evidencia um sistema que deixou de preocupar apenas pela perda de eficiência e passou a exigir atenção redobrada com sua segurança operacional.',
+      'Nada disso aconteceu de um dia para o outro. Um sistema de transporte não chega a esse nível de deterioração por acidente. Entre 2019 e 2024, o Governo do Distrito Federal empenhou cerca de apenas 1% dos recursos previstos para investimentos no Metrô-DF. Na prática, R$ 1 bilhão deixou de ser investido no sistema metroviário enquanto o governo aportou bilhões em viadutos e rodovias.',
+      'O problema não é apenas quanto se investe, mas também como o sistema é financiado. Enquanto as empresas de ônibus recebem por meio da tarifa técnica — um modelo que cobre custos operacionais, manutenção e renovação da frota independentemente da arrecadação das passagens —, o Metrô-DF continua dependendo, em grande medida, da receita obtida com os próprios passageiros para custear sua operação. Esse desequilíbrio compromete um sistema que deveria ser planejado de forma integrada.',
+      'O metrô precisa voltar a ser a espinha dorsal da mobilidade do Distrito Federal, realizando os grandes deslocamentos entre as regiões administrativas e o Plano Piloto, enquanto os ônibus cumprem o papel de alimentar essa rede.',
+      'É indispensável modernizar o sistema de energia para ampliar a capacidade operacional da rede, reduzir a dependência de equipamentos obsoletos e permitir a entrada de novas composições. Também é urgente recompor o quadro de servidores, fortalecer a manutenção preventiva e garantir investimentos permanentes para que a companhia deixe de atuar apenas apagando incêndios e volte a planejar o futuro.',
+      'O futuro do Metrô-DF ainda pode ser reescrito. Mas isso exige coragem para abandonar a política do improviso e transformar o transporte público em uma verdadeira prioridade de Estado. Com um modelo de financiamento mais justo, investimentos permanentes e planejamento de longo prazo será possível adquirir novos trens, ampliar o quadro de servidores, recuperar a capacidade operacional da companhia e levar o metrô às regiões administrativas que há décadas aguardam essa expansão.',
+      'Não precisamos escolher entre um metrô sucateado e um metrô privatizado. Precisamos escolher um metrô forte, moderno, seguro e capaz de atender às necessidades da população. Porque patrimônio público não se abandona. Patrimônio público se fortalece.',
+    ],
+  },
+  {
+    id: 'racismo-ambiental',
+    title: 'Sem enfrentar o racismo ambiental, não existe projeto de cidade',
+    paragraphs: [
+      'Em breve, estaremos em mais um período eleitoral. As campanhas ocuparão as ruas e as redes sociais. Falaremos sobre saúde, segurança, transporte, educação, geração de emprego e desenvolvimento econômico. No entanto, existe uma pauta que continua praticamente ausente do debate público: o racismo ambiental.',
+      'Enquanto esse tema permanecer invisível, continuaremos discutindo apenas os efeitos da desigualdade, sem enfrentar suas causas. Muita gente ainda acredita que racismo ambiental é apenas uma questão ligada ao meio ambiente, mas não é. Na verdade, é compreender quem convive diariamente com enchentes, calor extremo, falta de árvores, esgoto a céu aberto, rios contaminados e infraestrutura precária. E, principalmente, entender por que isso acontece sempre nos mesmos lugares.',
+      'No Brasil, e em especial no Distrito Federal, a desigualdade tem endereço. Basta comparar o Plano Piloto com a maioria das regiões administrativas. Quando chegam as chuvas, as cidades param. Quando chega a seca, o calor se torna quase insuportável. As mudanças climáticas atingem todos nós, mas seus impactos são muito mais severos para quem vive onde o GDF historicamente investiu menos.',
+      'Brasília foi construída sobre um projeto urbano profundamente desigual. Enquanto servidores públicos, militares, arquitetos e engenheiros recebiam moradias estruturadas no centro da nova capital, milhares de trabalhadores responsáveis por erguer a cidade foram empurrados para ocupações distantes, sem infraestrutura e, posteriormente, removidos para regiões cada vez mais afastadas. Essa lógica de segregação territorial permanece viva até hoje.',
+      'As periferias foram planejadas para garantir um teto, mas não qualidade de vida. Como se o direito do pobre terminasse na porta de casa. Dignidade não é apenas ter um endereço. É viver em uma cidade que ofereça sombra, parques urbanos, áreas de convivência e espaços públicos onde crianças podem brincar, famílias podem se encontrar e a população pode exercer plenamente o direito à cidade.',
+      'Todas as regiões administrativas possuem um plano urbanístico de desenvolvimento. No entanto, o Plano Piloto e os lagos Sul e Norte concentram grande parte da arborização e recebem, com mais frequência, novas mudas de árvores. Já as periferias convivem com menos áreas verdes, mais calor e maior vulnerabilidade às mudanças climáticas.',
+      'Essa desigualdade também se revela na forma como cuidamos do Rio Melchior e do Lago Paranoá. Mesmo sendo importante para o abastecimento de água de grande parte da população, o Melchior, que passas pela Ceilândia e Samambaia, continua recebendo esgoto, resíduos e sofrendo sucessivos processos de degradação. Já o Lago Paranoá, cartão-postal cercado por grandes mansões, recebe investimentos para manter suas águas próprias para banhistas, turistas e donos de embarcações.',
+      'Quando afirmo que existe racismo ambiental, não estou dizendo que a chuva escolhe onde cair. Estou dizendo que o poder público escolhe, há décadas, onde investir. Escolhe onde plantar árvores, construir parques, ampliar a drenagem, levar saneamento, recuperar córregos e regularizar bairros. Também escolhe quais territórios podem continuar esperando.',
+      'As nossas casas alagam, as ruas se transformam em rios e as cidades se tornam verdadeiras ilhas de calor porque o planejamento urbano nunca preparou as periferias para enfrentar esses desafios. Garantiram moradia, mas não construíram cidades sustentáveis, humanas e resilientes. Retiraram áreas verdes para dar lugar ao concreto, impermeabilizaram o solo sem investir em drenagem e deixaram a periferia mais vulnerável aos efeitos da crise climática.',
+      'No DF, o CEP ainda determina a velocidade com que o Estado chega. É justamente por isso que o racismo ambiental precisa ocupar o centro do debate eleitoral. Ainda dá tempo de mudar essa história, mas, para isso, precisamos pensar o desenvolvimento do Distrito Federal a partir das periferias, ouvindo quem mais sente os efeitos da desigualdade territorial e da crise climática, e não apenas a partir da realidade do centro.',
+      'As eleições são o momento em que decidimos quais prioridades orientarão o orçamento público pelos próximos anos. Ignorar o racismo ambiental significa continuar destinando recursos de forma desigual e aceitar que algumas regiões sigam acumulando riscos, enquanto outras concentram qualidade de vida.',
+      'Não existe justiça climática sem justiça territorial. E não existe democracia plena enquanto o lugar onde uma pessoa mora continuar determinando o tamanho da proteção que ela recebe do Estado.',
+    ],
+  },
+];
+
+export const artigosPage = {
+  title: 'Artigos',
+  intro:
+    'Reflexões sobre mobilidade, cidade e justiça territorial — o que Max Maciel escreve para colocar a periferia no centro do debate público.',
+};
+
 export const midiaPage = {
   title: 'Max na Mídia',
   sections: [
     { title: 'Notícias', items: newsItems.map((item) => item.title) },
     { title: 'Entrevistas em vídeo', items: videoItems.map((item) => item.title) },
-    { title: 'Artigos', items: ['Em breve'] },
+    { title: 'Artigos', items: artigos.map((article) => article.title) },
   ] satisfies MidiaSection[],
 };
 

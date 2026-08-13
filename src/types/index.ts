@@ -63,6 +63,14 @@ export interface CrewCard {
   href: string;
 }
 
+export interface CrewMaterialForm {
+  id: string;
+  title: string;
+  description: string;
+  cta: string;
+  href: string;
+}
+
 export interface AgendaTopic {
   id: string;
   title: string;
@@ -120,6 +128,12 @@ export interface ModalProps {
 export interface PageContent {
   title: string;
   subtitle?: string;
+  paragraphs: string[];
+}
+
+export interface Article {
+  id: string;
+  title: string;
   paragraphs: string[];
 }
 
@@ -197,6 +211,7 @@ export interface ProposalCard {
   status: ProposalStatus;
   title: string;
   description: string;
+  href: string;
 }
 
 export interface StatCard {
@@ -216,6 +231,15 @@ export interface ActionCard {
   description: string;
   cta: string;
   href: string;
+}
+
+export interface BondeAvatarStudioContent {
+  eyebrow: string;
+  title: string;
+  description: string;
+  embedUrl: string;
+  embedTitle: string;
+  embedUnavailableMessage: string;
 }
 
 export interface MissionCard {

@@ -1,4 +1,4 @@
-import { bondeProMaxBlocks, whatsappUrl } from '../../data/content.ts';
+import { bondeProMaxBlocks } from '../../data/content.ts';
 import { AnimatedSection } from '../ui/AnimatedSection.tsx';
 import { SectionHeading } from '../ui/SectionHeading.tsx';
 
@@ -18,7 +18,7 @@ export function BondeProMax() {
               <p className="mt-2 text-gray-600">{block.description}</p>
               {block.cta && block.href ? (
                 <a
-                  href={block.id === 'grupo-apoiadores' ? whatsappUrl('Quero entrar no grupo de apoiadores!') : block.href}
+                  href={block.href}
                   target={block.href.startsWith('http') ? '_blank' : undefined}
                   rel={block.href.startsWith('http') ? 'noreferrer' : undefined}
                   className="inline-flex items-center justify-center rounded-full bg-navy-500 px-5 py-3 text-sm font-semibold text-yellow-500 transition-colors hover:bg-navy-600 mt-4 px-4 py-2"

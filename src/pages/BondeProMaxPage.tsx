@@ -1,4 +1,5 @@
 import { bondePageContent } from '../data/content.ts';
+import { BondeAvatarStudio } from '../components/pages/BondeAvatarStudio.tsx';
 import {
   InternalPageLayout,
   PageHero,
@@ -7,7 +8,7 @@ import {
 import { BondeActionGrid, BondeMissionList, BondeStatGrid } from '../components/pages/PageBlocks.tsx';
 
 export default function BondeProMaxPage() {
-  const { hero, stats, actions, missions } = bondePageContent;
+  const { hero, stats, avatarStudio, actions, missions } = bondePageContent;
 
   return (
     <InternalPageLayout>
@@ -18,6 +19,8 @@ export default function BondeProMaxPage() {
           <BondeStatGrid stats={stats} />
         </div>
       </section>
+
+      <BondeAvatarStudio {...avatarStudio} />
 
       <PageSection eyebrow={actions.eyebrow} title={actions.title} className="bg-white">
         <BondeActionGrid cards={actions.cards} />

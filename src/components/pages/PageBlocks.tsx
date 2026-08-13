@@ -61,24 +61,31 @@ export function ProposalGrid({ cards }: { cards: ProposalCard[] }) {
   return (
     <ul className="grid gap-6 sm:grid-cols-2">
       {cards.map((card) => (
-        <li key={card.title} className="rounded-2xl border border-brand-black/[0.06] bg-white p-6">
-          <div className="flex items-center justify-between gap-3">
-            <div className="flex items-center gap-2">
-              <span className="text-2xl leading-8" aria-hidden>
-                {card.icon}
+        <li key={card.title}>
+          <AppLink
+            to={card.href}
+            className="group flex h-full flex-col rounded-2xl border border-brand-black/[0.06] bg-white p-6 transition hover:border-navy-500"
+          >
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2">
+                <span className="text-2xl leading-8" aria-hidden>
+                  {card.icon}
+                </span>
+                <p className="font-nav text-sm font-semibold uppercase tracking-[0.05em] text-navy-500">
+                  {card.category}
+                </p>
+              </div>
+              <span
+                className={`shrink-0 rounded-full px-2 py-1 font-nav text-xs font-semibold ${statusStyles[card.status]}`}
+              >
+                {card.status}
               </span>
-              <p className="font-nav text-sm font-semibold uppercase tracking-[0.05em] text-navy-500">
-                {card.category}
-              </p>
             </div>
-            <span
-              className={`shrink-0 rounded-full px-2 py-1 font-nav text-xs font-semibold ${statusStyles[card.status]}`}
-            >
-              {card.status}
-            </span>
-          </div>
-          <h3 className="pt-3 font-nav text-lg font-bold text-brand-black">{card.title}</h3>
-          <p className="pt-2 text-sm leading-[1.625] text-brand-black">{card.description}</p>
+            <h3 className="pt-3 font-nav text-lg font-bold text-brand-black group-hover:text-navy-500">
+              {card.title}
+            </h3>
+            <p className="pt-2 text-sm leading-[1.625] text-brand-black">{card.description}</p>
+          </AppLink>
         </li>
       ))}
     </ul>
