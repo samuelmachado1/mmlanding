@@ -204,6 +204,12 @@ export interface StatCard {
   label: string;
 }
 
+export interface HighlightStatCard {
+  value: string;
+  label: string;
+  srLabel?: string;
+}
+
 export interface ActionCard {
   icon: string;
   title: string;

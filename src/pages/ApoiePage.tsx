@@ -1,7 +1,6 @@
 import { apoiePage } from '../data/content.ts';
 import {
   InternalPageLayout,
-  PageCta,
   PageHero,
   PageSection,
 } from '../components/pages/InternalPageParts.tsx';
@@ -23,19 +22,19 @@ export default function ApoiePage() {
         <form className="mx-auto max-w-xl space-y-5" onSubmit={(event) => event.preventDefault()}>
           <div>
             <label className="font-nav text-sm font-semibold text-brand-black">Nome</label>
-            <input type="text" className={inputClassName} placeholder="Seu nome completo" />
+            <input type="text" className={inputClassName} placeholder="Seu nome completo" required />
           </div>
           <div>
             <label className="font-nav text-sm font-semibold text-brand-black">RA</label>
-            <input type="text" className={inputClassName} placeholder="Sua região administrativa" />
+            <input type="text" className={inputClassName} placeholder="Sua região administrativa" required />
           </div>
           <div>
             <label className="font-nav text-sm font-semibold text-brand-black">WhatsApp</label>
-            <input type="tel" className={inputClassName} placeholder="(61) 99999-9999" />
+            <input type="tel" className={inputClassName} placeholder="(61) 99999-9999" required />
           </div>
           <div>
             <label className="font-nav text-sm font-semibold text-brand-black">E-mail</label>
-            <input type="email" className={inputClassName} placeholder="seu@email.com" />
+            <input type="email" className={inputClassName} placeholder="seu@email.com" required />
           </div>
           <button
             type="submit"
@@ -44,15 +43,7 @@ export default function ApoiePage() {
             Quero apoiar
           </button>
         </form>
-        <p className="mx-auto mt-6 max-w-xl text-sm text-brand-black/60">{apoiePage.note}</p>
       </PageSection>
-
-      <PageCta
-        title="Quer ir além?"
-        primary={{ label: 'Entrar no Bonde', href: '/bonde-pro-max' }}
-        secondary={{ label: 'Ver materiais', href: '/materiais' }}
-        variant="yellow"
-      />
     </InternalPageLayout>
   );
 }

@@ -11,6 +11,7 @@ import MateriaisPage from './pages/MateriaisPage.tsx';
 import ApoiePage from './pages/ApoiePage.tsx';
 import MidiaPage from './pages/MidiaPage.tsx';
 import ContatoPage from './pages/ContatoPage.tsx';
+import DoePage from './pages/DoePage.tsx';
 
 export default function App() {
   return (
@@ -25,6 +26,7 @@ export default function App() {
       <Route path="/bonde-pro-max" element={<BondeProMaxPage />} />
       <Route path="/materiais" element={<MateriaisPage />} />
       <Route path="/apoie" element={<ApoiePage />} />
+      <Route path="/doe" element={<DoePage />} />
       <Route path="/midia" element={<MidiaPage />} />
       <Route path="/contato" element={<ContatoPage />} />
     </Routes>
