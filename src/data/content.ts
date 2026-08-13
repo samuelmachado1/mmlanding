@@ -278,7 +278,7 @@ export const crewContent = {
 export const crewCards: CrewCard[] = [
   {
     id: 'espalhe-material',
-    title: 'Espalhe nosso material nas redes',
+    title: 'Mostre seu apoio nas redes',
     description:
       'Leve nossas ideias para as ruas e para as redes. Baixe cards, vídeos e materiais para compartilhar com sua comunidade.',
     cta: 'Acessar materiais',
@@ -402,8 +402,46 @@ export const socialBarLinks: SocialBarLink[] = [
 
 export const volunteerRegions = ['Plano Piloto', 'Ceilândia', 'Taguatinga', 'Samambaia', 'Gama', 'São Sebastião', 'Planaltina', 'Outra RA'];
 
+/** Todas as regiões administrativas do Distrito Federal (ordem alfabética). */
+export const distritoFederalRegioesAdministrativas = [
+  'Águas Claras',
+  'Arniqueira',
+  'Arapoanga',
+  'Brazlândia',
+  'Candangolândia',
+  'Ceilândia',
+  'Cidade Estrutural',
+  'Cruzeiro',
+  'Fercal',
+  'Gama',
+  'Guará',
+  'Itapoã',
+  'Jardim Botânico',
+  'Lago Norte',
+  'Lago Sul',
+  'Núcleo Bandeirante',
+  'Park Way',
+  'Planaltina',
+  'Plano Piloto',
+  'Recanto das Emas',
+  'Riacho Fundo',
+  'Riacho Fundo II',
+  'Samambaia',
+  'Santa Maria',
+  'São Sebastião',
+  'SIA',
+  'Sobradinho',
+  'Sobradinho II',
+  'Sol Nascente/Pôr do Sol',
+  'Sudoeste/Octogonal',
+  'Taguatinga',
+  'Varjão',
+  'Vicente Pires',
+] as const;
+
 export const footerLinks = [
   { label: 'Contato', href: '/contato' },
+  { label: 'Política de Privacidade', action: 'privacy-policy' as const },
 ];
 
 export const quemEPage: PageContent = {
@@ -811,6 +849,102 @@ export const apoiePage = {
     'Se você quer MAXzimizar as maravilhas para quem acorda cedo e faz a cidade funcionar todos os dias e bota fé na nossa caminhada, se torne um apoiador, assinando aqui:',
 };
 
+export const apoiadorFormContent = {
+  title: 'PREENCHA COM SEUS DADOS E ASSINE O MANIFESTO',
+  placeholders: {
+    nome: 'Nome Completo',
+    email: 'E-mail',
+    whatsapp: 'Whatsapp',
+    uf: 'UF',
+    municipio: 'Selecione um município',
+    regiaoAdministrativa: 'Selecione uma RA',
+  },
+  checkboxes: {
+    novidades: 'Marque aqui para receber novidades',
+    campanhaDigital: 'Marque aqui para participar da campanha digital',
+    campanhaRua: 'Marque aqui para participar da campanha de rua',
+  },
+  submitLabel: 'ASSINAR',
+  successMessage: 'Manifesto assinado! Obrigado pelo apoio.',
+  notConfiguredMessage: 'Cadastro temporariamente indisponível. Tente novamente em breve.',
+  lgpdTermTitle: 'TERMO DE ACEITE DA LGPD:',
+  lgpdTermText:
+    'Ao enviar este formulário, você concorda que o Gabinete Aba Reta utilize os dados informados exclusivamente para responder ao seu contato/atender sua solicitação, em conformidade com a LGPD.',
+  lgpdCheckboxLabel: 'Li e concordo com o tratamento dos meus dados pessoais.',
+  municipioLoading: 'Carregando municípios...',
+  municipioSelectUf: 'Selecione a UF primeiro',
+};
+
+export const privacyPolicyContent = {
+  title: 'Política de Privacidade',
+  lastUpdated: 'Agosto de 2026',
+  sections: [
+    {
+      heading: '1. Quem é o controlador dos dados',
+      paragraphs: [
+        `Esta Política de Privacidade descreve como ${siteConfig.name} e o comitê de campanha responsável pela reeleição tratam os dados pessoais coletados por este site.`,
+        `Para questões sobre privacidade e proteção de dados, entre em contato pelo e-mail ${siteConfig.email}.`,
+      ],
+    },
+    {
+      heading: '2. Dados que coletamos',
+      paragraphs: [
+        'Ao assinar o manifesto e tornar-se apoiador, podemos coletar: nome completo, e-mail, número de WhatsApp, UF, município e suas preferências de participação (receber novidades, campanha digital ou campanha de rua).',
+        'Não coletamos dados além do necessário para as finalidades descritas nesta política.',
+      ],
+    },
+    {
+      heading: '3. Finalidade do tratamento',
+      paragraphs: [
+        'Utilizamos seus dados para cadastrar apoiadores da campanha, comunicar novidades e convites relacionados ao mandato e à campanha de reeleição, organizar mobilização digital e de rua, e fortalecer a rede de apoiadores do Distrito Federal.',
+      ],
+    },
+    {
+      heading: '4. Base legal',
+      paragraphs: [
+        'O tratamento dos dados pessoais basea-se no consentimento (art. 7º, I, da Lei nº 13.709/2018 — LGPD), manifestado ao assinar o manifesto e marcar as opções de participação, e no legítimo interesse para comunicações relacionadas à finalidade declarada pelo titular.',
+      ],
+    },
+    {
+      heading: '5. Compartilhamento de dados',
+      paragraphs: [
+        'Os dados podem ser armazenados em ferramentas de formulário e planilhas (Google Forms e Google Sheets) utilizadas para organização da campanha. Não vendemos nem comercializamos dados pessoais.',
+        'O compartilhamento com terceiros ocorre apenas quando necessário para operação dessas ferramentas ou quando exigido por lei ou ordem judicial.',
+      ],
+    },
+    {
+      heading: '6. Retenção dos dados',
+      paragraphs: [
+        'Os dados são mantidos durante o período da campanha e pelo prazo necessário para cumprimento de obrigações legais aplicáveis. Após esse período, buscamos eliminar ou anonimizar os dados quando não houver necessidade de manutenção.',
+      ],
+    },
+    {
+      heading: '7. Seus direitos como titular',
+      paragraphs: [
+        'Nos termos do art. 18 da LGPD, você pode solicitar: confirmação da existência de tratamento, acesso aos dados, correção de dados incompletos ou desatualizados, anonimização, bloqueio ou eliminação de dados desnecessários, informação sobre compartilhamento e revogação do consentimento.',
+      ],
+    },
+    {
+      heading: '8. Como exercer seus direitos',
+      paragraphs: [
+        `Para exercer qualquer um desses direitos, envie um e-mail a ${siteConfig.email} com o assunto "Privacidade — LGPD". Responderemos em prazo razoável, conforme a legislação aplicável.`,
+      ],
+    },
+    {
+      heading: '9. Segurança',
+      paragraphs: [
+        'Adotamos medidas técnicas e organizacionais razoáveis para proteger os dados pessoais contra acessos não autorizados, perda ou uso indevido. Ferramentas de terceiros utilizadas para armazenamento operam como subprocessadores sob suas próprias políticas de segurança.',
+      ],
+    },
+    {
+      heading: '10. Alterações nesta política',
+      paragraphs: [
+        'Esta política pode ser atualizada para refletir mudanças nas práticas de tratamento de dados ou exigências legais. A data da última revisão consta no topo deste documento.',
+      ],
+    },
+  ],
+};
+
 export const doePageContent = {
   hero: {
     eyebrow: 'Fortaleça a campanha',
@@ -829,7 +963,7 @@ export const doePageContent = {
     namePlaceholder: 'Seu nome completo',
     emailPlaceholder: 'E-mail',
     cpfPlaceholder: 'CPF',
-    legalNote: 'Doação regulamentada pelo TSE. CNPJ do comitê financeiro em breve.',
+    legalNote: 'Doação regulamentada pelo TSE. CNPJ Max Maciel: 68.267.093/0001-59.',
   },
   impactCards: [
     {
