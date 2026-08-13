@@ -1,6 +1,7 @@
 import { Header } from '../components/layout/Header.tsx';
 import { SocialBar } from '../components/layout/SocialBar.tsx';
 import { Footer } from '../components/layout/Footer.tsx';
+import { SitePageCtaSection } from '../components/pages/InternalPageParts.tsx';
 import { Hero } from '../components/sections/Hero.tsx';
 import { Manifest } from '../components/sections/Manifest.tsx';
 import { Biography } from '../components/sections/Biography.tsx';
@@ -17,12 +18,13 @@ export default function LandingPage() {
       </div>
       <main className="w-full">
         <Hero />
-        <Manifest />
         <Biography />
+        <Manifest />
         <Crew />
         <Clipping />
         <ZeroFare />
       </main>
+      <SitePageCtaSection />
       <Footer />
     </>
   );

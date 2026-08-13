@@ -87,8 +87,7 @@ export function Clipping() {
             {clippingContent.eyebrow}
           </p>
           <h2 className="pt-4 font-nav text-[clamp(2rem,5vw,3.75rem)] font-black leading-none text-yellow-500">
-            <span className="block">Maximizando</span>
-            <span className="block">o DF</span>
+            {clippingContent.title}
           </h2>
           {loading ? (
             <ClippingSkeleton />

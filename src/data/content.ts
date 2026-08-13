@@ -23,6 +23,7 @@ import type {
   ChannelItem,
   MidiaSection,
   PageLink,
+  HighlightStatCard,
 } from '../types/index.ts';
 
 import midiaRedetv from '../assets/pictures/midia/redetv.png';
@@ -34,7 +35,7 @@ import midiaPodcast from '../assets/pictures/midia/podcast.png';
 export const siteConfig = {
   name: 'Deputado Max Maciel',
   tagline: 'Coragem para defender o Distrito Federal',
-  phase: 'Prestação de Contas de Mandato',
+  phase: 'Campanha de Reeleição',
   electoralNumber: '50100',
   colors: {
     purple: '#70148c',
@@ -56,6 +57,7 @@ export const siteConfig = {
 export const navItems: NavItem[] = [
   { label: 'Quem é Max', href: '/quem-e-max' },
   { label: 'Mandato Aba Reta', href: '/mandato' },
+  { label: 'Maximizando o DF', href: '/maximizando-df' },
   { label: 'Bonde Pro Max', href: '/bonde-pro-max' },
   { label: 'Max na Mídia', href: '/midia' },
   { label: 'Materiais', href: '/materiais' },
@@ -65,16 +67,17 @@ export const navItems: NavItem[] = [
 export const internalNavItems: NavItem[] = [
   { label: 'Quem é Max', href: '/quem-e-max' },
   { label: 'Mandato Aba Reta', href: '/mandato' },
+  { label: 'Maximizando o DF', href: '/maximizando-df' },
   { label: 'Bonde Pro Max', href: '/bonde-pro-max' },
   { label: 'Max na Mídia', href: '/midia' },
-  { label: 'Artigos', href: '/materiais' },
+  { label: 'Materiais', href: '/materiais' },
   { label: 'Contato', href: '/contato' },
 ];
 
 export const heroContent = {
   headline: 'Coragem para defender o Distrito Federal',
   subheadline:
-    'Transparência, trabalho e resultados concretos para quem vive e trabalha no DF. Acompanhe a prestação de contas do mandato.',
+    'Candidato à reeleição como Deputado Distrital. Trabalho, entregas e a luta por um DF mais justo para quem faz a cidade funcionar todos os dias.',
 };
 
 export const heroQuickLinks: QuickLink[] = [
@@ -100,21 +103,21 @@ export const timeline = [
 ];
 
 export const tarifaZeroContent = {
-  title: 'Tarifa Zero é possível',
+  title: 'Tarifa Zero',
   description:
-    'Mobilidade como direito, não privilégio. O projeto de Tarifa Zero no transporte público do DF garante acesso digno a quem mais depende do ônibus para trabalhar, estudar e viver.',
+    'O que parecia impossível se tornou inevitável. A Tarifa Zero já faz parte da realidade do DF aos domingos e feriados.',
   highlights: [
-    'Redução do custo de vida para famílias trabalhadoras',
-    'Mais pessoas usando transporte coletivo e menos carros nas vias',
-    'Financiamento transparente com fiscalização do mandato',
+    'Mais de 37,8 milhões de acessos ao STPC/DF em 82 dias de gratuidade',
+    'Aumento de 70% na demanda de ônibus aos domingos e até 111% nos feriados',
+    'Nós vamos seguir lutando para o DF ter Tarifa Zero todos os dias',
   ],
 };
 
 export const stats: StatItem[] = [
-  { value: 47, suffix: '+', label: 'Projetos apresentados' },
-  { value: 12, suffix: '', label: 'Leis sancionadas' },
-  { value: 28, suffix: ' mi', label: 'Emendas para saúde (R$)' },
-  { value: 156, suffix: '', label: 'Audiências e reuniões' },
+  { value: 14, suffix: '', label: 'Leis sancionadas' },
+  { value: 37, suffix: ',8 mi', label: 'Acessos com Tarifa Zero' },
+  { value: 26, suffix: ',4 mi', label: 'Emendas para saúde (R$)' },
+  { value: 116, suffix: ' mi', label: 'Emendas no mandato (R$)' },
 ];
 
 export const agendaTopics: AgendaTopic[] = [
@@ -183,9 +186,9 @@ export const bondeProMaxBlocks: ContentBlock[] = [
 
 export const clippingContent = {
   eyebrow: 'Max na mídia',
-  title: 'Maximizando o DF',
-  interviewsLabel: 'Destaque em entrevistas',
-  reportsLabel: 'Destaque em reportagens',
+  title: 'Max na Mídia',
+  interviewsLabel: 'Entrevistas em vídeo',
+  reportsLabel: 'Notícias',
   cta: 'Ver mais notícias',
   ctaHref: '/midia',
 };
@@ -223,46 +226,46 @@ export const clippingReports: ClippingReport[] = [
 ];
 
 export const zeroFareContent = {
-  title: 'Tarifa Zero é possível',
+  title: 'Tarifa Zero',
   description:
-    '6 destaques do nosso mandato que provam que uma cidade melhor é possível.',
+    'O que parecia impossível se tornou inevitável. Aos domingos e feriados o transporte público do DF já é gratuito — e os números mostram que funciona.',
 };
 
 export const zeroFareCards: ZeroFareCard[] = [
   {
-    id: 'economia-anual',
+    id: 'acessos-stpc',
     type: 'stat',
-    value: 'R$ 500M',
-    label: 'Economia anual com tarifa zero no DF',
+    value: '37,8 mi',
+    label: 'Acessos ao STPC/DF em dias de gratuidade',
   },
   {
-    id: 'pessoas-beneficiadas',
+    id: 'dias-gratuidade',
     type: 'stat',
-    value: '2.3M',
-    label: 'Pessoas beneficiadas pelo transporte gratuito',
+    value: '82',
+    label: 'Dias de Tarifa Zero (52 domingos, 7 feriados e extensões)',
   },
   {
-    id: 'reducao-carros',
+    id: 'demanda-domingos',
     type: 'stat',
-    value: '40%',
-    label: 'Redução de carros nas vias com tarifa zero',
+    value: '+70%',
+    label: 'Aumento da demanda de ônibus aos domingos',
   },
   {
-    id: 'emendas-escolas',
+    id: 'demanda-feriados',
     type: 'highlight',
-    title: 'Emendas para todas as escolas públicas do DF',
+    title: 'Até +111% de demanda por transporte nos feriados',
     size: 'tall',
   },
   {
-    id: 'passe-livre',
+    id: 'lojistas',
     type: 'highlight',
-    title: 'Passe livre estudantil ampliado para toda rede',
+    title: '96% dos lojistas perceberam aumento no fluxo de clientes',
     size: 'compact',
   },
   {
-    id: 'integracao-modais',
+    id: 'custo-stpc',
     type: 'highlight',
-    title: 'Integração total entre metrô, BRT e ônibus',
+    title: 'Representa apenas 11% do custo total do STPC/DF',
     size: 'compact',
   },
 ];
@@ -290,13 +293,6 @@ export const crewCards: CrewCard[] = [
     href: '/bonde-pro-max',
   },
   {
-    id: 'saude-qualidade',
-    title: 'Saúde de Qualidade',
-    description: 'Mais recursos para UBSs e hospitais regionais do DF',
-    cta: 'Saiba mais',
-    href: '/maximizando-df',
-  },
-  {
     id: 'apoie-manifesto',
     title: 'Apoie o manifesto',
     description:
@@ -312,19 +308,12 @@ export const crewCards: CrewCard[] = [
     cta: 'Ver missões',
     href: '/bonde-pro-max',
   },
-  {
-    id: 'geracao-emprego',
-    title: 'Geração de Emprego',
-    description: 'Incentivo ao empreendedorismo local e cooperativas',
-    cta: 'Saiba mais',
-    href: '/maximizando-df',
-  },
 ];
 
 export const doeContent = {
-  title: 'Apoie a luta por um DF melhor',
+  title: 'Doe',
   description:
-    'Sua contribuição financia material de campanha, mobilização nas regiões administrativas e a continuidade do mandato popular.',
+    'Doe e nos ajude a arrecadar recursos financeiros para espalhar ainda mais a campanha de reeleição do nosso Aba Reta favorito.',
   pixKey: 'contato@maxmaciel.df.br',
   note: 'Toda doação é registrada e presta contas conforme a legislação eleitoral.',
 };
@@ -363,7 +352,7 @@ export const videoItems: MediaItem[] = [
     title: 'Prestação de contas do mandato — resumo 2025',
     source: 'YouTube',
     date: 'Dez 2025',
-    href: 'https://youtube.com/@maxmaciel',
+    href: 'https://www.youtube.com/@MaxMacielDF',
   },
   {
     id: '2',
@@ -371,14 +360,14 @@ export const videoItems: MediaItem[] = [
     title: 'Tarifa Zero: por que é possível no DF',
     source: 'YouTube',
     date: 'Nov 2025',
-    href: 'https://youtube.com/@maxmaciel',
+    href: 'https://www.youtube.com/@MaxMacielDF',
   },
 ];
 
 export const socialLinks: SocialLink[] = [
-  { name: 'Instagram', href: 'https://instagram.com/maxmaciel', icon: Share2 },
-  { name: 'Facebook', href: 'https://facebook.com/maxmaciel', icon: Globe },
-  { name: 'YouTube', href: 'https://youtube.com/@maxmaciel', icon: MessageCircle },
+  { name: 'Instagram', href: 'https://www.instagram.com/maxmacieldf', icon: Share2 },
+  { name: 'Facebook', href: 'https://www.facebook.com/maxmacieldf', icon: Globe },
+  { name: 'YouTube', href: 'https://www.youtube.com/@MaxMacielDF', icon: MessageCircle },
 ];
 
 export function whatsappUrl(customMessage?: string): string {
@@ -387,128 +376,42 @@ export function whatsappUrl(customMessage?: string): string {
 }
 
 export const socialBarLinks: SocialBarLink[] = [
-  { name: 'Instagram', href: 'https://instagram.com/maxmaciel', platform: 'instagram' },
+  { name: 'Instagram', href: 'https://www.instagram.com/maxmacieldf', platform: 'instagram' },
   { name: 'WhatsApp', href: 'https://wa.me/5561999999999', platform: 'whatsapp' },
-  { name: 'YouTube', href: 'https://youtube.com/@maxmaciel', platform: 'youtube' },
-  { name: 'TikTok', href: 'https://tiktok.com/@maxmaciel', platform: 'tiktok' },
-  { name: 'Facebook', href: 'https://facebook.com/maxmaciel', platform: 'facebook' },
-  { name: 'X', href: 'https://x.com/maxmaciel', platform: 'x' },
+  { name: 'YouTube', href: 'https://www.youtube.com/@MaxMacielDF', platform: 'youtube' },
+  { name: 'TikTok', href: 'https://www.tiktok.com/@maxmacieldf', platform: 'tiktok' },
+  { name: 'Facebook', href: 'https://www.facebook.com/maxmacieldf', platform: 'facebook' },
+  { name: 'X', href: 'https://x.com/maxmacieldf', platform: 'x' },
 ];
 
 
 export const volunteerRegions = ['Plano Piloto', 'Ceilândia', 'Taguatinga', 'Samambaia', 'Gama', 'São Sebastião', 'Planaltina', 'Outra RA'];
 
 export const footerLinks = [
-  { label: 'Política de privacidade', href: '#privacidade' },
-  { label: 'Termos de uso', href: '#termos' },
+  { label: 'Apoie a campanha', href: '/apoie' },
+  { label: 'Doe', href: '/doe' },
   { label: 'Contato', href: '/contato' },
 ];
 
 export const quemEPage: PageContent = {
   title: 'Quem é o Max Maciel?',
+  subtitle:
+    'Nascido em Ceilândia, deputado distrital e presidente da CTMU — quase 30 anos de luta nas quebradas do DF.',
   paragraphs: [
     'Max Maciel é candidato à Deputado Distrital e com seu apoio ele vai para o seu segundo mandato.',
     'Nascido em 1982 em Ceilândia, Max Maciel é o filho caçula do Seu Agamenon e da Dona Goreth, casal nordestino que veio para Brasília, assim como tantos outros, para lutar por mais oportunidades.',
     'Em 2022, Max Maciel se tornou o terceiro Deputado Distrital mais votado do DF, eleito com 35.758 votos.',
+    'Mas antes disso, o nosso deputado aba reta começou sua trajetória no movimento estudantil, especificamente no grêmio da sua escola, e depois formou o grupo Atitude com seus amigos, que circulava escolas públicas de ensino médio falando sobre prevenção e educação sexual.',
+    'Com o passar dos anos passou a integrar conselhos, fazer atividades junto com o movimento Hip Hop nas quebradas, contribuir com pesquisas, atuar dentro e fora da institucionalidade em defesa da juventude. Ele também participou ativamente de campanhas pelo desarmamento e pelo fim do extermínio da juventude negra no Brasil.',
+    'Ele não começou há pouco tempo, por isso soma quase 30 anos de luta dentro dos movimentos estudantis, sociais e culturais de Ceilândia e de outras quebradas do DF.',
+    'Além de ter nascido na RA mais populosa do Distrito Federal, o Max fez morada na cidade: cresceu, estudou, trabalhou, se casou há mais de 20 anos com Ildely Ana, teve duas filhas e ainda mora em Ceilândia.',
+    'Ele é pedagogo de formação e especialista em Gestão de Políticas Públicas em Gênero e Raça pela UnB.',
+    'Na Câmara Legislativa do Distrito Federal, atualmente ele é presidente da Comissão de Transporte e Mobilidade Urbana (CTMU), e tem como principal bandeira a luta por Tarifa Zero no DF e a garantia do direito à cidade através de um transporte público digno e de qualidade.',
   ],
 };
 
-export const quemEPageContent = {
-  hero: {
-    eyebrow: 'Conheça',
-    title: 'Quem é Max Maciel',
-    subtitle: 'Da periferia para o Congresso — uma história de luta, cultura e transformação.',
-    variant: 'navy' as const,
-  },
-  origin: {
-    eyebrow: 'Origem',
-    title: 'Nascido na Ceilândia',
-    paragraphs: [
-      'Max Maciel nasceu e cresceu na Ceilândia, uma das maiores cidades-satélite do Distrito Federal, onde aprendeu desde cedo que a periferia tem potência, cultura e identidade própria.',
-      'Gestor cultural e produtor, construiu sua trajetória organizando saraus, batalhas de rap, festivais e projetos culturais que colocaram Ceilândia, Samambaia e Sol Nascente no mapa da produção artística do DF.',
-      'Seu caminho para a política foi natural: quem sempre lutou pela sua comunidade, em dado momento decide ocupar os espaços de poder para ampliar o alcance dessa luta.',
-    ],
-  },
-  timeline: {
-    eyebrow: 'Trajetória',
-    title: 'Uma história de compromisso',
-    items: [
-      {
-        year: '2005',
-        title: 'Início na cultura periférica',
-        description:
-          'Primeiros projetos culturais em Ceilândia: batalhas de rap, saraus e oficinas de comunicação para jovens da periferia.',
-      },
-      {
-        year: '2012',
-        title: 'Gestão cultural consolidada',
-        description:
-          'Criação de coletivos e produção de festivais que movimentaram a cena cultural das cidades-satélite do DF.',
-      },
-      {
-        year: '2018',
-        title: 'Entrada na política institucional',
-        description:
-          'Candidatura à Câmara Legislativa do DF, levando a pauta da periferia para o debate político formal.',
-      },
-      {
-        year: '2022',
-        title: 'Deputado Distrital',
-        description:
-          'Eleito deputado federal pelo DF, Max Maciel leva para Brasília as demandas dos territórios que sempre estiveram à margem das decisões.',
-      },
-      {
-        year: '2024',
-        title: 'Mandato Aba Reta',
-        description:
-          'Lançamento do programa Mandato Aba Reta: transparência total, prestação de contas mensal e participação popular nas decisões do mandato.',
-      },
-    ],
-  },
-  principles: {
-    eyebrow: 'Princípios',
-    title: 'O que guia o mandato',
-    cards: [
-      {
-        icon: '🗺️',
-        title: 'Territorialidade',
-        description:
-          'Política feita nos territórios, com quem vive neles. As respostas para os problemas da periferia nascem na periferia.',
-      },
-      {
-        icon: '🤝',
-        title: 'Coletividade',
-        description:
-          'Ninguém transforma nada sozinho. O Bonde Pro Max é a prova de que a mudança é sempre coletiva.',
-      },
-      {
-        icon: '📢',
-        title: 'Transparência',
-        description: 'Prestação de contas mensal, mandato aberto e decisões compartilhadas com a base.',
-      },
-      {
-        icon: '🎵',
-        title: 'Cultura como direito',
-        description: 'Cultura não é luxo — é ferramenta de resistência, identidade e desenvolvimento.',
-      },
-      {
-        icon: '⚖️',
-        title: 'Justiça social',
-        description: 'Um DF mais justo é possível. Redistribuição de recursos, oportunidades e poder.',
-      },
-      {
-        icon: '🚌',
-        title: 'Mobilidade pública',
-        description: 'Tarifa Zero, integração total e transporte digno para todos os cantos do DF.',
-      },
-    ],
-  },
-  cta: {
-    title: 'Faça parte desta história',
-    primary: { label: 'Entrar no Bonde', href: '/bonde-pro-max' },
-    variant: 'navy' as const,
-  },
-};
+/** Resumo para a seção da landing page */
+export const quemEPageSummary = quemEPage.paragraphs.slice(0, 3);
 
 export const mandatoHub = {
   title: 'Mandato Aba Reta',
@@ -520,160 +423,79 @@ export const mandatoHub = {
   ] satisfies PageLink[],
 };
 
+export const mandateHighlights = [
+  {
+    value: '14',
+    label: 'Leis sancionadas',
+    srLabel: '14 leis sancionadas',
+  },
+  {
+    value: '+40 mi',
+    label: 'Para educação',
+    srLabel: 'Mais de 40 milhões para educação',
+  },
+  {
+    value: '+26 mi',
+    label: 'Para saúde',
+    srLabel: 'Mais de 26 milhões para saúde',
+  },
+  {
+    value: '21 mi',
+    label: 'Para mobilidade',
+    srLabel: '21 milhões para mobilidade',
+  },
+] satisfies HighlightStatCard[];
+
+export const sitePageCta = {
+  title: 'Quer participar das decisões do mandato?',
+  primary: { label: 'Entrar no Bonde', href: '/bonde-pro-max' },
+  variant: 'yellow' as const,
+};
+
 export const mandatoPageContent = {
   hero: {
-    eyebrow: 'Transparência',
+    eyebrow: 'Mandato Aba Reta',
     title: 'Mandato Aba Reta',
     subtitle:
-      'Um mandato feito com e para a periferia do DF. Confira propostas, realizações e votações.',
+      'Conheça as principais frentes de trabalho do mandato: Tarifa Zero, projetos de lei sancionados e a atuação na CTMU.',
     variant: 'black' as const,
   },
-  tabs: [
-    { id: 'propostas', label: 'Propostas' },
-    { id: 'realizacoes', label: 'Realizações' },
-    { id: 'votacoes', label: 'Votações' },
-    { id: 'emendas', label: 'Emendas' },
-  ],
-  sections: {
-    propostas: {
-      title: 'Principais propostas',
-      items: [
-        {
-          icon: '🚌',
-          category: 'Mobilidade',
-          status: 'Em tramitação' as const,
-          title: 'PL Tarifa Zero no DF',
-          description:
-            'Projeto de lei para implementação da tarifa zero no transporte público do Distrito Federal, beneficiando 2,3 milhões de pessoas.',
-        },
-        {
-          icon: '🏫',
-          category: 'Educação',
-          status: 'Aprovado' as const,
-          title: 'Emendas para escolas públicas',
-          description:
-            'Destinação de emendas parlamentares para todas as escolas públicas do DF, com foco em infraestrutura e tecnologia.',
-        },
-        {
-          icon: '🏥',
-          category: 'Saúde',
-          status: 'Em tramitação' as const,
-          title: 'Mais recursos para UBSs',
-          description:
-            'Ampliação do financiamento para Unidades Básicas de Saúde nas regiões periféricas do DF.',
-        },
-        {
-          icon: '🎭',
-          category: 'Cultura',
-          status: 'Apresentado' as const,
-          title: 'Fundo de Cultura Periférica',
-          description:
-            'Criação de fundo específico para financiamento de projetos culturais nas cidades-satélite do DF.',
-        },
-        {
-          icon: '💼',
-          category: 'Emprego',
-          status: 'Em tramitação' as const,
-          title: 'Incentivo a cooperativas locais',
-          description:
-            'Programa de apoio ao empreendedorismo periférico e formação de cooperativas de trabalho nas RA do DF.',
-        },
-        {
-          icon: '🌳',
-          category: 'Ambiente',
-          status: 'Apresentado' as const,
-          title: 'Parques nas periferias',
-          description:
-            'PL para criação e manutenção de parques e áreas verdes nas regiões administrativas periféricas.',
-        },
-      ],
-    },
-    realizacoes: {
-      title: 'Principais realizações',
-      items: [
-        {
-          icon: '🚌',
-          category: 'Mobilidade',
-          status: 'Aprovado' as const,
-          title: 'Tarifa Zero aos domingos e feriados',
-          description:
-            'Mais de 37,8 milhões de acessos ao STPC/DF em 82 dias de gratuidade no transporte público.',
-        },
-        {
-          icon: '💰',
-          category: 'Emendas',
-          status: 'Aprovado' as const,
-          title: 'R$ 116 milhões em emendas',
-          description:
-            'Recursos destinados para educação, saúde, cultura, mobilidade e assistência social nas periferias.',
-        },
-        {
-          icon: '🏛️',
-          category: 'Institucional',
-          status: 'Aprovado' as const,
-          title: 'Presidência da CTMU',
-          description:
-            'Liderança da Comissão de Transporte e Mobilidade Urbana na Câmara Legislativa do DF.',
-        },
-      ],
-    },
-    votacoes: {
-      title: 'Principais votações',
-      items: [
-        {
-          icon: '🗳️',
-          category: 'Mobilidade',
-          status: 'Aprovado' as const,
-          title: 'Tarifa Zero em dias especiais',
-          description: 'Aprovação da gratuidade no transporte público aos domingos, feriados e eventos.',
-        },
-        {
-          icon: '📜',
-          category: 'Legislativo',
-          status: 'Em tramitação' as const,
-          title: 'PL Tarifa Zero permanente',
-          description: 'Votação em andamento para ampliar a gratuidade a todos os dias da semana.',
-        },
-      ],
-    },
-    emendas: {
-      title: 'Emendas parlamentares',
-      items: [
-        {
-          icon: '🏫',
-          category: 'Educação',
-          status: 'Aprovado' as const,
-          title: 'R$ 40,1 mi para educação',
-          description: 'Maior parcela das emendas destinada à rede pública de ensino do DF.',
-        },
-        {
-          icon: '🏥',
-          category: 'Saúde',
-          status: 'Aprovado' as const,
-          title: 'R$ 26,4 mi para saúde',
-          description: 'Investimento em unidades de saúde e atendimento nas regiões administrativas.',
-        },
-        {
-          icon: '🎭',
-          category: 'Cultura',
-          status: 'Aprovado' as const,
-          title: 'R$ 12,2 mi para cultura',
-          description: 'Fomento à produção cultural e equipamentos nos territórios periféricos.',
-        },
-        {
-          icon: '🚌',
-          category: 'Mobilidade',
-          status: 'Aprovado' as const,
-          title: 'R$ 21,2 mi para mobilidade',
-          description: 'Recursos para infraestrutura e melhorias no transporte público do DF.',
-        },
-      ],
-    },
-  },
-  cta: {
-    title: 'Quer participar das decisões do mandato?',
-    primary: { label: 'Entrar no Bonde', href: '/bonde-pro-max' },
-    variant: 'yellow' as const,
+  realizacoes: {
+    title: 'Principais realizações',
+    items: [
+      {
+        icon: '🚌',
+        category: 'Mobilidade',
+        status: 'Aprovado' as const,
+        title: 'Tarifa Zero aos domingos e feriados',
+        description:
+          'Mais de 37,8 milhões de acessos ao STPC/DF em 82 dias de gratuidade no transporte público.',
+      },
+      {
+        icon: '📜',
+        category: 'Legislativo',
+        status: 'Aprovado' as const,
+        title: '14 leis sancionadas',
+        description:
+          'Em quase 4 anos de Gabinete Aba Reta, leis que mudam a realidade do DF com vontade do Poder Executivo.',
+      },
+      {
+        icon: '💰',
+        category: 'Emendas',
+        status: 'Aprovado' as const,
+        title: 'R$ 116 milhões em emendas',
+        description:
+          'Recursos destinados para educação, saúde, cultura, mobilidade e assistência social nas periferias.',
+      },
+      {
+        icon: '🏛️',
+        category: 'Institucional',
+        status: 'Aprovado' as const,
+        title: 'Presidência da CTMU',
+        description:
+          'Liderança da Comissão de Transporte e Mobilidade Urbana na Câmara Legislativa do DF.',
+      },
+    ],
   },
 };
 
@@ -700,7 +522,7 @@ export const projetosDeLeiIntro = [
   'O Distrito Federal é majoritariamente composto por mulheres, jovens, negros e trabalhadores e pessoas que moram nas periferias, mas, infelizmente, esses grupos estão sub-representados na Câmara Legislativa do DF (CLDF).',
   'Ou seja, o verdadeiro Povo do DF, em 30 anos de CLDF, esteve pouquíssimas vezes no centro das formulações de leis, sem realmente poder incidir nesse espaço tão importante.',
   'Quando iniciamos os trabalhos do Gabinete Aba Reta, fizemos uma escolha: melhorar a vida da população que faz essa cidade funcionar todos os dias. As leis são instrumentos muito importantes para isso e isso direciona nossa ação legislativa.',
-  'Em quase 4 anos de Gabinete Aba Reta tivemos 10 leis sancionadas e que com aplicação e vontade do Poder Executivo estão mudando a realidade do DF. Se liga:',
+  'Em quase 4 anos de Gabinete Aba Reta tivemos 14 leis sancionadas e que com aplicação e vontade do Poder Executivo estão mudando a realidade do DF. Se liga:',
 ];
 
 export const projetosDeLei: LawItem[] = [
@@ -711,7 +533,7 @@ export const projetosDeLei: LawItem[] = [
       'Garante sigilo de dados nos cadastros de órgãos públicos do DF para mulheres vítimas de violência doméstica e intrafamiliar, incluindo seus filhos e outros membros familiares próximos nessa garantia de sigilo.',
   },
   {
-    number: 'Lei Complementar N° 1032',
+    number: 'Lei Complementar Nº 1032',
     title: 'Lei da Licença Menstrual',
     description:
       'Garante uma licença de três dias consecutivos, a cada mês, às mulheres que comprovem sintomas graves associados ao fluxo menstrual.',
@@ -723,28 +545,34 @@ export const projetosDeLei: LawItem[] = [
       'Altera a Lei nº 6.798 e garante a possibilidade de ofertar às parturientes de natimorto acomodação, em leito ou ala, em área separada dos demais pacientes e gestantes.',
   },
   {
-    number: 'Lei Nº 7.875',
-    title: 'Programa Cozinha Solidária Distrital',
+    number: 'Lei Nº 7.462',
+    title: 'Lei Maria da Penha nos concursos do GDF',
     description:
-      'Institui o Programa Cozinha Solidária Distrital, pensado em conjunto com os movimentos sociais e OSCs, garantindo incentivo público para iniciativas de distribuição de alimentação gratuita para a população em situação de vulnerabilidade, risco social e em situação de rua.',
+      'Exige o tema da Lei Maria da Penha em concursos do GDF e impede a posse ou a progressão de carreira de condenados por violência doméstica.',
+  },
+  {
+    number: 'Lei Nº 7.701',
+    title: 'Lei da Casa da Doméstica',
+    description:
+      'Cria o programa distrital de acolhimento, valorização e garantia de direitos para as trabalhadoras domésticas do Distrito Federal.',
   },
   {
     number: 'Lei Nº 7.517',
-    title: 'Lei Vinicius Jr',
+    title: 'Lei Vinicius Jr.',
     description:
       'Serviu como base para a Campanha do GDF Cartão Vermelho para o Racismo, criando medidas, protocolos e ações de combate ao racismo nos estádios e arenas esportivas do Distrito Federal.',
   },
   {
-    number: 'Lei N° 7.274',
+    number: 'Lei Nº 7.274',
     title: 'Hip Hop Patrimônio Cultural do DF',
     description:
-      'Reconhece a história e extrema importância do movimento Hip Hop, declarando-o patrimônio cultural imaterial do DF.',
+      'Reconhece a história e extrema importância do movimento Hip Hop, declarando-o patrimônio cultural e imaterial do DF.',
   },
   {
-    number: 'Lei Nº 7.836',
-    title: 'Transparência no Sistema de Transporte Público do DF',
+    number: 'Lei Nº 7.645',
+    title: 'Fim da discriminação em elevadores',
     description:
-      'Torna obrigatória a divulgação de dados relativos ao Sistema de Transporte Público Coletivo do Distrito Federal.',
+      'Põe fim à distinção entre “elevador social” e “elevador de serviço”, acabando com a discriminação no uso de elevadores no Distrito Federal.',
   },
   {
     number: 'Lei Nº 7.793',
@@ -753,16 +581,34 @@ export const projetosDeLei: LawItem[] = [
       'Faz o que ninguém sequer pensou em fazer nos 30 anos de CLDF e torna a iluminação pública em paradas de ônibus, passarelas e passagens subterrâneas no Distrito Federal obrigatória e um direito do pedestre.',
   },
   {
-    number: 'Lei N° 7.463',
+    number: 'Lei Nº 7.463',
     title: 'Política de Mobilidade a Pé',
     description:
       'Pioneira em criar uma política ampla para pedestres no DF ao lado de ativistas e pesquisadores, pensando na construção de calçadas, ciclovias e rotas de acessibilidade, pautada no acesso à cidade.',
   },
   {
+    number: 'Lei Nº 7.836',
+    title: 'Transparência no Sistema de Transporte Público do DF',
+    description:
+      'Torna obrigatória a divulgação de dados relativos ao Sistema de Transporte Público Coletivo do Distrito Federal.',
+  },
+  {
+    number: 'Lei Nº 7.714',
+    title: 'Segurança em zonas ferroviárias',
+    description:
+      'Obriga a criação de protocolos de segurança entre veículos motorizados e trens em zonas ferroviárias do Distrito Federal.',
+  },
+  {
     number: 'Lei Nº 7.875',
     title: 'Combate ao Racismo Ambiental',
     description:
-      'Resultado da realização de Audiências Públicas e reuniões feitas com os movimentos sociais, institui a Política Distrital de atenção às Emergências Climáticas, Prevenção aos Desastres Ambientais e Combate ao Racismo Ambiental.',
+      'Resultado da realização de Audiências Públicas e reuniões feitas com os movimentos sociais, institui a Política Distrital de Atenção às Emergências Climáticas e Combate ao Racismo Ambiental, protegendo as periferias contra desastres ambientais.',
+  },
+  {
+    number: 'Lei Nº 7.871',
+    title: 'Programa Cozinha Solidária Distrital',
+    description:
+      'Institui o Programa Cozinha Solidária Distrital, pensado em conjunto com os movimentos sociais e OSCs, garantindo incentivo público para iniciativas de distribuição de alimentação gratuita para a população em situação de vulnerabilidade, risco social e em situação de rua.',
   },
 ];
 
@@ -794,7 +640,7 @@ export const maximizandoDfPage = {
     'Maximizar é entregar, é dar acesso, é levar ao máximo a força coletiva que nasce nas quebradas, movimentos, associações de bairros, redes sociais e sindicatos, mostrando que ela pode ocupar os espaços mais altos da política.',
     'Mas temos firmes em nossas mentes e corações que isso exige tempo, exige continuidade!',
     'O primeiro mandato mostrou que a periferia nunca foi problema, sempre foi solução.',
-    'A destinação de emendas parlamentares é a forma mais direta de devolver o dinheiro dos impostos para o lugar de onde ele nunca deveria ter saído: a vida das pessoas.',
+    'A destinação de emendas parlamentares é a forma mais direta de devolver o dinheiro dos impostos para o lugar de onde ele nunca deveria ter saído: a vida das pessoas. Se liga quanto destinamos para cada área em apenas um mandato:',
     'Cada centavo do montante de R$ 116.132.000,00 em emendas foi planejado para fortalecer quem faz o Distrito Federal funcionar todos os dias.',
     'Não são apenas números em uma planilha, são escolas reformadas, projetos potencializados, incentivo à cultura local, tranquilidade para caminhar nas ruas e mais dignidade para as periferias.',
     'O segundo mandato vem para mostrar que ninguém pensa melhor o funcionamento de toda a cidade que a própria periferia.',
@@ -826,7 +672,7 @@ export const bondePageContent = {
     eyebrow: 'Ninguém maximiza o DF sozinho',
     title: 'Bonde Pro Max',
     subtitle:
-      'O Bonde é a nossa força coletiva. Junte-se a milhares de pessoas que acreditam em um DF mais justo.',
+      'Se você bota fé na gente e quer caminhar ao nosso lado, vem na manha junto com o Bonde Pro Max. Espalhe nossa palavra com materiais de campanha, postagens e vídeos.',
     variant: 'navy' as const,
   },
   stats: [
@@ -918,7 +764,7 @@ export const canaisPage = {
   title: 'Acesse nossos canais',
   intro: 'Vem trocar uma ideia com a gente através dos nossos canais:',
   channels: [
-    { name: 'Instagram', href: 'https://instagram.com/maxmaciel' },
+    { name: 'Instagram', href: 'https://www.instagram.com/maxmacieldf' },
     { name: 'WhatsApp', href: 'https://wa.me/5561999999999' },
     { name: 'Telegram', href: 'https://t.me/maxmaciel' },
   ] satisfies ChannelItem[],
@@ -928,15 +774,14 @@ export const apoiePage = {
   title: 'Apoie nossa campanha',
   intro:
     'Se você quer MAXzimizar as maravilhas para quem acorda cedo e faz a cidade funcionar todos os dias e bota fé na nossa caminhada, se torne um apoiador, assinando aqui:',
-  note: 'TODO: verificar campos com Caio.',
 };
 
 export const doePageContent = {
   hero: {
-    eyebrow: 'Fortaleça o mandato',
-    title: 'Doe para o Bonde',
+    eyebrow: 'Fortaleça a campanha',
+    title: 'Doe',
     subtitle:
-      'Cada contribuição financia presença nos territórios, produção de conteúdo e a estrutura do mandato.',
+      'Doe e nos ajude a arrecadar recursos financeiros para espalhar ainda mais a campanha de reeleição do nosso Aba Reta favorito.',
     variant: 'red' as const,
   },
   amounts: [10, 30, 50, 100, 200],

@@ -3,6 +3,8 @@ import { AppLink } from '../ui/AppLink.tsx';
 import { Header } from '../layout/Header.tsx';
 import { SocialBar } from '../layout/SocialBar.tsx';
 import { Footer } from '../layout/Footer.tsx';
+import { mandateHighlights, sitePageCta } from '../../data/content.ts';
+import { MandateHighlightGrid } from './PageBlocks.tsx';
 
 interface InternalPageLayoutProps {
   children: ReactNode;
@@ -24,6 +26,7 @@ export function InternalPageLayout({
         {showSocialInHeader ? <SocialBar /> : null}
       </div>
       <main className="w-full">{children}</main>
+      <SitePageCtaSection />
       {socialBarPlacement === 'before-footer' ? <SocialBar /> : null}
       <Footer variant={footerVariant} />
     </>
@@ -92,19 +95,33 @@ export function PageProse({ paragraphs }: { paragraphs: string[] }) {
   );
 }
 
+export function SitePageCtaSection() {
+  return (
+    <div className="relative">
+      <div className="relative z-20 mx-auto max-w-6xl px-6 sm:px-8">
+        <div className="-mt-[3.125rem] -mb-[3.125rem]">
+          <MandateHighlightGrid cards={mandateHighlights} />
+        </div>
+      </div>
+      <PageCta {...sitePageCta} className="relative z-10 !pt-[5.5rem]" />
+    </div>
+  );
+}
+
 interface PageCtaProps {
   title: string;
   primary: { label: string; href: string };
   secondary?: { label: string; href: string };
   variant?: 'navy' | 'yellow';
+  className?: string;
 }
 
-export function PageCta({ title, primary, secondary, variant = 'navy' }: PageCtaProps) {
+export function PageCta({ title, primary, secondary, variant = 'navy', className = '' }: PageCtaProps) {
   const isNavy = variant === 'navy';
 
   return (
     <section
-      className={`px-6 py-16 sm:px-8 ${isNavy ? 'bg-navy-500' : 'bg-yellow-500'}`}
+      className={`px-6 py-16 sm:px-8 ${isNavy ? 'bg-navy-500' : 'bg-yellow-500'} ${className}`}
     >
       <div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-6 sm:flex-row sm:items-center">
         <h2

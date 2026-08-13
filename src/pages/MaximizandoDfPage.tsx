@@ -1,7 +1,6 @@
 import { maximizandoDfPage } from '../data/content.ts';
 import {
   InternalPageLayout,
-  PageCta,
   PageHero,
   PageProse,
   PageSection,
@@ -25,13 +24,6 @@ export default function MaximizandoDfPage() {
       <PageSection eyebrow="Investimentos" title="Distribuição por área" className="bg-white">
         <InvestmentTable rows={maximizandoDfPage.rows} total={maximizandoDfPage.total} />
       </PageSection>
-
-      <PageCta
-        title="Faça parte da continuidade"
-        primary={{ label: 'Apoie a campanha', href: '/apoie' }}
-        secondary={{ label: 'Entrar no Bonde', href: '/bonde-pro-max' }}
-        variant="yellow"
-      />
     </InternalPageLayout>
   );
 }
