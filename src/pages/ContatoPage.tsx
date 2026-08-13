@@ -1,7 +1,6 @@
 import { canaisPage, contatoPage } from '../data/content.ts';
 import {
   InternalPageLayout,
-  PageCta,
   PageHero,
   PageSection,
 } from '../components/pages/InternalPageParts.tsx';
@@ -38,13 +37,6 @@ export default function ContatoPage() {
           </div>
         </div>
       </PageSection>
-
-      <PageCta
-        title="Vem pro Bonde!"
-        primary={{ label: 'Quero apoiar', href: '/apoie' }}
-        secondary={{ label: 'Ver materiais', href: '/materiais' }}
-        variant="yellow"
-      />
     </InternalPageLayout>
   );
 }

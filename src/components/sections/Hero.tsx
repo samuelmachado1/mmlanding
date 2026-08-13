@@ -1,34 +1,40 @@
 import { AppLink } from '../ui/AppLink.tsx';
 import { ChevronRight } from 'lucide-react';
-import frameHero from '../../assets/backgrounds/frame-hero-low.png';
+import heroBgTexture from '../../assets/backgrounds/hero-bg-texture.png';
+import heroBordao from '../../assets/backgrounds/maximiz.png';
 
 export function Hero() {
   return (
     <section
       id="inicio"
-      className="relative flex w-full items-center justify-center overflow-hidden bg-yellow-500"
+      className="relative flex h-[calc(100dvh-4rem-2.75rem)] w-full items-center justify-center overflow-hidden sm:h-[calc(100dvh-5rem-3.5rem)] lg:h-[calc(100dvh-101px-3.5rem)]"
     >
-      <div className="relative mx-auto w-full max-w-full [container-type:inline-size]">
+      <img
+        src={heroBgTexture}
+        alt=""
+        aria-hidden
+        className="absolute inset-0 h-full w-full object-cover object-center"
+      />
+
+      <div className="relative z-10 flex h-full w-full items-center justify-center px-[4%] py-[6%]">
         <img
-          src={frameHero}
-          alt=""
-          aria-hidden
-          className="block h-auto w-full max-h-[calc(100dvh-4rem-2.75rem-20px)] object-contain sm:max-h-[calc(100dvh-5rem-3.5rem-20px)] lg:max-h-[calc(100dvh-101px-3.5rem-20px)]"
+          src={heroBordao}
+          alt="Maximizar as maravilhas de quem é do corre"
+          className="h-auto max-h-full w-auto max-w-full origin-center object-contain lg:scale-150"
         />
-        <div
-          className="absolute inset-x-0 bottom-[4%] z-1 flex flex-wrap items-center justify-center gap-[clamp(0.375rem,1.5cqi,0.75rem)] px-[2%] sm:bottom-[calc(4%+20px)]"
+      </div>
+
+      <div className="absolute inset-x-0 bottom-[4%] z-20 flex flex-wrap items-center justify-center gap-2 px-[2%] sm:bottom-[calc(4%+12px)]">
+        <AppLink
+          to="/quem-e-max"
+          className="inline-flex h-9 shrink-0 items-center justify-center gap-1 rounded-lg bg-brand-black px-4 font-nav text-sm font-bold leading-none text-yellow-500 sm:h-11 sm:gap-1.5 sm:px-5 sm:text-base lg:h-12 lg:px-6 lg:text-lg"
         >
-          <AppLink
-            to="/quem-e-max"
-            className="inline-flex h-[clamp(1.375rem,3.5cqi,3rem)] shrink-0 items-center justify-center gap-[clamp(0.125rem,0.4cqi,0.25rem)] rounded-[clamp(0.25rem,0.6cqi,0.5rem)] bg-brand-black px-[clamp(0.5rem,2cqi,1rem)] font-nav text-[clamp(0.625rem,1.2cqi,1rem)] font-bold leading-none text-yellow-500"
-          >
-            Quem é Max
-            <ChevronRight
-              className="size-[clamp(0.75rem,1.75cqi,1.5rem)] shrink-0 text-yellow-500"
-              aria-hidden
-            />
-          </AppLink>
-        </div>
+          Quem é Max
+          <ChevronRight
+            className="size-4 shrink-0 text-yellow-500 sm:size-5 lg:size-6"
+            aria-hidden
+          />
+        </AppLink>
       </div>
     </section>
   );

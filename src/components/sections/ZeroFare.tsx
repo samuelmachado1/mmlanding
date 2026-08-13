@@ -1,3 +1,4 @@
+import { AppLink } from '../ui/AppLink.tsx';
 import { zeroFareCards, zeroFareContent } from "../../data/content.ts";
 import type { ZeroFareCard } from "../../types/index.ts";
 import { AnimatedSection } from "../ui/AnimatedSection.tsx";
@@ -43,6 +44,12 @@ export function ZeroFare() {
           <p className="max-w-[672px] pt-4 font-nav text-lg leading-7 text-brand-black">
             {zeroFareContent.description}
           </p>
+          <AppLink
+            to="/mandato/tarifa-zero"
+            className="mt-4 inline-flex font-nav text-sm font-bold text-navy-500 underline underline-offset-4"
+          >
+            Saiba mais
+          </AppLink>
 
           <div className="w-full max-w-[890.41px] pt-12">
             <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2">

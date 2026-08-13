@@ -5,10 +5,12 @@ import type {
   InvestmentRow,
   MediaCard,
   MissionCard,
+  PageLink,
   PageTimelineItem,
   PamphletItem,
   PrincipleCard,
   ProposalCard,
+  HighlightStatCard,
   StatCard,
 } from '../../types/index.ts';
 
@@ -231,6 +233,50 @@ export function BondeMissionList({ cards }: { cards: MissionCard[] }) {
   );
 }
 
+function MandateSeal({ className = 'size-5' }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 48 48" className={`shrink-0 text-yellow-500 ${className}`} aria-hidden>
+      <path
+        fill="currentColor"
+        d="M24 1 28.14 3.21 32.8 2.75 35.78 6.37 40.26 7.74 41.63 12.22 45.25 15.2 44.79 19.86 47 24 44.79 28.14 45.25 32.8 41.63 35.78 40.26 40.26 35.78 41.63 32.8 45.25 28.14 44.79 24 47 19.86 44.79 15.2 45.25 12.22 41.63 7.74 40.26 6.37 35.78 2.75 32.8 3.21 28.14 1 24 3.21 19.86 2.75 15.2 6.37 12.22 7.74 7.74 12.22 6.37 15.2 2.75 19.86 3.21Z"
+      />
+      <path
+        fill="none"
+        stroke="#25211e"
+        strokeWidth="3.4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M16.4 24.4 21.1 29.1 32 17.8"
+      />
+    </svg>
+  );
+}
+
+export function MandateHighlightGrid({ cards }: { cards: HighlightStatCard[] }) {
+  return (
+    <ul className="mx-auto grid max-w-5xl grid-cols-2 gap-3 lg:grid-cols-4">
+      {cards.map((card) => (
+        <li key={card.label}>
+          <article
+            aria-label={card.srLabel ?? `${card.value} ${card.label}`}
+            className="flex h-[100px] max-h-[100px] items-center gap-2.5 rounded-xl bg-brand-black px-3 py-2 shadow-[0_12px_32px_rgba(37,33,30,0.22)] ring-1 ring-white/10 sm:gap-3 sm:px-4"
+          >
+            <MandateSeal />
+            <div className="min-w-0 text-left">
+              <p className="font-nav text-[clamp(1.125rem,2.5vw,1.5rem)] font-black leading-none text-white">
+                {card.value}
+              </p>
+              <p className="pt-1 font-nav text-[10px] font-bold uppercase leading-tight tracking-[0.06em] text-white/90 sm:text-[11px]">
+                {card.label}
+              </p>
+            </div>
+          </article>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 export function StatGrid({ stats }: { stats: StatCard[] }) {
   return (
     <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -432,6 +478,26 @@ export function InvestmentTable({
   );
 }
 
+export function HubLinkGrid({ links }: { links: PageLink[] }) {
+  return (
+    <ul className="grid gap-6 sm:grid-cols-3">
+      {links.map((link) => (
+        <li key={link.href}>
+          <AppLink
+            to={link.href}
+            className="group flex h-full flex-col rounded-2xl border border-brand-black/10 bg-white p-6 transition hover:border-navy-500"
+          >
+            <h3 className="font-nav text-xl font-bold text-brand-black group-hover:text-navy-500">
+              {link.label}
+            </h3>
+            <span className="mt-auto pt-4 font-nav text-sm font-bold text-navy-500">Ver mais →</span>
+          </AppLink>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 export function PamphletGrid({ items }: { items: PamphletItem[] }) {
   return (
     <ul className="grid gap-6 sm:grid-cols-2">
@@ -449,7 +515,9 @@ export function PamphletGrid({ items }: { items: PamphletItem[] }) {
             <h3 className="pt-3 font-nav text-lg font-bold text-brand-black group-hover:text-navy-500">
               {item.title}
             </h3>
-            <p className="pt-2 text-sm text-brand-black/60">Prévia em breve</p>
+            <p className="pt-2 text-sm text-brand-black/60">
+              {item.href === '#' ? 'Arquivo em breve' : 'Clique para baixar o arquivo'}
+            </p>
             <span className="mt-auto pt-4 font-nav text-sm font-bold text-navy-500">Baixar →</span>
           </a>
         </li>
