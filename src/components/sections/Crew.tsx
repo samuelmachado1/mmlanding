@@ -6,7 +6,7 @@ import bondeAvatarMari from '../../assets/pictures/bonde-avatar-mari.png';
 import bondeAvatarThay from '../../assets/pictures/bonde-avatar-thay.png';
 import bondeProMaxAbaReto from '../../assets/pictures/bonde-pro-max-aba-reto.png';
 import bondeProMaxAbaReta from '../../assets/pictures/bonde-pro-max-aba-reta.png';
-import { crewCards, crewContent, crewMaterialForm } from '../../data/content.ts';
+import { crewCards, crewContent } from '../../data/content.ts';
 import type { CrewCard } from '../../types/index.ts';
 import { AppLink } from '../ui/AppLink.tsx';
 import { AnimatedSection } from '../ui/AnimatedSection.tsx';
@@ -66,31 +66,12 @@ function BondeAvatarLink() {
   );
 }
 
-function CrewMaterialFormCard() {
-  const { id, title, description, cta, href } = crewMaterialForm;
-
-  return (
-    <article
-      id={id}
-      className={`mx-auto flex w-full max-w-2xl flex-col rounded-2xl border border-cream${slash}20 bg-white${slash}10 p-6`}
-    >
-      <h3 className="font-nav text-lg font-semibold leading-5 tracking-[0.05em] text-yellow-500 uppercase">
-        {title}
-      </h3>
-      <p className={`flex-1 pt-2 font-nav text-lg leading-7 text-white${slash}80`}>{description}</p>
-      <a
-        href={href}
-        target="_blank"
-        rel="noreferrer"
-        className="mt-4 inline-flex h-12 items-center justify-center rounded-lg bg-yellow-500 px-4 font-nav text-base font-bold text-navy-500 transition-colors hover:bg-yellow-400"
-      >
-        {cta}
-      </a>
-    </article>
-  );
-}
+const ctaClassName =
+  'mt-4 inline-flex h-12 items-center justify-center rounded-lg bg-yellow-500 px-4 font-nav text-base font-bold text-navy-500 transition-colors hover:bg-yellow-400';
 
 function CrewCardItem({ card }: { card: CrewCard }) {
+  const isExternal = card.href.startsWith('http');
+
   return (
     <article
       id={card.id}
@@ -100,12 +81,15 @@ function CrewCardItem({ card }: { card: CrewCard }) {
         {card.title}
       </h3>
       <p className={`flex-1 pt-2 font-nav text-lg leading-7 text-white${slash}80`}>{card.description}</p>
-      <NavLink
-        href={card.href}
-        className="mt-4 inline-flex h-12 items-center justify-center rounded-lg bg-yellow-500 px-4 font-nav text-base font-bold text-navy-500"
-      >
-        {card.cta}
-      </NavLink>
+      {isExternal ? (
+        <a href={card.href} target="_blank" rel="noreferrer" className={ctaClassName}>
+          {card.cta}
+        </a>
+      ) : (
+        <NavLink href={card.href} className={ctaClassName}>
+          {card.cta}
+        </NavLink>
+      )}
     </article>
   );
 }
@@ -124,15 +108,13 @@ export function Crew() {
 
           <div className="grid gap-10 pt-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-stretch lg:gap-12">
             <div className="flex flex-col gap-6">
-              <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:grid-rows-2 sm:items-stretch">
+              <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:items-stretch">
                 {crewCards.map((card) => (
                   <li key={card.id} className="flex min-h-0">
                     <CrewCardItem card={card} />
                   </li>
                 ))}
               </ul>
-
-              <CrewMaterialFormCard />
             </div>
 
             <div className="flex justify-center lg:items-center lg:justify-start lg:pt-8">

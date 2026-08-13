@@ -63,14 +63,6 @@ export interface CrewCard {
   href: string;
 }
 
-export interface CrewMaterialForm {
-  id: string;
-  title: string;
-  description: string;
-  cta: string;
-  href: string;
-}
-
 export interface AgendaTopic {
   id: string;
   title: string;
