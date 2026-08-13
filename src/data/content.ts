@@ -8,7 +8,6 @@ import type {
   QuickLink,
   ContentBlock,
   CrewCard,
-  CrewMaterialForm,
   ClippingInterview,
   ClippingReport,
   ZeroFareCard,
@@ -309,16 +308,23 @@ export const crewCards: CrewCard[] = [
     cta: 'Ver missões',
     href: '/bonde-pro-max',
   },
+  {
+    id: 'fortalecer-o-corre',
+    title: 'Espalhe nosso material nas ruas',
+    description:
+      'Cola com a gente! Preenche os dados abaixo que a gente separa seu material e leva até você.',
+    cta: 'Cola com a gente',
+    href: 'https://docs.google.com/forms/d/e/1FAIpQLSfN6eMANJTcC4tQULeIbmuQh4HYVOoww0qUsPMgkRiVqvGsNw/viewform',
+  },
+  {
+    id: 'cafe-com-max',
+    title: 'Café com Max',
+    description:
+      'Não sou a dona Florinda, mas quero te fazer um convite: aceitas tomar uma xícara de café comigo?',
+    cta: 'Aceitar convite',
+    href: 'https://docs.google.com/forms/d/1nJoS_loU2qvbv6lXujp4N8Mu_YH7VN9pzNJt-sTvGV0/viewform',
+  },
 ];
-
-export const crewMaterialForm = {
-  id: 'fortalecer-o-corre',
-  title: 'Espalhe nosso material nas ruas',
-  description:
-    'Cola com a gente! Preenche os dados abaixo que a gente separa seu material e leva até você.',
-  cta: 'Cola com a gente',
-  href: 'https://docs.google.com/forms/d/e/1FAIpQLSfN6eMANJTcC4tQULeIbmuQh4HYVOoww0qUsPMgkRiVqvGsNw/viewform',
-} satisfies CrewMaterialForm;
 
 export const doeContent = {
   title: 'Doe',
