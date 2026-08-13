@@ -203,6 +203,7 @@ export interface ProposalCard {
   status: ProposalStatus;
   title: string;
   description: string;
+  href: string;
 }
 
 export interface StatCard {

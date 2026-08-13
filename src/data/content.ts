@@ -453,6 +453,7 @@ export const mandatoPageContent = {
         title: 'Tarifa Zero aos domingos e feriados',
         description:
           'Mais de 37,8 milhões de acessos ao STPC/DF em 82 dias de gratuidade no transporte público.',
+        href: '/mandato/tarifa-zero',
       },
       {
         icon: '📜',
@@ -461,6 +462,7 @@ export const mandatoPageContent = {
         title: '14 leis sancionadas',
         description:
           'Em quase 4 anos de Gabinete Aba Reta, leis que mudam a realidade do DF com vontade do Poder Executivo.',
+        href: '/mandato/projetos-de-lei',
       },
       {
         icon: '💰',
@@ -469,6 +471,7 @@ export const mandatoPageContent = {
         title: 'R$ 116 milhões em emendas',
         description:
           'Recursos destinados para educação, saúde, cultura, mobilidade e assistência social nas periferias.',
+        href: '/maximizando-df',
       },
       {
         icon: '🏛️',
@@ -477,6 +480,7 @@ export const mandatoPageContent = {
         title: 'Presidência da CTMU',
         description:
           'Liderança da Comissão de Transporte e Mobilidade Urbana na Câmara Legislativa do DF.',
+        href: '/mandato/ctmu',
       },
     ],
   },
