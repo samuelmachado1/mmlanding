@@ -91,7 +91,6 @@ export const heroQuickLinks: QuickLink[] = [
 ];
 
 export const heroFixedActions: QuickLink[] = [
-  { label: 'Apoie o manifesto', href: '#apoie-manifesto' },
   { label: 'Compartilhe', href: '#espalhe-material' },
   { label: 'Exercite o direito de manifestar', href: '#bonde-pro-max' },
 ];
@@ -165,13 +164,6 @@ export const bondeProMaxBlocks: ContentBlock[] = [
     description: 'Receba atualizações do mandato, votações e convites para audiências no WhatsApp e Telegram.',
     cta: 'Entrar no grupo',
     href: 'https://chat.whatsapp.com/exemplo',
-  },
-  {
-    id: 'apoie-manifesto',
-    title: 'Apoie o manifesto',
-    description: 'Assine e divulgue nossas propostas por um DF mais justo, acessível e transparente.',
-    cta: 'Assinar manifesto',
-    href: '#apoie-manifesto',
   },
   {
     id: 'missoes',
@@ -294,14 +286,6 @@ export const crewCards: CrewCard[] = [
     href: '/bonde-pro-max',
   },
   {
-    id: 'apoie-manifesto',
-    title: 'Apoie o manifesto',
-    description:
-      'Mostre que você também acredita em um DF no qual a periferia esteja no centro das decisões.',
-    cta: 'Quero apoiar',
-    href: '/apoie',
-  },
-  {
     id: 'missoes',
     title: 'Missões',
     description:
@@ -389,8 +373,6 @@ export const socialBarLinks: SocialBarLink[] = [
 export const volunteerRegions = ['Plano Piloto', 'Ceilândia', 'Taguatinga', 'Samambaia', 'Gama', 'São Sebastião', 'Planaltina', 'Outra RA'];
 
 export const footerLinks = [
-  { label: 'Apoie a campanha', href: '/apoie' },
-  { label: 'Doe', href: '/doe' },
   { label: 'Contato', href: '/contato' },
 ];
 
