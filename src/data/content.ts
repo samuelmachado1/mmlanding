@@ -680,6 +680,16 @@ export const bondePageContent = {
     { value: '48', label: 'regiões cobertas' },
     { value: '230+', label: 'eventos realizados' },
   ],
+  avatarStudio: {
+    eyebrow: 'Seu avatar no bonde',
+    title: 'Crie seu personagem aba reta',
+    description:
+      'Monte seu avatar no estilo Bonde Pro Max, como nos exemplos ao lado, e compartilhe nas redes para mostrar que você faz parte dessa caminhada.',
+    embedUrl: '',
+    embedTitle: 'Criador de avatares Bonde Pro Max',
+    embedUnavailableMessage:
+      'O criador de avatares estará disponível em breve. Enquanto isso, acompanhe o Bonde Pro Max pelos canais oficiais.',
+  },
   actions: {
     eyebrow: 'Como participar',
     title: 'Escolha sua forma de agir',
@@ -699,6 +709,14 @@ export const bondePageContent = {
           'Baixe cards, vídeos e artes prontas para compartilhar nas redes sociais e fortalecer nossas ideias.',
         cta: 'Acessar materiais',
         href: '/materiais',
+      },
+      {
+        icon: '🎨',
+        title: 'Crie seu avatar',
+        description:
+          'Personalize seu personagem aba reto ou aba reta e use nas redes para mostrar que você está no Bonde.',
+        cta: 'Criar avatar',
+        href: '#criar-avatar',
       },
       {
         icon: '🎯',
