@@ -218,6 +218,15 @@ export interface ActionCard {
   href: string;
 }
 
+export interface BondeAvatarStudioContent {
+  eyebrow: string;
+  title: string;
+  description: string;
+  embedUrl: string;
+  embedTitle: string;
+  embedUnavailableMessage: string;
+}
+
 export interface MissionCard {
   points: string;
   title: string;
