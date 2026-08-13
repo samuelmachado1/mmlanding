@@ -123,6 +123,12 @@ export interface PageContent {
   paragraphs: string[];
 }
 
+export interface Article {
+  id: string;
+  title: string;
+  paragraphs: string[];
+}
+
 export interface DoeImpactCard {
   emoji: string;
   title: string;

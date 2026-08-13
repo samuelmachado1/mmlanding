@@ -10,6 +10,7 @@ import BondeProMaxPage from './pages/BondeProMaxPage.tsx';
 import MateriaisPage from './pages/MateriaisPage.tsx';
 import ApoiePage from './pages/ApoiePage.tsx';
 import MidiaPage from './pages/MidiaPage.tsx';
+import ArtigosPage from './pages/ArtigosPage.tsx';
 import ContatoPage from './pages/ContatoPage.tsx';
 import DoePage from './pages/DoePage.tsx';
 
@@ -28,6 +29,7 @@ export default function App() {
       <Route path="/apoie" element={<ApoiePage />} />
       <Route path="/doe" element={<DoePage />} />
       <Route path="/midia" element={<MidiaPage />} />
+      <Route path="/artigos" element={<ArtigosPage />} />
       <Route path="/contato" element={<ContatoPage />} />
     </Routes>
   );
