@@ -1,4 +1,3 @@
-import { ChevronRight } from 'lucide-react';
 import {
   SplitSection,
   SplitSectionContent,
@@ -20,8 +19,6 @@ export function Manifest() {
             o Distrito Federal
           </>
         }
-        cta={{ href: '/apoie', label: 'Apoie este manifesto' }}
-        ctaIcon={<ChevronRight className="h-6 w-6 shrink-0" aria-hidden />}
       >
         <p>
           O DF que aparece nos cartões-postais não pode ser privilégio de poucos. Brasília também é Ceilândia,

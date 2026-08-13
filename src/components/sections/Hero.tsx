@@ -1,7 +1,7 @@
 import { AppLink } from '../ui/AppLink.tsx';
 import { ChevronRight } from 'lucide-react';
 import heroBgTexture from '../../assets/backgrounds/hero-bg-texture.png';
-import heroBordao from '../../assets/backgrounds/maximiz.png';
+import heroText from '../../assets/backgrounds/texto-hero.png';
 
 export function Hero() {
   return (
@@ -18,7 +18,7 @@ export function Hero() {
 
       <div className="relative z-10 flex h-full w-full items-center justify-center px-[4%] py-[6%]">
         <img
-          src={heroBordao}
+          src={heroText}
           alt="Maximizar as maravilhas de quem é do corre"
           className="h-auto max-h-full w-auto max-w-full origin-center object-contain lg:scale-150"
         />
