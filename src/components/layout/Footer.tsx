@@ -1,4 +1,5 @@
 import { footerLinks, siteConfig, socialLinks } from '../../data/content.ts';
+import { usePrivacyPolicy } from '../../context/PrivacyPolicyContext.tsx';
 import { PAGE_GRID_INNER, PAGE_GRID_OUTER } from './pageGrid.ts';
 
 interface FooterProps {
@@ -8,6 +9,7 @@ interface FooterProps {
 export function Footer({ variant = 'navy' }: FooterProps) {
   const year = new Date().getFullYear();
   const isBlack = variant === 'black';
+  const { open: openPrivacyPolicy } = usePrivacyPolicy();
 
   return (
     <footer
@@ -62,9 +64,19 @@ export function Footer({ variant = 'navy' }: FooterProps) {
           <ul className="flex flex-wrap gap-4">
             {footerLinks.map((link) => (
               <li key={link.label}>
-                <a href={link.href} className="hover:text-white">
-                  {link.label}
-                </a>
+                {'action' in link ? (
+                  <button
+                    type="button"
+                    onClick={openPrivacyPolicy}
+                    className="hover:text-white"
+                  >
+                    {link.label}
+                  </button>
+                ) : (
+                  <a href={link.href} className="hover:text-white">
+                    {link.label}
+                  </a>
+                )}
               </li>
             ))}
           </ul>

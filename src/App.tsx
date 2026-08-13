@@ -1,5 +1,6 @@
 import { Routes, Route } from 'react-router-dom';
 import { ScrollToHash } from './components/ScrollToHash.tsx';
+import { PrivacyPolicyProvider } from './context/PrivacyPolicyContext.tsx';
 import LandingPage from './pages/LandingPage.tsx';
 import QuemEPage from './pages/QuemEPage.tsx';
 import MandatoPage from './pages/MandatoPage.tsx';
@@ -16,7 +17,7 @@ import ContatoPage from './pages/ContatoPage.tsx';
 
 export default function App() {
   return (
-    <>
+    <PrivacyPolicyProvider>
       <ScrollToHash />
       <Routes>
         <Route path="/" element={<LandingPage />} />
@@ -33,6 +34,6 @@ export default function App() {
         <Route path="/artigos" element={<ArtigosPage />} />
         <Route path="/contato" element={<ContatoPage />} />
       </Routes>
-    </>
+    </PrivacyPolicyProvider>
   );
 }

@@ -110,6 +110,33 @@ export interface VolunteerForm {
   region: string;
 }
 
+export interface ApoiadorFormData {
+  nome: string;
+  email: string;
+  whatsapp: string;
+  uf: string;
+  municipio: string;
+  novidades: boolean;
+  campanhaDigital: boolean;
+  campanhaRua: boolean;
+  lgpdAceite: boolean;
+}
+
+export interface PrivacyPolicySection {
+  heading: string;
+  paragraphs: string[];
+}
+
+export interface PrivacyPolicyContent {
+  title: string;
+  lastUpdated: string;
+  sections: PrivacyPolicySection[];
+}
+
+export type FooterLink =
+  | { label: string; href: string }
+  | { label: string; action: 'privacy-policy' };
+
 export interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
