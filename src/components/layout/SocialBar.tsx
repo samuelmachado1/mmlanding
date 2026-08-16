@@ -4,7 +4,7 @@ import { PAGE_GRID_INNER, PAGE_GRID_OUTER } from './pageGrid.ts';
 
 export function SocialBar() {
   return (
-    <div className="shrink-0 bg-navy-500">
+    <div className="relative z-10 shrink-0 bg-navy-500">
       <div className={PAGE_GRID_OUTER}>
         <div
           className={`flex items-center justify-center gap-3 py-2.5 sm:h-14 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:py-0 ${PAGE_GRID_INNER}`}
