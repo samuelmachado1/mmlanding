@@ -1,3 +1,5 @@
+import { getRequestOidcToken } from './request-context.js';
+
 const BLOB_API_URL = 'https://vercel.com/api/blob';
 const BLOB_API_VERSION = '12';
 
@@ -54,8 +56,6 @@ export function isBlobStorageError(message: string): boolean {
     message.includes('Blob API')
   );
 }
-
-import { getRequestOidcToken } from './request-context.js';
 
 async function resolveOidcToken(): Promise<string | null> {
   const fromContext = getRequestOidcToken();
@@ -130,6 +130,25 @@ export async function listBlobByPrefix(prefix: string): Promise<BlobListItem[]> 
   return data.blobs ?? [];
 }
 
+export async function getBlobJson(pathname: string): Promise<unknown | null> {
+  const blobs = await listBlobByPrefix(pathname);
+  const blob = blobs.find((entry) => entry.pathname === pathname);
+  if (!blob) return null;
+
+  const auth = await resolveBlobAuth();
+  if (!auth) return null;
+
+  const response = await fetch(blob.url, {
+    headers: { authorization: `Bearer ${auth.token}` },
+  });
+
+  if (!response.ok) {
+    throw new Error(`Blob fetch failed: ${response.status}`);
+  }
+
+  return (await response.json()) as unknown;
+}
+
 export async function putJsonBlob(pathname: string, body: string): Promise<void> {
   const params = new URLSearchParams({ pathname });
   const bodyBytes = new TextEncoder().encode(body).byteLength;
@@ -140,7 +159,7 @@ export async function putJsonBlob(pathname: string, body: string): Promise<void>
     headers: {
       'content-type': 'application/json',
       'x-content-length': String(bodyBytes),
-      'x-vercel-blob-access': 'public',
+      'x-vercel-blob-access': 'private',
       'x-add-random-suffix': '0',
       'x-allow-overwrite': '1',
       'x-content-type': 'application/json',
