@@ -59,6 +59,22 @@ export default async function handler(
   });
 }
 
+import type { ClippingsStore } from '../../_lib/types.js';
+
+function adminSnapshotFromStore(store: ClippingsStore) {
+  return {
+    pending: sortPendingByRecency(store.pending),
+    published: sortMediaCardsByRecency(store.published.items),
+    highlightId: store.highlightId,
+    storageConfigured: isStorageWritable(),
+  };
+}
+
+async function adminSnapshot() {
+  const { getStore } = await import('../../_lib/store-read.js');
+  return adminSnapshotFromStore(await getStore());
+}
+
 async function handlePending(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -66,12 +82,7 @@ async function handlePending(req: VercelRequest, res: VercelResponse) {
 
   const { getStore } = await import('../../_lib/store-read.js');
   const store = await getStore();
-  return res.status(200).json({
-    pending: sortPendingByRecency(store.pending),
-    published: sortMediaCardsByRecency(store.published.items),
-    highlightId: store.highlightId,
-    storageConfigured: isStorageWritable(),
-  });
+  return res.status(200).json(adminSnapshotFromStore(store));
 }
 
 async function handleApprove(req: VercelRequest, res: VercelResponse) {
@@ -87,12 +98,12 @@ async function handleApprove(req: VercelRequest, res: VercelResponse) {
   }
 
   const { approveItem } = await import('../../_lib/store.js');
-  const ok = await approveItem(id, asHighlight);
-  if (!ok) {
+  const store = await approveItem(id, asHighlight);
+  if (!store) {
     return res.status(404).json({ error: 'Pending item not found' });
   }
 
-  return res.status(200).json({ ok: true });
+  return res.status(200).json({ ok: true, ...adminSnapshotFromStore(store) });
 }
 
 async function handleReject(req: VercelRequest, res: VercelResponse) {
@@ -111,7 +122,7 @@ async function handleReject(req: VercelRequest, res: VercelResponse) {
     return res.status(404).json({ error: 'Pending item not found' });
   }
 
-  return res.status(200).json({ ok: true });
+  return res.status(200).json({ ok: true, ...(await adminSnapshot()) });
 }
 
 async function handleHighlight(req: VercelRequest, res: VercelResponse) {
@@ -130,7 +141,7 @@ async function handleHighlight(req: VercelRequest, res: VercelResponse) {
     return res.status(404).json({ error: 'Published item not found' });
   }
 
-  return res.status(200).json({ ok: true });
+  return res.status(200).json({ ok: true, ...(await adminSnapshot()) });
 }
 
 async function handleManual(req: VercelRequest, res: VercelResponse) {
@@ -175,7 +186,7 @@ async function handleManual(req: VercelRequest, res: VercelResponse) {
     asHighlight,
   );
 
-  return res.status(200).json({ ok: true, item });
+  return res.status(200).json({ ok: true, item, ...(await adminSnapshot()) });
 }
 
 async function handlePublished(req: VercelRequest, res: VercelResponse) {
@@ -200,7 +211,7 @@ async function handlePublished(req: VercelRequest, res: VercelResponse) {
     return res.status(404).json({ error: 'Published item not found' });
   }
 
-  return res.status(200).json({ ok: true });
+  return res.status(200).json({ ok: true, ...(await adminSnapshot()) });
 }
 
 async function handleDiscover(req: VercelRequest, res: VercelResponse) {
@@ -216,5 +227,5 @@ async function handleDiscover(req: VercelRequest, res: VercelResponse) {
     return res.status(status).json(result);
   }
 
-  return res.status(200).json(result);
+  return res.status(200).json({ ...result, ...(await adminSnapshot()) });
 }

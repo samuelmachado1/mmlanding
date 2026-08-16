@@ -1,6 +1,7 @@
 import type { ClippingsPayload, ClippingsStore, MediaCard } from './types.js';
 import { buildPublishedPayload } from './map-published.js';
 import { sortMediaCardsByRecency } from './sort-clippings.js';
+import { getStoreSnapshot } from './request-context.js';
 
 const STORE_BLOB_PATHNAME = 'clippings-store.json';
 const LEGACY_BLOB_PATHNAME = 'clippings.json';
@@ -124,6 +125,11 @@ function hasBlobEnv(): boolean {
 
 export async function getStore(): Promise<ClippingsStore> {
   try {
+    const cached = getStoreSnapshot();
+    if (cached) {
+      return normalizeStore(cached);
+    }
+
     if (process.env.VERCEL === '1') {
       if (!hasBlobEnv()) {
         console.error('Blob not configured on Vercel (BLOB_STORE_ID or BLOB_READ_WRITE_TOKEN)');

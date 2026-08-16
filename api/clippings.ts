@@ -19,14 +19,14 @@ export default async function handler(
         return res.status(404).json({ error: 'Article not found' });
       }
 
-      res.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate=600');
+      res.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate=120');
       return res.status(200).json(item);
     }
 
     const cached = await getClippings();
 
     if (cached) {
-      res.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate=600');
+      res.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate=120');
       return res.status(200).json(cached);
     }
 
