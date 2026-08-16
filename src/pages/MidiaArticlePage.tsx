@@ -7,25 +7,43 @@ import {
 import { AppLink } from '../components/ui/AppLink.tsx';
 import type { MediaCard } from '../types/index.ts';
 
-function isGoogleNewsUrl(href: string): boolean {
-  return /news\.google\.com/i.test(href);
+interface MediaArticle extends MediaCard {
+  excerpt?: string;
+  bodyHtml?: string;
 }
 
-function ArticleEmbedFallback({ article }: { article: MediaCard }) {
+const articleBodyClassName =
+  'article-body flex flex-col gap-5 font-body text-lg leading-relaxed text-brand-black/90 ' +
+  '[&_h2]:mt-6 [&_h2]:font-nav [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-brand-black ' +
+  '[&_h3]:mt-4 [&_h3]:font-nav [&_h3]:text-xl [&_h3]:font-bold [&_h3]:text-brand-black ' +
+  '[&_blockquote]:border-l-4 [&_blockquote]:border-yellow-500 [&_blockquote]:pl-4 [&_blockquote]:text-brand-black/80 ' +
+  '[&_a]:font-semibold [&_a]:text-navy-500 [&_a]:underline [&_li]:ml-4';
+
+function ArticleBody({ article }: { article: MediaArticle }) {
   return (
-    <div className="flex flex-col gap-6 p-6 sm:p-10">
+    <div className="flex flex-col gap-8 p-6 sm:p-10">
       {article.imageUrl ? (
         <img
           src={article.imageUrl}
           alt=""
-          className="max-h-[min(50vh,420px)] w-full rounded-xl object-cover"
+          className="w-full rounded-xl object-cover"
         />
       ) : null}
-      <p className="text-base text-brand-black/70">
-        Esta matéria está no site de <strong>{article.source}</strong>. Alguns
-        portais não permitem exibir o conteúdo aqui — use o botão abaixo para
-        ler na íntegra.
-      </p>
+
+      {article.bodyHtml ? (
+        <div
+          className={articleBodyClassName}
+          dangerouslySetInnerHTML={{ __html: article.bodyHtml }}
+        />
+      ) : article.excerpt ? (
+        <p className="text-lg leading-relaxed text-brand-black/85">{article.excerpt}</p>
+      ) : (
+        <p className="text-base text-brand-black/70">
+          Não foi possível carregar o texto desta matéria aqui. Use o botão abaixo
+          para ler no site de <strong>{article.source}</strong>.
+        </p>
+      )}
+
       <a
         href={article.href}
         target="_blank"
@@ -40,9 +58,8 @@ function ArticleEmbedFallback({ article }: { article: MediaCard }) {
 
 export default function MidiaArticlePage() {
   const { id } = useParams<{ id: string }>();
-  const [article, setArticle] = useState<MediaCard | null>(null);
+  const [article, setArticle] = useState<MediaArticle | null>(null);
   const [loading, setLoading] = useState(true);
-  const [embedFailed, setEmbedFailed] = useState(false);
 
   useEffect(() => {
     if (!id) {
@@ -52,7 +69,6 @@ export default function MidiaArticlePage() {
 
     let cancelled = false;
     setLoading(true);
-    setEmbedFailed(false);
 
     async function loadFromApi() {
       try {
@@ -60,7 +76,7 @@ export default function MidiaArticlePage() {
           `/api/clippings/item?id=${encodeURIComponent(id!)}`,
         );
         if (!response.ok) return;
-        const payload = (await response.json()) as MediaCard;
+        const payload = (await response.json()) as MediaArticle;
         if (!cancelled) setArticle(payload);
       } finally {
         if (!cancelled) setLoading(false);
@@ -73,11 +89,6 @@ export default function MidiaArticlePage() {
       cancelled = true;
     };
   }, [id]);
-
-  const canEmbed =
-    article &&
-    !isGoogleNewsUrl(article.href) &&
-    !embedFailed;
 
   if (!id) {
     return (
@@ -133,39 +144,14 @@ export default function MidiaArticlePage() {
             {article.title}
           </h1>
           <p className="mt-2 font-nav text-sm text-cream/70">{article.date}</p>
-          <a
-            href={article.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-4 inline-flex rounded-xl bg-yellow-500 px-4 py-2 font-nav text-sm font-bold text-navy-500"
-          >
-            Abrir no site original
-          </a>
         </div>
       </section>
 
       <section className="bg-cream px-4 py-6 sm:px-6">
         <div className="mx-auto max-w-5xl">
           <div className="overflow-hidden rounded-2xl border border-brand-black/10 bg-white shadow-sm">
-            {canEmbed ? (
-              <iframe
-                title={article.title}
-                src={article.href}
-                className="h-[min(75vh,900px)] w-full bg-white"
-                sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
-                referrerPolicy="no-referrer-when-downgrade"
-                onError={() => setEmbedFailed(true)}
-              />
-            ) : (
-              <ArticleEmbedFallback article={article} />
-            )}
+            <ArticleBody article={article} />
           </div>
-          {canEmbed ? (
-            <p className="mt-4 text-sm text-brand-black/60">
-              Se a matéria não carregar aqui, alguns sites bloqueiam exibição
-              incorporada. Use &quot;Abrir no site original&quot; acima.
-            </p>
-          ) : null}
         </div>
       </section>
     </InternalPageLayout>

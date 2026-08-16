@@ -99,11 +99,11 @@ export function SitePageCtaSection() {
   return (
     <div className="relative">
       <div className="relative z-20 mx-auto max-w-6xl px-6 sm:px-8">
-        <div className="-mt-[3.125rem] -mb-[3.125rem]">
+        <div className="-mt-8 -mb-8 sm:-mt-10 sm:-mb-10">
           <MandateHighlightGrid cards={mandateHighlights} />
         </div>
       </div>
-      <PageCta {...sitePageCta} className="relative z-10 !pt-[5.5rem]" />
+      <PageCta {...sitePageCta} className="relative z-10 !pt-10 sm:!pt-12" />
     </div>
   );
 }
@@ -121,7 +121,7 @@ export function PageCta({ title, primary, secondary, variant = 'navy', className
 
   return (
     <section
-      className={`px-6 py-16 sm:px-8 ${isNavy ? 'bg-navy-500' : 'bg-yellow-500'} ${className}`}
+      className={`px-6 py-10 sm:px-8 sm:py-12 ${isNavy ? 'bg-navy-500' : 'bg-yellow-500'} ${className}`}
     >
       <div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-6 sm:flex-row sm:items-center">
         <h2

@@ -1,6 +1,6 @@
 export function ClippingSkeleton() {
   return (
-    <div className="flex flex-col gap-6 pt-8 lg:flex-row lg:gap-6" aria-busy="true">
+    <div className="flex flex-col gap-6 pt-6 lg:flex-row lg:gap-6" aria-busy="true">
       <div className="flex flex-1 flex-col gap-3">
         <div className="h-[15px] w-40 animate-pulse bg-white/20" />
         <div className="aspect-[424/283] w-full animate-pulse rounded bg-white/10" />

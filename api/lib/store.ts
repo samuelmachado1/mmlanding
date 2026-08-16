@@ -9,7 +9,8 @@ import type {
 } from '../../src/types/index.ts';
 import { buildPublishedPayload } from './map-clippings.ts';
 import { normalizeUrl } from './normalize-url.ts';
-import { hydrateMediaCard, isBadImageUrl, resolveArticleImage, resolveArticleUrl } from './article-meta.ts';
+import { hydrateMediaCard, isBadImageUrl, fetchArticleContent, resolveArticleImage, resolveArticleUrl } from './article-meta.ts';
+import { isGoogleNewsUrl } from './google-news-url.ts';
 import { sortMediaCardsByRecency, sortPendingByRecency } from './sort-clippings.ts';
 
 const STORE_BLOB_PATHNAME = 'clippings-store.json';
@@ -263,6 +264,19 @@ function rebuildPublishedPayload(store: ClippingsStore): ClippingsPayload {
   return payload;
 }
 
+async function enrichWithArticleContent(card: MediaCard): Promise<MediaCard> {
+  if (card.bodyHtml || isGoogleNewsUrl(card.href)) return card;
+
+  const content = await fetchArticleContent(card.href);
+  if (!content.bodyHtml && !content.excerpt) return card;
+
+  return {
+    ...card,
+    excerpt: content.excerpt ?? card.excerpt,
+    bodyHtml: content.bodyHtml ?? card.bodyHtml,
+  };
+}
+
 export async function approveItem(
   id: string,
   asHighlight = false,
@@ -272,10 +286,14 @@ export async function approveItem(
   if (index === -1) return false;
 
   const [pendingItem] = store.pending.splice(index, 1);
-  const { discoveredAt: _d, searchQuery: _q, snippet: _s, ...mediaCard } = pendingItem;
+  const { discoveredAt: _d, searchQuery: _q, snippet, ...mediaCard } = pendingItem;
 
   mediaCard.id = `clipping-${Date.now()}`;
   mediaCard.href = await resolveArticleUrl(mediaCard.href);
+
+  if (snippet) {
+    mediaCard.excerpt = snippet;
+  }
 
   if (isBadImageUrl(mediaCard.imageUrl)) {
     mediaCard.imageUrl = undefined;
@@ -286,17 +304,27 @@ export async function approveItem(
     if (imageUrl) mediaCard.imageUrl = imageUrl;
   }
 
-  const url = normalizeUrl(mediaCard.href);
-  const existing = store.published.items.find(
+  const enrichedCard = await enrichWithArticleContent(mediaCard);
+
+  const url = normalizeUrl(enrichedCard.href);
+  const existingIndex = store.published.items.findIndex(
     (item) => normalizeUrl(item.href) === url,
   );
 
-  if (!existing) {
-    store.published.items.unshift(mediaCard);
+  if (existingIndex === -1) {
+    store.published.items.unshift(enrichedCard);
+  } else {
+    store.published.items[existingIndex] = await enrichWithArticleContent({
+      ...store.published.items[existingIndex],
+      excerpt: enrichedCard.excerpt ?? store.published.items[existingIndex].excerpt,
+    });
   }
 
   if (asHighlight) {
-    store.highlightId = existing?.id ?? mediaCard.id;
+    store.highlightId =
+      existingIndex === -1
+        ? enrichedCard.id
+        : store.published.items[existingIndex].id;
   }
 
   store.published = rebuildPublishedPayload(store);
@@ -326,30 +354,42 @@ export async function addManualItem(
   asHighlight = false,
 ): Promise<MediaCard> {
   const store = await getStore();
-  const mediaCard: MediaCard = {
+  let mediaCard: MediaCard = {
     ...item,
     id: item.id ?? `manual-${Date.now()}`,
   };
 
+  mediaCard = await enrichWithArticleContent(mediaCard);
+
   const url = normalizeUrl(mediaCard.href);
-  const existing = store.published.items.find(
+  const existingIndex = store.published.items.findIndex(
     (entry) => normalizeUrl(entry.href) === url,
   );
 
-  if (!existing) {
+  if (existingIndex === -1) {
     store.published.items.unshift(mediaCard);
+  } else {
+    store.published.items[existingIndex] = await enrichWithArticleContent({
+      ...store.published.items[existingIndex],
+      excerpt: mediaCard.excerpt ?? store.published.items[existingIndex].excerpt,
+    });
   }
 
   if (asHighlight) {
-    store.highlightId = existing?.id ?? mediaCard.id;
+    store.highlightId =
+      existingIndex === -1
+        ? mediaCard.id
+        : store.published.items[existingIndex].id;
   }
 
-  if (!existing || asHighlight) {
+  if (existingIndex === -1 || asHighlight || mediaCard.bodyHtml) {
     store.published = rebuildPublishedPayload(store);
     await saveStore(store);
   }
 
-  return existing ?? mediaCard;
+  return existingIndex === -1
+    ? mediaCard
+    : store.published.items[existingIndex];
 }
 
 export async function getPublishedItemById(id: string): Promise<MediaCard | null> {
@@ -357,19 +397,22 @@ export async function getPublishedItemById(id: string): Promise<MediaCard | null
   const index = store.published.items.findIndex((item) => item.id === id);
   if (index === -1) return null;
 
-  const hydrated = await hydrateMediaCard(store.published.items[index]);
-  const current = store.published.items[index];
+  let card = await hydrateMediaCard(store.published.items[index]);
+  card = await enrichWithArticleContent(card);
 
+  const current = store.published.items[index];
   if (
-    hydrated.href !== current.href ||
-    hydrated.imageUrl !== current.imageUrl
+    card.href !== current.href ||
+    card.imageUrl !== current.imageUrl ||
+    card.bodyHtml !== current.bodyHtml ||
+    card.excerpt !== current.excerpt
   ) {
-    store.published.items[index] = hydrated;
+    store.published.items[index] = card;
     store.published = rebuildPublishedPayload(store);
     await saveStore(store);
   }
 
-  return hydrated;
+  return card;
 }
 
 export async function setHighlightItem(id: string): Promise<boolean> {

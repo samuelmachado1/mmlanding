@@ -11,7 +11,7 @@ import type { CrewCard } from '../../types/index.ts';
 import { AppLink } from '../ui/AppLink.tsx';
 import { AnimatedSection } from '../ui/AnimatedSection.tsx';
 import { NavLink } from '../ui/NavLink.tsx';
-import { PAGE_GRID_INNER, PAGE_GRID_OUTER } from '../layout/pageGrid.ts';
+import { PAGE_GRID_INNER, PAGE_GRID_OUTER, LANDING_SECTION_PY } from '../layout/pageGrid.ts';
 
 const slash = String.fromCharCode(47);
 
@@ -97,16 +97,16 @@ function CrewCardItem({ card }: { card: CrewCard }) {
 export function Crew() {
   return (
     <AnimatedSection id="bonde-pro-max" className="bg-navy-500">
-      <div className={`py-12 sm:py-16 lg:py-20 ${PAGE_GRID_OUTER}`}>
-        <div className={`min-h-[clamp(32rem,61vw,54.9375rem)] ${PAGE_GRID_INNER}`}>
+      <div className={`${LANDING_SECTION_PY} ${PAGE_GRID_OUTER}`}>
+        <div className={PAGE_GRID_INNER}>
           <p className="font-nav text-lg font-semibold leading-5 tracking-[0.05em] text-cream uppercase">
             {crewContent.eyebrow}
           </p>
-          <h2 className="pt-4 font-nav text-[clamp(2rem,8vw,3.75rem)] font-black leading-[1.05] text-yellow-500">
+          <h2 className="pt-3 font-nav text-[clamp(2rem,8vw,3.75rem)] font-black leading-[1.05] text-yellow-500">
             {crewContent.title}
           </h2>
 
-          <div className="grid gap-10 pt-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-stretch lg:gap-12">
+          <div className="grid gap-6 pt-6 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-stretch lg:gap-8">
             <div className="flex flex-col gap-6">
               <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:items-stretch">
                 {crewCards.map((card) => (
@@ -117,7 +117,7 @@ export function Crew() {
               </ul>
             </div>
 
-            <div className="flex justify-center lg:items-center lg:justify-start lg:pt-8">
+            <div className="flex justify-center lg:items-center lg:justify-start lg:pt-4">
               <BondeAvatarLink />
             </div>
           </div>

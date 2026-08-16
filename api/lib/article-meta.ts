@@ -11,6 +11,27 @@ const OG_IMAGE_PATTERNS = [
   /<meta[^>]+content=["']([^"']+)["'][^>]+name=["']twitter:image["']/i,
 ];
 
+const OG_DESCRIPTION_PATTERNS = [
+  /<meta[^>]+property=["']og:description["'][^>]+content=["']([^"']+)["']/i,
+  /<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:description["']/i,
+  /<meta[^>]+name=["']description["'][^>]+content=["']([^"']+)["']/i,
+  /<meta[^>]+content=["']([^"']+)["'][^>]+name=["']description["']/i,
+  /<meta[^>]+name=["']twitter:description["'][^>]+content=["']([^"']+)["']/i,
+  /<meta[^>]+content=["']([^"']+)["'][^>]+name=["']twitter:description["']/i,
+];
+
+export function extractOgDescriptionFromHtml(html: string): string | undefined {
+  for (const pattern of OG_DESCRIPTION_PATTERNS) {
+    const match = html.match(pattern);
+    if (match?.[1]) {
+      const text = decodeHtmlEntities(match[1].trim());
+      if (text.length > 0) return text;
+    }
+  }
+
+  return undefined;
+}
+
 export function extractOgImageFromHtml(html: string): string | undefined {
   for (const pattern of OG_IMAGE_PATTERNS) {
     const match = html.match(pattern);
@@ -104,29 +125,132 @@ export async function resolveArticleUrl(url: string): Promise<string> {
   }
 }
 
-export async function fetchOgImage(url: string): Promise<string | undefined> {
+export async function fetchArticleHtml(url: string): Promise<string | undefined> {
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 5000);
+  const timeout = setTimeout(() => controller.abort(), 8000);
 
   try {
     const response = await fetch(url, {
       signal: controller.signal,
       redirect: 'follow',
       headers: {
-        'User-Agent': 'max-maciel-landing/1.0',
+        'User-Agent':
+          'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
         Accept: 'text/html,application/xhtml+xml',
       },
     });
 
     if (!response.ok) return undefined;
-
-    const html = await response.text();
-    return extractOgImageFromHtml(html);
+    return await response.text();
   } catch {
     return undefined;
   } finally {
     clearTimeout(timeout);
   }
+}
+
+export async function fetchArticleExcerpt(url: string): Promise<string | undefined> {
+  const content = await fetchArticleContent(url);
+  return content.excerpt;
+}
+
+const BODY_SKIP_PATTERN =
+  /whatsapp|siga o canal|saiba mais|estagi[aá]rio do correio|receba as principais not[ií]cias|assine o correio/i;
+
+function stripHtmlTags(html: string): string {
+  return html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+}
+
+function sanitizeInlineHtml(html: string): string {
+  let sanitized = html
+    .replace(/<script[\s\S]*?<\/script>/gi, '')
+    .replace(/<style[\s\S]*?<\/style>/gi, '')
+    .replace(/<iframe[\s\S]*?<\/iframe>/gi, '');
+
+  sanitized = sanitized.replace(
+    /<a\s+[^>]*href=["'](https?:\/\/[^"']+)["'][^>]*>([\s\S]*?)<\/a>/gi,
+    '<a href="$1" target="_blank" rel="noopener noreferrer">$2</a>',
+  );
+
+  sanitized = sanitized.replace(/<(?!\/?(strong|em|b|i|br|a)\b)[^>]+>/gi, '');
+  return sanitized.trim();
+}
+
+const ARTICLE_CONTAINER_REGEXES = [
+  /<article[^>]*id=["']digital["'][^>]*>([\s\S]*?)<\/article>/i,
+  /<div[^>]*class=["'][^"']*body-content-cb[^"']*["'][^>]*>([\s\S]*?)<\/div>/i,
+  /<article[^>]*class=["'][^"']*article[^"']*["'][^>]*>([\s\S]*?)<\/article>/i,
+  /<div[^>]*itemprop=["']articleBody["'][^>]*>([\s\S]*?)<\/div>/i,
+];
+
+export function extractArticleBodyHtml(html: string): string | undefined {
+  let container = html;
+
+  for (const regex of ARTICLE_CONTAINER_REGEXES) {
+    const match = html.match(regex);
+    if (match?.[1] && stripHtmlTags(match[1]).length > 300) {
+      container = match[1];
+      break;
+    }
+  }
+
+  const cleaned = container
+    .replace(/<script[\s\S]*?<\/script>/gi, '')
+    .replace(/<style[\s\S]*?<\/style>/gi, '')
+    .replace(/<picture[\s\S]*?<\/picture>/gi, '')
+    .replace(/<figure[\s\S]*?<\/figure>/gi, '')
+    .replace(/<img[^>]*>/gi, '')
+    .replace(/<svg[\s\S]*?<\/svg>/gi, '')
+    .replace(
+      /<div[^>]*class=["'][^"']*(?:pub-ret|box-content-read-more|news__box|entry-headerBox)[^"']*["'][^>]*>[\s\S]*?<\/div>/gi,
+      '',
+    );
+
+  const blockRegex = /<(p|h2|h3|h4|blockquote|li)(\s[^>]*)?>([\s\S]*?)<\/\1>/gi;
+  const blocks: string[] = [];
+
+  for (const match of cleaned.matchAll(blockRegex)) {
+    const tag = match[1].toLowerCase();
+    const inner = sanitizeInlineHtml(match[3]);
+    const text = stripHtmlTags(inner);
+
+    if (!text) continue;
+    if (BODY_SKIP_PATTERN.test(text)) continue;
+    if (tag === 'p' && text.length < 60) continue;
+    if (tag === 'li' && text.length < 20) continue;
+    if (
+      (tag === 'h3' || tag === 'h4') &&
+      /^(assista|tags|compartilhe|relacionadas)/i.test(text)
+    ) {
+      continue;
+    }
+
+    blocks.push(`<${tag}>${inner}</${tag}>`);
+  }
+
+  if (blocks.length === 0) return undefined;
+  return blocks.join('');
+}
+
+export interface ArticleContent {
+  excerpt?: string;
+  bodyHtml?: string;
+}
+
+export async function fetchArticleContent(url: string): Promise<ArticleContent> {
+  const html = await fetchArticleHtml(url);
+  if (!html) return {};
+
+  return {
+    excerpt: extractOgDescriptionFromHtml(html),
+    bodyHtml: extractArticleBodyHtml(html),
+  };
+}
+
+export async function fetchOgImage(url: string): Promise<string | undefined> {
+  const html = await fetchArticleHtml(url);
+  if (!html) return undefined;
+  return extractOgImageFromHtml(html);
 }
 
 export async function resolveArticleImage(

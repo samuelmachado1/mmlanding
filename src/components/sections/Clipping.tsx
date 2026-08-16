@@ -8,7 +8,7 @@ import { NavLink } from '../ui/NavLink.tsx';
 import { AppLink } from '../ui/AppLink.tsx';
 import { mediaArticlePath } from '../../lib/media-paths.ts';
 import { ClippingSkeleton } from './ClippingSkeleton.tsx';
-import { PAGE_GRID_INNER, PAGE_GRID_OUTER } from '../layout/pageGrid.ts';
+import { PAGE_GRID_INNER, PAGE_GRID_OUTER, LANDING_SECTION_PY } from '../layout/pageGrid.ts';
 
 function SectionLabel({ children }: { children: string }) {
   return (
@@ -71,18 +71,18 @@ export function Clipping() {
 
   return (
     <AnimatedSection id="max-na-midia" className="bg-brand-red">
-      <div className={`py-12 sm:py-16 lg:py-20 ${PAGE_GRID_OUTER}`}>
-        <div className={`flex min-h-[clamp(32rem,61vw,54.9375rem)] flex-col ${PAGE_GRID_INNER}`}>
+      <div className={`${LANDING_SECTION_PY} ${PAGE_GRID_OUTER}`}>
+        <div className={`flex flex-col ${PAGE_GRID_INNER}`}>
           <p className="font-nav text-lg font-semibold leading-5 tracking-[0.05em] text-cream uppercase">
             {clippingContent.eyebrow}
           </p>
-          <h2 className="pt-4 font-nav text-[clamp(2rem,5vw,3.75rem)] font-black leading-none text-yellow-500">
+          <h2 className="pt-3 font-nav text-[clamp(2rem,5vw,3.75rem)] font-black leading-none text-yellow-500">
             {clippingContent.title}
           </h2>
           {loading ? (
             <ClippingSkeleton />
           ) : (
-            <div className="flex flex-col gap-6 pt-8 lg:flex-row lg:gap-6">
+            <div className="flex flex-col gap-6 pt-6 lg:flex-row lg:gap-6">
               <div className="flex flex-1 flex-col gap-3">
                 <SectionLabel>{clippingContent.interviewsLabel}</SectionLabel>
                 {interview ? (

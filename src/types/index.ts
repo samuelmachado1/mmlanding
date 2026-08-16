@@ -278,6 +278,8 @@ export interface MediaCard {
   href: string;
   imageUrl?: string;
   tab: string;
+  excerpt?: string;
+  bodyHtml?: string;
 }
 
 export interface ClippingsPayload {
