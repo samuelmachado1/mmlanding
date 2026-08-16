@@ -40,7 +40,7 @@ export function useClippings(): UseClippingsResult {
 
     async function load() {
       try {
-        const response = await fetch('/api/clippings');
+        const response = await fetch('/api/clippings', { cache: 'no-store' });
 
         if (!response.ok) {
           throw new Error(`HTTP ${response.status}`);

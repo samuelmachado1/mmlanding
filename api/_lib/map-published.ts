@@ -49,7 +49,7 @@ export function buildPublishedPayload(
   const reports = items
     .filter((card) => normalizeUrl(card.href) !== highlightUrl)
     .filter((card) => card.tab === 'reportagens')
-    .slice(0, 3)
+    .slice(0, 10)
     .map(toReport);
 
   return {

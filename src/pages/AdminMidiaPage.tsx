@@ -20,6 +20,20 @@ const TAB_OPTIONS: MediaCard['tab'][] = [
 const BLOB_SETUP_HINT =
   'Conecte um Blob store na Vercel (Storage → Blob → Connect to Project, ambiente Production) e faça redeploy. Sem isso, buscar/aprovar/publicar não persiste dados em produção.';
 
+type AdminSnapshot = {
+  pending?: PendingMediaItem[];
+  published?: MediaCard[];
+  highlightId?: string | null;
+  storageConfigured?: boolean;
+};
+
+function applyAdminSnapshot(data: AdminSnapshot) {
+  if (data.pending) setPending(data.pending);
+  if (data.published) setPublished(data.published);
+  if (data.highlightId !== undefined) setHighlightId(data.highlightId);
+  if (data.storageConfigured !== undefined) setStorageConfigured(data.storageConfigured);
+}
+
 export default function AdminMidiaPage() {
   const [authenticated, setAuthenticated] = useState(false);
   const [tokenInput, setTokenInput] = useState('');
@@ -164,8 +178,10 @@ export default function AdminMidiaPage() {
         method: 'POST',
         body: JSON.stringify({ id, asHighlight }),
       });
+      const data = (await response.json()) as AdminSnapshot & { ok?: boolean };
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      await loadData();
+      applyAdminSnapshot(data);
+      setActiveTab('published');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Falha ao aprovar');
     } finally {
@@ -181,8 +197,9 @@ export default function AdminMidiaPage() {
         method: 'POST',
         body: JSON.stringify({ id }),
       });
+      const data = (await response.json()) as AdminSnapshot & { ok?: boolean };
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      await loadData();
+      applyAdminSnapshot(data);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Falha ao definir destaque');
     } finally {
@@ -198,8 +215,9 @@ export default function AdminMidiaPage() {
         method: 'POST',
         body: JSON.stringify({ id }),
       });
+      const data = (await response.json()) as AdminSnapshot & { ok?: boolean };
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      await loadData();
+      applyAdminSnapshot(data);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Falha ao rejeitar');
     } finally {
@@ -214,8 +232,9 @@ export default function AdminMidiaPage() {
       const response = await adminFetch(`/api/admin/clippings/published?id=${encodeURIComponent(id)}`, {
         method: 'DELETE',
       });
+      const data = (await response.json()) as AdminSnapshot & { ok?: boolean };
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      await loadData();
+      applyAdminSnapshot(data);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Falha ao remover');
     } finally {
@@ -243,6 +262,9 @@ export default function AdminMidiaPage() {
 
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
+      const data = (await response.json()) as AdminSnapshot & { ok?: boolean };
+      applyAdminSnapshot(data);
+
       setManualForm({
         title: '',
         href: '',
@@ -252,7 +274,6 @@ export default function AdminMidiaPage() {
         asHighlight: false,
       });
       setActiveTab('published');
-      await loadData();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Falha ao adicionar item');
       setLoading(false);
@@ -269,7 +290,7 @@ export default function AdminMidiaPage() {
         method: 'POST',
       });
       const body = await response.text();
-      let data: {
+      let data: AdminSnapshot & {
         ok: boolean;
         addedToPending: number;
         pendingTotal: number;
@@ -296,12 +317,13 @@ export default function AdminMidiaPage() {
         throw new Error(errMsg);
       }
 
+      applyAdminSnapshot(data);
+
       setDiscoverMessage(
         data.addedToPending > 0
           ? `${data.addedToPending} nova(s) matéria(s) encontrada(s). Revise na aba Pendentes.`
           : 'Nenhuma matéria nova encontrada desta vez. Você pode tentar de novo mais tarde.',
       );
-      await loadData();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Falha na busca');
     } finally {

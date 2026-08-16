@@ -7,7 +7,7 @@ import type { ClippingsPayload, ClippingsStore, MediaCard, PendingMediaItem } fr
 import { buildPublishedPayload } from './map-published.js';
 import { normalizeUrl } from './normalize-url.js';
 import { sortMediaCardsByRecency, sortPendingByRecency } from './sort-clippings.js';
-import { emptyStore, getStore } from './store-read.js';
+import { setStoreSnapshot } from './request-context.js';
 
 export { emptyStore, getStore } from './store-read.js';
 
@@ -46,6 +46,7 @@ export async function saveStore(store: ClippingsStore): Promise<void> {
       await writeLocalStore(store);
     }
 
+    setStoreSnapshot(store);
     return;
   }
 
@@ -54,6 +55,7 @@ export async function saveStore(store: ClippingsStore): Promise<void> {
   }
 
   await writeLocalStore(store);
+  setStoreSnapshot(store);
 }
 
 export { getClippings, getPublishedItemById } from './store-read.js';
@@ -127,17 +129,15 @@ async function enrichWithArticleContent(card: MediaCard): Promise<MediaCard> {
 export async function approveItem(
   id: string,
   asHighlight = false,
-): Promise<boolean> {
+): Promise<ClippingsStore | null> {
   const store = await getStore();
   const index = store.pending.findIndex((item) => item.id === id);
-  if (index === -1) return false;
+  if (index === -1) return null;
 
   const [pendingItem] = store.pending.splice(index, 1);
   const { discoveredAt: _d, searchQuery: _q, snippet, ...mediaCard } = pendingItem;
 
-  const { resolveArticleUrl, isBadImageUrl, resolveArticleImage } = await import(
-    './article-meta.js',
-  );
+  const { resolveArticleUrl, isBadImageUrl } = await import('./article-meta.js');
 
   mediaCard.id = `clipping-${Date.now()}`;
   mediaCard.href = await resolveArticleUrl(mediaCard.href);
@@ -150,12 +150,7 @@ export async function approveItem(
     mediaCard.imageUrl = undefined;
   }
 
-  if (!mediaCard.imageUrl) {
-    const imageUrl = await resolveArticleImage(mediaCard.href);
-    if (imageUrl) mediaCard.imageUrl = imageUrl;
-  }
-
-  const enrichedCard = await enrichWithArticleContent(mediaCard);
+  const enrichedCard: MediaCard = mediaCard;
 
   const url = normalizeUrl(enrichedCard.href);
   const existingIndex = store.published.items.findIndex(
@@ -165,10 +160,10 @@ export async function approveItem(
   if (existingIndex === -1) {
     store.published.items.unshift(enrichedCard);
   } else {
-    store.published.items[existingIndex] = await enrichWithArticleContent({
+    store.published.items[existingIndex] = {
       ...store.published.items[existingIndex],
       excerpt: enrichedCard.excerpt ?? store.published.items[existingIndex].excerpt,
-    });
+    };
   }
 
   if (asHighlight) {
@@ -181,7 +176,7 @@ export async function approveItem(
   store.published = rebuildPublishedPayload(store);
 
   await saveStore(store);
-  return true;
+  return store;
 }
 
 export async function rejectItem(id: string): Promise<boolean> {
