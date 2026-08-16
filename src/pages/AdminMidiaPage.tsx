@@ -27,13 +27,6 @@ type AdminSnapshot = {
   storageConfigured?: boolean;
 };
 
-function applyAdminSnapshot(data: AdminSnapshot) {
-  if (data.pending) setPending(data.pending);
-  if (data.published) setPublished(data.published);
-  if (data.highlightId !== undefined) setHighlightId(data.highlightId);
-  if (data.storageConfigured !== undefined) setStorageConfigured(data.storageConfigured);
-}
-
 export default function AdminMidiaPage() {
   const [authenticated, setAuthenticated] = useState(false);
   const [tokenInput, setTokenInput] = useState('');
@@ -47,6 +40,13 @@ export default function AdminMidiaPage() {
   const [actionId, setActionId] = useState<string | null>(null);
   const [discovering, setDiscovering] = useState(false);
   const [discoverMessage, setDiscoverMessage] = useState<string | null>(null);
+
+  function applyAdminSnapshot(data: AdminSnapshot) {
+    if (data.pending) setPending(data.pending);
+    if (data.published) setPublished(data.published);
+    if (data.highlightId !== undefined) setHighlightId(data.highlightId);
+    if (data.storageConfigured !== undefined) setStorageConfigured(data.storageConfigured);
+  }
 
   const [manualForm, setManualForm] = useState({
     title: '',
