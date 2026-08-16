@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { getClippings, getPublishedItemById } from './lib/store';
+import { getClippings, getPublishedItemById } from './_lib/store';
 
 export default async function handler(
   req: VercelRequest,
