@@ -11,7 +11,7 @@ export default async function handler(
   const id = typeof req.query.id === 'string' ? req.query.id : null;
 
   try {
-    const { getClippings, getPublishedItemById } = await import('./_lib/store-read');
+    const { getClippings, getPublishedItemById } = await import('./_lib/store-read.js');
 
     if (id) {
       const item = await getPublishedItemById(id);

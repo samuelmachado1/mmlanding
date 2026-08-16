@@ -1,11 +1,11 @@
-import { isBlobConfigured, putJsonBlob } from './blob-client';
-import type { ClippingsPayload, ClippingsStore, MediaCard, PendingMediaItem } from './types';
-import { buildPublishedPayload } from './map-published';
-import { normalizeUrl } from './normalize-url';
-import { sortMediaCardsByRecency, sortPendingByRecency } from './sort-clippings';
-import { emptyStore, getStore } from './store-read';
+import { isBlobConfigured, putJsonBlob } from './blob-client.js';
+import type { ClippingsPayload, ClippingsStore, MediaCard, PendingMediaItem } from './types.js';
+import { buildPublishedPayload } from './map-published.js';
+import { normalizeUrl } from './normalize-url.js';
+import { sortMediaCardsByRecency, sortPendingByRecency } from './sort-clippings.js';
+import { emptyStore, getStore } from './store-read.js';
 
-export { emptyStore, getStore } from './store-read';
+export { emptyStore, getStore } from './store-read.js';
 
 const STORE_BLOB_PATHNAME = 'clippings-store.json';
 
@@ -54,7 +54,7 @@ export async function saveStore(store: ClippingsStore): Promise<void> {
   await writeLocalStore(store);
 }
 
-export { getClippings, getPublishedItemById } from './store-read';
+export { getClippings, getPublishedItemById } from './store-read.js';
 
 function collectKnownUrls(store: ClippingsStore): Set<string> {
   const urls = new Set<string>();
@@ -108,10 +108,10 @@ function rebuildPublishedPayload(store: ClippingsStore): ClippingsPayload {
 }
 
 async function enrichWithArticleContent(card: MediaCard): Promise<MediaCard> {
-  const { isGoogleNewsUrl } = await import('./google-news-url');
+  const { isGoogleNewsUrl } = await import('./google-news-url.js');
   if (card.bodyHtml || isGoogleNewsUrl(card.href)) return card;
 
-  const { fetchArticleContent } = await import('./article-meta');
+  const { fetchArticleContent } = await import('./article-meta.js');
   const content = await fetchArticleContent(card.href);
   if (!content.bodyHtml && !content.excerpt) return card;
 
@@ -134,7 +134,7 @@ export async function approveItem(
   const { discoveredAt: _d, searchQuery: _q, snippet, ...mediaCard } = pendingItem;
 
   const { resolveArticleUrl, isBadImageUrl, resolveArticleImage } = await import(
-    './article-meta',
+    './article-meta.js',
   );
 
   mediaCard.id = `clipping-${Date.now()}`;

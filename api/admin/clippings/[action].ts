@@ -1,9 +1,9 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { isAdminAuthorized } from '../../_lib/auth';
+import { isAdminAuthorized } from '../../_lib/auth.js';
 import {
   sortMediaCardsByRecency,
   sortPendingByRecency,
-} from '../../_lib/sort-clippings';
+} from '../../_lib/sort-clippings.js';
 
 export default async function handler(
   req: VercelRequest,
@@ -21,19 +21,19 @@ export default async function handler(
   try {
     switch (action) {
       case 'pending':
-        return handlePending(req, res);
+        return await handlePending(req, res);
       case 'approve':
-        return handleApprove(req, res);
+        return await handleApprove(req, res);
       case 'reject':
-        return handleReject(req, res);
+        return await handleReject(req, res);
       case 'highlight':
-        return handleHighlight(req, res);
+        return await handleHighlight(req, res);
       case 'manual':
-        return handleManual(req, res);
+        return await handleManual(req, res);
       case 'published':
-        return handlePublished(req, res);
+        return await handlePublished(req, res);
       case 'discover':
-        return handleDiscover(req, res);
+        return await handleDiscover(req, res);
       default:
         return res.status(404).json({ error: 'Not found' });
     }
@@ -48,7 +48,7 @@ async function handlePending(req: VercelRequest, res: VercelResponse) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { getStore } = await import('../../_lib/store-read');
+  const { getStore } = await import('../../_lib/store-read.js');
   const store = await getStore();
   return res.status(200).json({
     pending: sortPendingByRecency(store.pending),
@@ -69,7 +69,7 @@ async function handleApprove(req: VercelRequest, res: VercelResponse) {
     return res.status(400).json({ error: 'Missing id' });
   }
 
-  const { approveItem } = await import('../../_lib/store');
+  const { approveItem } = await import('../../_lib/store.js');
   const ok = await approveItem(id, asHighlight);
   if (!ok) {
     return res.status(404).json({ error: 'Pending item not found' });
@@ -88,7 +88,7 @@ async function handleReject(req: VercelRequest, res: VercelResponse) {
     return res.status(400).json({ error: 'Missing id' });
   }
 
-  const { rejectItem } = await import('../../_lib/store');
+  const { rejectItem } = await import('../../_lib/store.js');
   const ok = await rejectItem(id);
   if (!ok) {
     return res.status(404).json({ error: 'Pending item not found' });
@@ -107,7 +107,7 @@ async function handleHighlight(req: VercelRequest, res: VercelResponse) {
     return res.status(400).json({ error: 'Missing id' });
   }
 
-  const { setHighlightItem } = await import('../../_lib/store');
+  const { setHighlightItem } = await import('../../_lib/store.js');
   const ok = await setHighlightItem(id);
   if (!ok) {
     return res.status(404).json({ error: 'Published item not found' });
@@ -142,8 +142,8 @@ async function handleManual(req: VercelRequest, res: VercelResponse) {
     return res.status(400).json({ error: 'Missing title, href or source' });
   }
 
-  const { classifyMedia } = await import('../../_lib/classify');
-  const { addManualItem } = await import('../../_lib/store');
+  const { classifyMedia } = await import('../../_lib/classify.js');
+  const { addManualItem } = await import('../../_lib/store.js');
   const { category } = classifyMedia(title, href);
   const item = await addManualItem(
     {
@@ -177,7 +177,7 @@ async function handlePublished(req: VercelRequest, res: VercelResponse) {
     return res.status(400).json({ error: 'Missing id' });
   }
 
-  const { removePublishedItem } = await import('../../_lib/store');
+  const { removePublishedItem } = await import('../../_lib/store.js');
   const ok = await removePublishedItem(id);
   if (!ok) {
     return res.status(404).json({ error: 'Published item not found' });
@@ -191,7 +191,7 @@ async function handleDiscover(req: VercelRequest, res: VercelResponse) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { discoverClippings } = await import('../../_lib/discover-clippings');
+  const { discoverClippings } = await import('../../_lib/discover-clippings.js');
   const result = await discoverClippings();
 
   if (!result.ok) {

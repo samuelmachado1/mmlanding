@@ -39,14 +39,21 @@ export default function AdminMidiaPage() {
     asHighlight: false,
   });
 
-  const loadData = useCallback(async () => {
+  const loadData = useCallback(async (options?: { silent?: boolean }) => {
     setLoading(true);
-    setError(null);
+    if (!options?.silent) {
+      setError(null);
+    }
 
     try {
       const response = await adminFetch('/api/admin/clippings/pending');
       const body = await response.text();
       if (!response.ok) {
+        if (options?.silent) {
+          clearAdminToken();
+          setAuthenticated(false);
+          return;
+        }
         if (response.status === 401) {
           clearAdminToken();
           setAuthenticated(false);
@@ -84,6 +91,11 @@ export default function AdminMidiaPage() {
       setHighlightId(data.highlightId ?? null);
       setAuthenticated(true);
     } catch (err) {
+      if (options?.silent) {
+        clearAdminToken();
+        setAuthenticated(false);
+        return;
+      }
       if (err instanceof TypeError && err.message === 'Failed to fetch') {
         setAuthenticated(false);
         setError(
@@ -109,11 +121,16 @@ export default function AdminMidiaPage() {
   }, []);
 
   useEffect(() => {
-    captureAdminTokenFromUrl();
-    const token = getAdminToken();
-    if (!token) return;
+    const fromUrl = captureAdminTokenFromUrl();
+    if (fromUrl) {
+      void loadData();
+      return;
+    }
 
-    void loadData();
+    const token = getAdminToken();
+    if (token) {
+      void loadData({ silent: true });
+    }
   }, [loadData]);
 
   function handleLogin(event: React.FormEvent) {

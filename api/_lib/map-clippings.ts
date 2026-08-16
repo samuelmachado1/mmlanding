@@ -2,13 +2,13 @@ import type {
   ClippingsPayload,
   MediaCard,
   PendingMediaItem,
-} from './types';
-import { classifyMedia } from './classify';
-import type { GoogleCseItem } from './google-cse';
-import type { NewsSearchItem } from './google-news';
-import { buildPublishedPayload } from './map-published';
+} from './types.js';
+import { classifyMedia } from './classify.js';
+import type { GoogleCseItem } from './google-cse.js';
+import type { NewsSearchItem } from './google-news.js';
+import { buildPublishedPayload } from './map-published.js';
 
-export { buildPublishedPayload } from './map-published';
+export { buildPublishedPayload } from './map-published.js';
 
 function extractImageUrl(item: GoogleCseItem): string | undefined {
   const cseImage = item.pagemap?.cse_image?.[0]?.src;
