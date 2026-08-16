@@ -1,6 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { isAdminAuthorized } from '../../_lib/auth.js';
 import { isBlobStorageError, isStorageWritable } from '../../_lib/blob-client.js';
+import { runWithApiContext } from '../../_lib/request-context.js';
 import {
   sortMediaCardsByRecency,
   sortPendingByRecency,
@@ -11,44 +12,51 @@ function setAdminNoCache(res: VercelResponse): void {
   res.setHeader('Pragma', 'no-cache');
 }
 
+function getOidcTokenFromRequest(req: VercelRequest): string | undefined {
+  const raw = req.headers['x-vercel-oidc-token'];
+  return typeof raw === 'string' && raw.trim() ? raw.trim() : undefined;
+}
+
 export default async function handler(
   req: VercelRequest,
   res: VercelResponse,
 ) {
-  setAdminNoCache(res);
+  return runWithApiContext({ oidcToken: getOidcTokenFromRequest(req) }, async () => {
+    setAdminNoCache(res);
 
-  if (!isAdminAuthorized(req)) {
-    return res.status(401).json({ error: 'Unauthorized' });
-  }
-
-  const action = typeof req.query.action === 'string' ? req.query.action : null;
-  if (!action) {
-    return res.status(404).json({ error: 'Not found' });
-  }
-
-  try {
-    switch (action) {
-      case 'pending':
-        return await handlePending(req, res);
-      case 'approve':
-        return await handleApprove(req, res);
-      case 'reject':
-        return await handleReject(req, res);
-      case 'highlight':
-        return await handleHighlight(req, res);
-      case 'manual':
-        return await handleManual(req, res);
-      case 'published':
-        return await handlePublished(req, res);
-      case 'discover':
-        return await handleDiscover(req, res);
-      default:
-        return res.status(404).json({ error: 'Not found' });
+    if (!isAdminAuthorized(req)) {
+      return res.status(401).json({ error: 'Unauthorized' });
     }
-  } catch (error) {
-    console.error(`Admin clippings action "${action}" failed:`, error);
-    return res.status(500).json({ error: 'Internal server error' });
-  }
+
+    const action = typeof req.query.action === 'string' ? req.query.action : null;
+    if (!action) {
+      return res.status(404).json({ error: 'Not found' });
+    }
+
+    try {
+      switch (action) {
+        case 'pending':
+          return await handlePending(req, res);
+        case 'approve':
+          return await handleApprove(req, res);
+        case 'reject':
+          return await handleReject(req, res);
+        case 'highlight':
+          return await handleHighlight(req, res);
+        case 'manual':
+          return await handleManual(req, res);
+        case 'published':
+          return await handlePublished(req, res);
+        case 'discover':
+          return await handleDiscover(req, res);
+        default:
+          return res.status(404).json({ error: 'Not found' });
+      }
+    } catch (error) {
+      console.error(`Admin clippings action "${action}" failed:`, error);
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+  });
 }
 
 async function handlePending(req: VercelRequest, res: VercelResponse) {

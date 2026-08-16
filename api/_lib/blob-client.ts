@@ -30,7 +30,7 @@ export const BLOB_NOT_CONFIGURED_MESSAGE =
 function hasReadWriteToken(): boolean {
   const token = process.env.BLOB_READ_WRITE_TOKEN?.trim();
   if (!token) return false;
-  return parseStoreIdFromReadWriteToken(token) !== null;
+  return Boolean(parseStoreIdFromReadWriteToken(token) ?? process.env.BLOB_STORE_ID?.trim());
 }
 
 /** Detects linked Blob store — BLOB_STORE_ID is set when store is connected to the project. */
@@ -55,7 +55,12 @@ export function isBlobStorageError(message: string): boolean {
   );
 }
 
+import { getRequestOidcToken } from './request-context.js';
+
 async function resolveOidcToken(): Promise<string | null> {
+  const fromContext = getRequestOidcToken();
+  if (fromContext) return fromContext;
+
   const fromEnv = process.env.VERCEL_OIDC_TOKEN?.trim();
   if (fromEnv) return fromEnv;
 
@@ -70,9 +75,10 @@ async function resolveOidcToken(): Promise<string | null> {
 async function resolveBlobAuth(): Promise<BlobAuth | null> {
   const readWriteToken = process.env.BLOB_READ_WRITE_TOKEN?.trim();
   if (readWriteToken) {
-    const storeId = parseStoreIdFromReadWriteToken(readWriteToken);
+    const parsedStoreId = parseStoreIdFromReadWriteToken(readWriteToken);
+    const storeId = parsedStoreId ?? process.env.BLOB_STORE_ID?.trim();
     if (storeId) {
-      return { token: readWriteToken, storeId };
+      return { token: readWriteToken, storeId: normalizeStoreId(storeId) };
     }
   }
 
