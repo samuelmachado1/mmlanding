@@ -9,13 +9,46 @@ interface GoogleFormEnv {
     whatsapp?: string;
     uf?: string;
     municipio?: string;
-    novidades?: string;
-    campanhaDigital?: string;
-    campanhaRua?: string;
+    participacao?: string;
+    lgpd?: string;
   };
 }
 
+const UF_GOOGLE_FORM_LABELS: Record<string, string> = {
+  AC: 'Acre (AC)',
+  AL: 'Alagoas (AL)',
+  AP: 'Amapá (AP)',
+  AM: 'Amazonas (AM)',
+  BA: 'Bahia (BA)',
+  CE: 'Ceará (CE)',
+  DF: 'Distrito Federal (DF)',
+  ES: 'Espírito Santo (ES)',
+  GO: 'Goiás (GO)',
+  MA: 'Maranhão (MA)',
+  MT: 'Mato Grosso (MT)',
+  MS: 'Mato Grosso do Sul (MS)',
+  MG: 'Minas Gerais (MG)',
+  PA: 'Pará (PA)',
+  PB: 'Paraíba (PB)',
+  PR: 'Paraná (PR)',
+  PE: 'Pernambuco (PE)',
+  PI: 'Piauí (PI)',
+  RJ: 'Rio de Janeiro (RJ)',
+  RN: 'Rio Grande do Norte (RN)',
+  RS: 'Rio Grande do Sul (RS)',
+  RO: 'Rondônia (RO)',
+  RR: 'Roraima (RR)',
+  SC: 'Santa Catarina (SC)',
+  SP: 'São Paulo (SP)',
+  SE: 'Sergipe (SE)',
+  TO: 'Tocantins (TO)',
+};
+
 function readGoogleFormEnv(): GoogleFormEnv {
+  const participacao =
+    import.meta.env.VITE_GOOGLE_FORM_ENTRY_PARTICIPACAO ??
+    import.meta.env.VITE_GOOGLE_FORM_ENTRY_NOVIDADES;
+
   return {
     actionUrl: import.meta.env.VITE_GOOGLE_FORM_ACTION_URL,
     entries: {
@@ -24,9 +57,8 @@ function readGoogleFormEnv(): GoogleFormEnv {
       whatsapp: import.meta.env.VITE_GOOGLE_FORM_ENTRY_WHATSAPP,
       uf: import.meta.env.VITE_GOOGLE_FORM_ENTRY_UF,
       municipio: import.meta.env.VITE_GOOGLE_FORM_ENTRY_MUNICIPIO,
-      novidades: import.meta.env.VITE_GOOGLE_FORM_ENTRY_NOVIDADES,
-      campanhaDigital: import.meta.env.VITE_GOOGLE_FORM_ENTRY_CAMPANHA_DIGITAL,
-      campanhaRua: import.meta.env.VITE_GOOGLE_FORM_ENTRY_CAMPANHA_RUA,
+      participacao,
+      lgpd: import.meta.env.VITE_GOOGLE_FORM_ENTRY_LGPD,
     },
   };
 }
@@ -47,34 +79,44 @@ export function isGoogleFormConfigured(): boolean {
   );
 }
 
+function mapUfToGoogleFormValue(uf: string): string {
+  return UF_GOOGLE_FORM_LABELS[uf] ?? uf;
+}
+
 export async function submitApoiadorGoogleForm(data: ApoiadorFormData): Promise<void> {
   if (!isGoogleFormConfigured()) {
     throw new Error('Google Form not configured');
   }
 
   const { actionUrl, entries } = readGoogleFormEnv();
-  const fields: Record<string, string> = {
-    [entries.nome!]: data.nome,
-    [entries.email!]: data.email,
-    [entries.whatsapp!]: data.whatsapp,
-    [entries.uf!]: data.uf,
-    [entries.municipio!]: data.municipio,
-  };
+  const params = new URLSearchParams();
 
-  if (data.novidades && isNonEmpty(entries.novidades)) {
-    fields[entries.novidades!] = apoiadorFormContent.checkboxes.novidades;
+  params.set(entries.nome!, data.nome);
+  params.set(entries.email!, data.email);
+  params.set(entries.whatsapp!, data.whatsapp);
+  params.set(entries.uf!, mapUfToGoogleFormValue(data.uf));
+  params.set(entries.municipio!, data.municipio);
+
+  if (isNonEmpty(entries.participacao)) {
+    if (data.novidades) {
+      params.append(entries.participacao!, apoiadorFormContent.checkboxes.novidades);
+    }
+    if (data.campanhaDigital) {
+      params.append(entries.participacao!, apoiadorFormContent.checkboxes.campanhaDigital);
+    }
+    if (data.campanhaRua) {
+      params.append(entries.participacao!, apoiadorFormContent.checkboxes.campanhaRua);
+    }
   }
-  if (data.campanhaDigital && isNonEmpty(entries.campanhaDigital)) {
-    fields[entries.campanhaDigital!] = apoiadorFormContent.checkboxes.campanhaDigital;
-  }
-  if (data.campanhaRua && isNonEmpty(entries.campanhaRua)) {
-    fields[entries.campanhaRua!] = apoiadorFormContent.checkboxes.campanhaRua;
+
+  if (data.lgpdAceite && isNonEmpty(entries.lgpd)) {
+    params.append(entries.lgpd!, apoiadorFormContent.lgpdFormValue);
   }
 
   await fetch(actionUrl!, {
     method: 'POST',
     mode: 'no-cors',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: new URLSearchParams(fields),
+    body: params,
   });
 }

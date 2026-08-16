@@ -16,7 +16,7 @@ interface UseClippingsResult {
   error: string | null;
   isLive: boolean;
   items: MediaCard[];
-  interview: ClippingInterview;
+  interview: ClippingInterview | null;
   reports: ClippingReport[];
 }
 
@@ -72,15 +72,23 @@ export function useClippings(): UseClippingsResult {
     };
   }, []);
 
-  const resolved = data ?? fallback;
+  if (data) {
+    return {
+      loading,
+      error,
+      isLive: data.fetchedAt !== fallback.fetchedAt,
+      items: data.items,
+      interview: data.interview,
+      reports: data.reports,
+    };
+  }
 
   return {
     loading,
     error,
-    isLive: data !== null && data.fetchedAt !== fallback.fetchedAt,
-    items: resolved.items,
-    interview: resolved.interview ?? fallback.interview!,
-    reports:
-      resolved.reports.length > 0 ? resolved.reports : fallback.reports,
+    isLive: false,
+    items: fallback.items,
+    interview: fallback.interview,
+    reports: fallback.reports,
   };
 }

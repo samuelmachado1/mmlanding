@@ -278,6 +278,8 @@ export interface MediaCard {
   href: string;
   imageUrl?: string;
   tab: string;
+  excerpt?: string;
+  bodyHtml?: string;
 }
 
 export interface ClippingsPayload {
@@ -285,4 +287,18 @@ export interface ClippingsPayload {
   items: MediaCard[];
   interview: ClippingInterview | null;
   reports: ClippingReport[];
+}
+
+export interface PendingMediaItem extends MediaCard {
+  discoveredAt: string;
+  searchQuery: string;
+  snippet?: string;
+}
+
+export interface ClippingsStore {
+  published: ClippingsPayload;
+  pending: PendingMediaItem[];
+  rejectedUrls: string[];
+  /** ID da matéria em destaque na landing (apenas uma por vez). */
+  highlightId: string | null;
 }
