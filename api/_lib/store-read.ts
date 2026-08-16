@@ -71,48 +71,10 @@ function migrateToStore(data: unknown): ClippingsStore {
   return emptyStore();
 }
 
-function blobStoreHosts(): string[] {
-  const raw = process.env.BLOB_STORE_ID?.trim();
-  if (!raw) return [];
-
-  const bare = raw.startsWith('store_') ? raw.slice('store_'.length) : raw;
-  const prefixed = raw.startsWith('store_') ? raw : `store_${raw}`;
-
-  return [...new Set([prefixed, bare])];
-}
-
-async function fetchPublicBlobJson(pathname: string): Promise<unknown | null> {
-  for (const host of blobStoreHosts()) {
-    const url = `https://${host}.public.blob.vercel-storage.com/${pathname}`;
-    try {
-      const response = await fetch(url);
-      if (!response.ok) continue;
-      return (await response.json()) as unknown;
-    } catch {
-      // Try the next host variant.
-    }
-  }
-
-  return null;
-}
-
 async function readBlobByPath(pathname: string): Promise<unknown | null> {
-  const fromPublic = await fetchPublicBlobJson(pathname);
-  if (fromPublic) return fromPublic;
-
   try {
-    const { listBlobByPrefix } = await import('./blob-client.js');
-    const blobs = await listBlobByPrefix(pathname);
-    const blob = blobs.find((entry) => entry.pathname === pathname);
-
-    if (!blob) return null;
-
-    const response = await fetch(blob.url);
-    if (!response.ok) {
-      throw new Error(`Blob fetch failed: ${response.status}`);
-    }
-
-    return (await response.json()) as unknown;
+    const { getBlobJson } = await import('./blob-client.js');
+    return await getBlobJson(pathname);
   } catch (error) {
     console.error(`Blob read failed for ${pathname}:`, error);
     return null;
