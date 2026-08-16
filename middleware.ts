@@ -1,4 +1,5 @@
 const ADMIN_COOKIE = '__max_admin';
+const ADMIN_COOKIE_MAX_AGE = 60 * 60 * 24;
 
 async function hashAdminSecret(secret: string): Promise<string> {
   const data = new TextEncoder().encode(secret);
@@ -21,8 +22,19 @@ function getCookieFromHeader(cookieHeader: string | null, name: string): string 
   return null;
 }
 
-function buildAdminCookie(hash: string, maxAgeSeconds = 60 * 60 * 24 * 7): string {
+function buildAdminCookie(hash: string, maxAgeSeconds = ADMIN_COOKIE_MAX_AGE): string {
   return `${ADMIN_COOKIE}=${hash}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${maxAgeSeconds}`;
+}
+
+function getAdminSecret(): string | undefined {
+  return process.env.ADMIN_SECRET?.trim() || undefined;
+}
+
+function jsonResponse(status: number, body: Record<string, string>): Response {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { 'Content-Type': 'application/json' },
+  });
 }
 
 async function passThrough(request: Request, setCookies?: string[]): Promise<Response> {
@@ -44,32 +56,64 @@ async function passThrough(request: Request, setCookies?: string[]): Promise<Res
   });
 }
 
-/** Edge middleware — gates `/admin/*` SPA routes with ADMIN_SECRET cookie. */
+function hasAdminAccess(
+  request: Request,
+  adminSecret: string,
+  expectedHash: string,
+): boolean {
+  const url = new URL(request.url);
+  const adminParam = url.searchParams.get('admin');
+  const cookie = getCookieFromHeader(request.headers.get('cookie'), ADMIN_COOKIE);
+  const bearer = request.headers.get('authorization');
+
+  return (
+    cookie === expectedHash ||
+    adminParam === adminSecret ||
+    bearer === `Bearer ${adminSecret}`
+  );
+}
+
+/** Edge middleware — gates `/max-admin/*` SPA routes and `/api/admin/*` with ADMIN_SECRET. */
 export default async function middleware(request: Request): Promise<Response> {
   const url = new URL(request.url);
   const pathname = url.pathname;
 
-  if (pathname.startsWith('/api/') || !pathname.startsWith('/admin')) {
+  const isAdminApi = pathname.startsWith('/api/admin');
+  const isAdminPage = pathname.startsWith('/max-admin');
+  const isLegacyAdminPage = pathname.startsWith('/admin');
+
+  if (isLegacyAdminPage) {
+    return new Response('Not Found', { status: 404 });
+  }
+
+  if (!isAdminApi && !isAdminPage) {
     return fetch(request);
   }
 
-  const adminSecret = process.env.ADMIN_SECRET?.trim();
+  const adminSecret = getAdminSecret();
   if (!adminSecret) {
-    return new Response('Admin access is not configured', { status: 503 });
+    if (isAdminApi) {
+      return jsonResponse(503, { error: 'Admin access is not configured' });
+    }
+    return new Response('Not Found', { status: 404 });
   }
 
   const expectedHash = await hashAdminSecret(adminSecret);
-  const adminParam = url.searchParams.get('admin');
-  const cookie = getCookieFromHeader(request.headers.get('cookie'), ADMIN_COOKIE);
 
-  const hasAccess = cookie === expectedHash || adminParam === adminSecret;
-
-  if (!hasAccess) {
-    return Response.redirect(new URL('/', request.url), 307);
+  if (!hasAdminAccess(request, adminSecret, expectedHash)) {
+    if (isAdminApi) {
+      return jsonResponse(401, { error: 'Unauthorized' });
+    }
+    return new Response('Not Found', { status: 404 });
   }
 
-  const shouldSetCookie =
-    adminParam === adminSecret && cookie !== expectedHash;
+  const adminParam = url.searchParams.get('admin');
+  const cookie = getCookieFromHeader(request.headers.get('cookie'), ADMIN_COOKIE);
+  const shouldSetCookie = adminParam === adminSecret && cookie !== expectedHash;
+
+  if (isAdminApi) {
+    return fetch(request);
+  }
 
   return passThrough(
     request,

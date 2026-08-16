@@ -83,6 +83,17 @@ export default function AdminMidiaPage() {
   }, []);
 
   useEffect(() => {
+    const meta = document.createElement('meta');
+    meta.name = 'robots';
+    meta.content = 'noindex, nofollow';
+    document.head.appendChild(meta);
+
+    return () => {
+      document.head.removeChild(meta);
+    };
+  }, []);
+
+  useEffect(() => {
     captureAdminTokenFromUrl();
     const token = getAdminToken();
     if (token) {
@@ -246,17 +257,15 @@ export default function AdminMidiaPage() {
   if (!authenticated) {
     return (
       <div className="min-h-screen bg-cream px-4 py-16">
-        <div className="mx-auto max-w-md rounded-2xl border border-brand-black/10 bg-white p-8">
-          <h1 className="font-nav text-2xl font-bold text-brand-black">Admin — Max na Mídia</h1>
-          <p className="mt-2 text-sm text-brand-black/70">
-            Insira o <code className="text-xs">ADMIN_SECRET</code> configurado no servidor.
-          </p>
+        <div className="mx-auto max-w-md rounded-2xl border border-brand-black/10 bg-white p-8 text-center">
+          <h1 className="font-nav text-2xl font-bold text-brand-black">Admin Sessão de notícias</h1>
+          <p className="mt-2 text-sm text-brand-black/70">Protegido por Max Token</p>
           <form onSubmit={handleLogin} className="mt-6 space-y-4">
             <input
               type="password"
               value={tokenInput}
               onChange={(e) => setTokenInput(e.target.value)}
-              placeholder="Token"
+              placeholder="Insira o Max token"
               className="w-full rounded-xl border border-brand-black/15 px-4 py-3 text-sm"
               autoComplete="off"
             />
@@ -278,7 +287,7 @@ export default function AdminMidiaPage() {
       <div className="mx-auto max-w-4xl">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
-            <h1 className="font-nav text-3xl font-bold text-brand-black">Admin — Max na Mídia</h1>
+            <h1 className="font-nav text-3xl font-bold text-brand-black">Admin Sessão de notícias</h1>
             <p className="mt-1 text-sm text-brand-black/70">
               Revise descobertas automáticas antes de publicar no site.
             </p>
@@ -288,7 +297,7 @@ export default function AdminMidiaPage() {
               type="button"
               onClick={() => void handleDiscoverNow()}
               disabled={discovering || loading}
-              className="rounded-xl bg-brand-red px-4 py-2 font-nav text-sm font-bold text-white disabled:opacity-50"
+              className="rounded-xl bg-navy-500 px-4 py-2 font-nav text-sm font-bold text-white disabled:opacity-50"
             >
               {discovering ? 'Buscando…' : 'Buscar agora'}
             </button>
@@ -408,7 +417,7 @@ export default function AdminMidiaPage() {
                       onClick={() => void handleApprove(item.id, true)}
                       className="rounded-xl bg-yellow-500 px-4 py-2 font-nav text-sm font-bold text-navy-500 disabled:opacity-50"
                     >
-                      Aprovar em destaque
+                      Tornar destaque
                     </button>
                     <button
                       type="button"

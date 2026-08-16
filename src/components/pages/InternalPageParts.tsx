@@ -97,13 +97,11 @@ export function PageProse({ paragraphs }: { paragraphs: string[] }) {
 
 export function SitePageCtaSection() {
   return (
-    <div className="relative">
-      <div className="relative z-20 mx-auto max-w-6xl px-6 sm:px-8">
-        <div className="-mt-8 -mb-8 sm:-mt-10 sm:-mb-10">
-          <MandateHighlightGrid cards={mandateHighlights} />
-        </div>
+    <div className="relative bg-cream">
+      <div className="relative z-20 mx-auto max-w-6xl px-6 py-5 sm:px-8 sm:py-6">
+        <MandateHighlightGrid cards={mandateHighlights} />
       </div>
-      <PageCta {...sitePageCta} className="relative z-10 !pt-10 sm:!pt-12" />
+      <PageCta {...sitePageCta} className="relative z-10" />
     </div>
   );
 }

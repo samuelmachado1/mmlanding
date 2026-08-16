@@ -5,7 +5,7 @@
 ```bash
 npm install
 npm run dev          # só frontend (API indisponível → fallback estático)
-npm run dev:full     # frontend + API serverless (recomendado para admin/mídia)
+npm run dev:full     # frontend + API serverless (recomendado para /max-admin)
 npm run dev:api      # só API na porta 3000 (use com npm run dev em outro terminal)
 ```
 
@@ -27,7 +27,7 @@ A seção **Max na Mídia** (landing + `/midia`) descobre matérias via **Google
 1. Cron diário (`/api/cron/refresh-clippings`) ou **Buscar agora** no admin
 2. Busca no Google News RSS (`news.google.com/rss/search`)
 3. URLs novas vão para `pending` no Vercel Blob
-4. Equipe revisa em `/admin/midia` e aprova ou rejeita
+4. Equipe revisa em `/max-admin` e aprova ou rejeita
 5. Só itens aprovados aparecem em `GET /api/clippings` (site público)
 
 ### Busca (padrão: Google News RSS)
@@ -50,7 +50,7 @@ Copie `.env.example` para `.env.local` e preencha:
 | `GOOGLE_CSE_ID` | (Opcional) Search Engine ID (`cx`) |
 | `CRON_SECRET` | Segredo para proteger o endpoint de cron |
 | `BLOB_READ_WRITE_TOKEN` | Token do Vercel Blob (produção) |
-| `ADMIN_SECRET` | Segredo para `/admin/midia` e rotas `/api/admin/*` |
+| `ADMIN_SECRET` | Segredo para `/max-admin` e rotas `/api/admin/*` |
 
 ### 3. Deploy na Vercel
 
@@ -63,15 +63,37 @@ Configure o header `Authorization: Bearer <CRON_SECRET>` para o cron na Vercel (
 
 ### Painel admin
 
-Configure `ADMIN_SECRET` na Vercel (Production). Primeiro acesso com link secreto (cookie de 7 dias):
+Configure `ADMIN_SECRET` na Vercel (Production). Primeiro acesso com link secreto (cookie de 24 horas):
 
 ```
-https://seu-dominio.com/admin/midia?admin=SEU_ADMIN_SECRET
+https://seu-dominio.com/max-admin?admin=SEU_ADMIN_SECRET
 ```
 
 Depois, use o mesmo segredo no formulário de login se o navegador limpar a sessão. A API exige `Authorization: Bearer <ADMIN_SECRET>`.
 
 Funcionalidades: revisar pendentes, aprovar/rejeitar, definir destaque, remover publicados, adicionar matéria manual.
+
+O segredo é removido da URL automaticamente após o primeiro acesso. Cookie e sessão do navegador expiram em **24 horas**.
+
+### Distribuição segura do `ADMIN_SECRET`
+
+Para 1–2 aprovadores:
+
+1. Gere um segredo longo:
+   ```bash
+   openssl rand -base64 32
+   ```
+2. Salve em gerenciador de senhas compartilhado (1Password, Bitwarden) — só com quem aprova matérias
+3. Configure em Vercel → Environment Variables → Production (nunca no git)
+4. Envie o link de primeiro acesso:
+   ```
+   https://seu-dominio.com/max-admin?admin=SEU_ADMIN_SECRET
+   ```
+5. **Não** linkar `/max-admin` no site público, sitemap ou redes sociais
+6. Para revogar acesso: gere novo `ADMIN_SECRET` na Vercel e redeploy
+7. Remova envs obsoletas se ainda existirem: `PREVIEW_SECRET`, `LAUNCH_DATE`, `SITE_LAUNCHED`
+
+**Hardening:** `/max-admin` retorna 404 sem auth; `/api/admin/*` exige Bearer ou cookie válido na edge; `robots.txt` bloqueia indexação.
 
 ### Refresh manual (local ou produção)
 

@@ -36,7 +36,7 @@ export default function App() {
       <Route path="/midia/a/:id" element={<MidiaArticlePage />} />
         <Route path="/artigos" element={<ArtigosPage />} />
         <Route path="/contato" element={<ContatoPage />} />
-        <Route path="/admin/midia" element={<AdminMidiaPage />} />
+        <Route path="/max-admin" element={<AdminMidiaPage />} />
       </Routes>
     </PrivacyPolicyProvider>
   );
