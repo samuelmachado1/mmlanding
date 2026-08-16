@@ -1,6 +1,5 @@
-import { isBlobConfigured, listBlobByPrefix } from './blob-client';
 import type { ClippingsPayload, ClippingsStore, MediaCard } from './types';
-import { buildPublishedPayload } from './map-clippings';
+import { buildPublishedPayload } from './map-published';
 import { sortMediaCardsByRecency } from './sort-clippings';
 
 const STORE_BLOB_PATHNAME = 'clippings-store.json';
@@ -72,18 +71,52 @@ function migrateToStore(data: unknown): ClippingsStore {
   return emptyStore();
 }
 
-async function readBlobByPath(pathname: string): Promise<unknown | null> {
-  const blobs = await listBlobByPrefix(pathname);
-  const blob = blobs.find((entry) => entry.pathname === pathname);
+function blobStoreHosts(): string[] {
+  const raw = process.env.BLOB_STORE_ID?.trim();
+  if (!raw) return [];
 
-  if (!blob) return null;
+  const bare = raw.startsWith('store_') ? raw.slice('store_'.length) : raw;
+  const prefixed = raw.startsWith('store_') ? raw : `store_${raw}`;
 
-  const response = await fetch(blob.url);
-  if (!response.ok) {
-    throw new Error(`Blob fetch failed: ${response.status}`);
+  return [...new Set([prefixed, bare])];
+}
+
+async function fetchPublicBlobJson(pathname: string): Promise<unknown | null> {
+  for (const host of blobStoreHosts()) {
+    const url = `https://${host}.public.blob.vercel-storage.com/${pathname}`;
+    try {
+      const response = await fetch(url);
+      if (!response.ok) continue;
+      return (await response.json()) as unknown;
+    } catch {
+      // Try the next host variant.
+    }
   }
 
-  return (await response.json()) as unknown;
+  return null;
+}
+
+async function readBlobByPath(pathname: string): Promise<unknown | null> {
+  const fromPublic = await fetchPublicBlobJson(pathname);
+  if (fromPublic) return fromPublic;
+
+  try {
+    const { listBlobByPrefix } = await import('./blob-client');
+    const blobs = await listBlobByPrefix(pathname);
+    const blob = blobs.find((entry) => entry.pathname === pathname);
+
+    if (!blob) return null;
+
+    const response = await fetch(blob.url);
+    if (!response.ok) {
+      throw new Error(`Blob fetch failed: ${response.status}`);
+    }
+
+    return (await response.json()) as unknown;
+  } catch (error) {
+    console.error(`Blob read failed for ${pathname}:`, error);
+    return null;
+  }
 }
 
 async function readBlobStore(): Promise<ClippingsStore | null> {
@@ -119,11 +152,19 @@ async function readLocalStore(): Promise<ClippingsStore | null> {
   return null;
 }
 
+function hasBlobEnv(): boolean {
+  return Boolean(
+    process.env.BLOB_STORE_ID?.trim() ||
+      process.env.BLOB_READ_WRITE_TOKEN?.trim() ||
+      process.env.VERCEL_OIDC_TOKEN?.trim(),
+  );
+}
+
 export async function getStore(): Promise<ClippingsStore> {
   try {
     if (process.env.VERCEL === '1') {
-      if (!isBlobConfigured()) {
-        console.error('Blob not configured on Vercel (BLOB_STORE_ID + OIDC or BLOB_READ_WRITE_TOKEN)');
+      if (!hasBlobEnv()) {
+        console.error('Blob not configured on Vercel (BLOB_STORE_ID or BLOB_READ_WRITE_TOKEN)');
         return emptyStore();
       }
 
@@ -131,7 +172,7 @@ export async function getStore(): Promise<ClippingsStore> {
       return normalizeStore(blobStore ?? emptyStore());
     }
 
-    if (isBlobConfigured()) {
+    if (hasBlobEnv()) {
       try {
         const blobStore = await readBlobStore();
         if (blobStore) return normalizeStore(blobStore);

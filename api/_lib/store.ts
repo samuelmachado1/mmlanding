@@ -1,6 +1,6 @@
 import { isBlobConfigured, putJsonBlob } from './blob-client';
 import type { ClippingsPayload, ClippingsStore, MediaCard, PendingMediaItem } from './types';
-import { buildPublishedPayload } from './map-clippings';
+import { buildPublishedPayload } from './map-published';
 import { normalizeUrl } from './normalize-url';
 import { sortMediaCardsByRecency, sortPendingByRecency } from './sort-clippings';
 import { emptyStore, getStore } from './store-read';
