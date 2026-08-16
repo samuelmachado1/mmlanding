@@ -49,9 +49,9 @@ export const siteConfig = {
     cream: '#f5f1e8',
   },
   whatsapp: {
-    groupUrl: 'https://chat.whatsapp.com/GEYO2eHXSKwKVJcRa2UL7t?s=cl&p=i&mlu=4',
+    groupUrl: 'https://wa.me/5561982521212',
   },
-  email: 'contato@maxmaciel.df.br',
+  email: 'contato@maxmaciel.com.br',
 } as const;
 
 export const navItems: NavItem[] = [
@@ -435,9 +435,9 @@ export const quemEPage: PageContent = {
     'Nascido em Ceilândia, deputado distrital e presidente da CTMU — quase 30 anos de luta nas quebradas do DF.',
   paragraphs: [
     'Max Maciel é candidato à Deputado Distrital e com seu apoio ele vai para o seu segundo mandato.',
-    'Nascido em 1982 em Ceilândia, Max Maciel é o filho caçula do Seu Agamenon e da Dona Goreth, casal nordestino que veio para Brasília, assim como tantos outros, para lutar por mais oportunidades.',
+    'Nascido em 1982 em Ceilândia, Max Maciel é o filho caçula do Seu Agamenon e da Dona Gorete, casal nordestino que veio para Brasília, assim como tantos outros, para lutar por mais oportunidades.',
     'Em 2022, Max Maciel se tornou o terceiro Deputado Distrital mais votado do DF, eleito com 35.758 votos.',
-    'Mas antes disso, o nosso deputado aba reta começou sua trajetória no movimento estudantil, especificamente no grêmio da sua escola, e depois formou o grupo Atitude com seus amigos, que circulava escolas públicas de ensino médio falando sobre prevenção e educação sexual.',
+    'Mas antes disso, o nosso deputado aba reta começou sua trajetória no movimento estudantil, especificamente no grêmio da sua escola, e depois participou de vários projetos sociais, circulando as escolas, promovendo cultura e direito à cidade.',
     'Com o passar dos anos passou a integrar conselhos, fazer atividades junto com o movimento Hip Hop nas quebradas, contribuir com pesquisas, atuar dentro e fora da institucionalidade em defesa da juventude. Ele também participou ativamente de campanhas pelo desarmamento e pelo fim do extermínio da juventude negra no Brasil.',
     'Ele não começou há pouco tempo, por isso soma quase 30 anos de luta dentro dos movimentos estudantis, sociais e culturais de Ceilândia e de outras quebradas do DF.',
     'Além de ter nascido na RA mais populosa do Distrito Federal, o Max fez morada na cidade: cresceu, estudou, trabalhou, se casou há mais de 20 anos com Ildely Ana, teve duas filhas e ainda mora em Ceilândia.',
