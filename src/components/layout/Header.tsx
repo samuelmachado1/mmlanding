@@ -7,8 +7,12 @@ import { NavLink } from '../ui/NavLink.tsx';
 import logoHeader from '../../assets/logos/logo-header.png';
 import { PAGE_GRID_INNER, PAGE_GRID_OUTER } from './pageGrid.ts';
 
+// logo-header.png (596×596): bounds da arte em y=185..326
+const logoLinkClassName =
+  'relative z-10 mt-[10px] block h-[68px] w-[min(255px,calc(100vw-5rem))] shrink-0 overflow-hidden sm:w-[255px]';
+
 const logoClassName =
-  'block w-[180px] max-w-[min(180px,calc(100vw-5rem))] h-auto lg:w-[255px] lg:max-w-none';
+  'block w-[255px] max-w-[min(255px,calc(100vw-5rem))] h-auto -mt-[79px] sm:max-w-none';
 
 const landingNavLinkClass =
   'font-nav text-base font-medium leading-6 tracking-[0.15px] text-brand-black transition-colors hover:text-navy-500';
@@ -37,7 +41,7 @@ export function Header({ variant = 'landing' }: HeaderProps) {
     <header className={`overflow-hidden bg-yellow-500 ${isInternal ? 'shadow-sm' : ''}`}>
       <div className={barOuterClass}>
         <div className={barClass}>
-        <AppLink to="/" aria-label="Ir para início" className="relative z-10 mt-[6px] flex shrink-0 self-start">
+        <AppLink to="/" aria-label="Ir para início" className={logoLinkClassName}>
           <img
             src={logoHeader}
             alt="Max Maciel"
