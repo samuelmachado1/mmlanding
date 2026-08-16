@@ -90,7 +90,7 @@ Para 1–2 aprovadores:
 6. Para revogar acesso: gere novo `ADMIN_SECRET` na Vercel e redeploy
 7. Remova envs obsoletas se ainda existirem: `PREVIEW_SECRET`, `LAUNCH_DATE`, `SITE_LAUNCHED`
 
-**Hardening:** `/max-admin` retorna 404 sem auth; `/api/admin/*` exige Bearer ou cookie válido na edge; `robots.txt` bloqueia indexação.
+**Hardening:** `/max-admin` exibe login sem expor dados; `/api/admin/*` exige Bearer válido na edge; `robots.txt` bloqueia indexação; `/admin/*` legado retorna 404.
 
 ### Busca manual (local)
 
