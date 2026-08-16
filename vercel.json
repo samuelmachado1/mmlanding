@@ -2,6 +2,14 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "framework": "vite",
+  "functions": {
+    "api/admin/clippings/[action].ts": {
+      "maxDuration": 30
+    },
+    "api/clippings.ts": {
+      "maxDuration": 15
+    }
+  },
   "rewrites": [
     { "source": "/coming-soon.html", "destination": "/coming-soon.html" },
     { "source": "/api/clippings/item", "destination": "/api/clippings" },

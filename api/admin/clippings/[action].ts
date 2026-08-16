@@ -196,8 +196,9 @@ async function handleDiscover(req: VercelRequest, res: VercelResponse) {
 
   const result = await discoverClippings();
 
-  if (!result.ok && result.error?.includes('não configurado')) {
-    return res.status(400).json(result);
+  if (!result.ok) {
+    const status = result.error?.includes('BLOB_READ_WRITE_TOKEN') ? 503 : 502;
+    return res.status(status).json(result);
   }
 
   return res.status(200).json(result);

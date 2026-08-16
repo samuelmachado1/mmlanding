@@ -3,6 +3,30 @@ import { searchClippings as searchGoogleCse } from './google-cse';
 import { searchItemToPending } from './map-clippings';
 import { addPendingItems, getStore } from './store';
 
+const DISCOVER_TIMEOUT_MS = 9_000;
+
+async function withTimeout<T>(
+  promise: Promise<T>,
+  ms: number,
+  label: string,
+): Promise<T> {
+  let timer: ReturnType<typeof setTimeout> | undefined;
+
+  try {
+    return await Promise.race([
+      promise,
+      new Promise<T>((_, reject) => {
+        timer = setTimeout(
+          () => reject(new Error(`${label} excedeu o tempo limite de ${Math.round(ms / 1000)}s`)),
+          ms,
+        );
+      }),
+    ]);
+  } finally {
+    if (timer) clearTimeout(timer);
+  }
+}
+
 export interface DiscoverResult {
   ok: boolean;
   addedToPending: number;
@@ -44,7 +68,7 @@ async function runSearch(): Promise<{
 
 export async function discoverClippings(): Promise<DiscoverResult> {
   try {
-    const { results, source } = await runSearch();
+    const { results, source } = await withTimeout(runSearch(), DISCOVER_TIMEOUT_MS, 'Busca de notícias');
     const pendingItems = [];
     let counter = 0;
 

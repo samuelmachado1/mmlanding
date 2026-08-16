@@ -168,6 +168,18 @@ export async function getStore(): Promise<ClippingsStore> {
 export async function saveStore(store: ClippingsStore): Promise<void> {
   if (process.env.BLOB_READ_WRITE_TOKEN) {
     await writeBlobStore(store);
+
+    if (process.env.VERCEL !== '1') {
+      await writeLocalStore(store);
+    }
+
+    return;
+  }
+
+  if (process.env.VERCEL === '1') {
+    throw new Error(
+      'Armazenamento não configurado: defina BLOB_READ_WRITE_TOKEN no Vercel.',
+    );
   }
 
   await writeLocalStore(store);
