@@ -1,6 +1,6 @@
-import type { MediaCard } from './types';
-import type { NewsSearchItem } from './google-news';
-import { decodeGoogleNewsUrl } from './google-news-url';
+import type { MediaCard } from './types.js';
+import type { NewsSearchItem } from './google-news.js';
+import { decodeGoogleNewsUrl } from './google-news-url.js';
 
 const OG_IMAGE_PATTERNS = [
   /<meta[^>]+property=["']og:image:secure_url["'][^>]+content=["']([^"']+)["']/i,

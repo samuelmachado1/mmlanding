@@ -1,4 +1,4 @@
-import type { MediaCard, PendingMediaItem } from './types';
+import type { MediaCard, PendingMediaItem } from './types.js';
 
 function parseMediaDate(date: string): number {
   if (!date.trim() || date === 'Recente') return 0;

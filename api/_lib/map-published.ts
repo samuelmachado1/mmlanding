@@ -3,8 +3,8 @@ import type {
   ClippingReport,
   ClippingsPayload,
   MediaCard,
-} from './types';
-import { normalizeUrl } from './normalize-url';
+} from './types.js';
+import { normalizeUrl } from './normalize-url.js';
 
 function toHighlight(item: MediaCard): ClippingInterview {
   const badge =

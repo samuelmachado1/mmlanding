@@ -1,6 +1,6 @@
-import type { ClippingsPayload, ClippingsStore, MediaCard } from './types';
-import { buildPublishedPayload } from './map-published';
-import { sortMediaCardsByRecency } from './sort-clippings';
+import type { ClippingsPayload, ClippingsStore, MediaCard } from './types.js';
+import { buildPublishedPayload } from './map-published.js';
+import { sortMediaCardsByRecency } from './sort-clippings.js';
 
 const STORE_BLOB_PATHNAME = 'clippings-store.json';
 const LEGACY_BLOB_PATHNAME = 'clippings.json';
@@ -101,7 +101,7 @@ async function readBlobByPath(pathname: string): Promise<unknown | null> {
   if (fromPublic) return fromPublic;
 
   try {
-    const { listBlobByPrefix } = await import('./blob-client');
+    const { listBlobByPrefix } = await import('./blob-client.js');
     const blobs = await listBlobByPrefix(pathname);
     const blob = blobs.find((entry) => entry.pathname === pathname);
 

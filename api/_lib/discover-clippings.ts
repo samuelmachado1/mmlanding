@@ -1,7 +1,7 @@
-import { searchGoogleNews, type NewsSearchItem } from './google-news';
-import { searchClippings as searchGoogleCse } from './google-cse';
-import { searchItemToPending } from './map-clippings';
-import { addPendingItems, getStore } from './store';
+import { searchGoogleNews, type NewsSearchItem } from './google-news.js';
+import { searchClippings as searchGoogleCse } from './google-cse.js';
+import { searchItemToPending } from './map-clippings.js';
+import { addPendingItems, getStore } from './store.js';
 
 const DISCOVER_TIMEOUT_MS = 9_000;
 
