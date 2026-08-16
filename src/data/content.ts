@@ -49,7 +49,9 @@ export const siteConfig = {
     cream: '#f5f1e8',
   },
   whatsapp: {
-    groupUrl: 'https://wa.me/5561982521212',
+    chatUrl: 'https://wa.me/5561982521212',
+    bondeGroupUrl:
+      'https://chat.whatsapp.com/Erw07ITrsnl2qIYO6mNKOP?s=cl&p=a&mlu=0&ilr=0',
   },
   email: 'contato@maxmaciel.com.br',
 } as const;
@@ -163,7 +165,7 @@ export const bondeProMaxBlocks: ContentBlock[] = [
     title: 'Grupo de apoiadores',
     description: 'Receba atualizações do mandato, votações e convites para audiências no WhatsApp e Telegram.',
     cta: 'Entrar no grupo',
-    href: siteConfig.whatsapp.groupUrl,
+    href: siteConfig.whatsapp.bondeGroupUrl,
   },
   {
     id: 'apoie-manifesto',
@@ -283,7 +285,7 @@ export const crewCards: CrewCard[] = [
     description:
       'Entre no grupo, acompanhe as novidades e participe das próximas mobilizações do Bonde.',
     cta: 'Entrar no bonde',
-    href: '/bonde-pro-max',
+    href: siteConfig.whatsapp.bondeGroupUrl,
   },
   {
     id: 'apoie-manifesto',
@@ -372,12 +374,12 @@ export const socialLinks: SocialLink[] = [
 ];
 
 export function whatsappUrl(): string {
-  return siteConfig.whatsapp.groupUrl;
+  return siteConfig.whatsapp.chatUrl;
 }
 
 export const socialBarLinks: SocialBarLink[] = [
   { name: 'Instagram', href: 'https://www.instagram.com/maxmacieldf', platform: 'instagram' },
-  { name: 'WhatsApp', href: siteConfig.whatsapp.groupUrl, platform: 'whatsapp' },
+  { name: 'WhatsApp', href: siteConfig.whatsapp.chatUrl, platform: 'whatsapp' },
   { name: 'YouTube', href: 'https://www.youtube.com/@MaxMacielDF', platform: 'youtube' },
   { name: 'TikTok', href: 'https://www.tiktok.com/@maxmacieldf', platform: 'tiktok' },
   { name: 'Facebook', href: 'https://www.facebook.com/maxmacieldf', platform: 'facebook' },
@@ -484,7 +486,7 @@ export const mandateHighlights = [
 
 export const sitePageCta = {
   title: 'Cola com a gente',
-  primary: { label: 'Entrar no Bonde', href: '/bonde-pro-max' },
+  primary: { label: 'Entrar no Bonde', href: siteConfig.whatsapp.bondeGroupUrl },
   variant: 'yellow' as const,
 };
 
@@ -740,7 +742,7 @@ export const bondePageContent = {
         description:
           'Entre no grupo do WhatsApp e receba em primeira mão notícias, convocações e materiais de campanha.',
         cta: 'Entrar no grupo',
-        href: siteConfig.whatsapp.groupUrl,
+        href: siteConfig.whatsapp.bondeGroupUrl,
       },
       {
         icon: '📦',
@@ -815,7 +817,7 @@ export const canaisPage = {
   intro: 'Vem trocar uma ideia com a gente através dos nossos canais:',
   channels: [
     { name: 'Instagram', href: 'https://www.instagram.com/maxmacieldf' },
-    { name: 'WhatsApp', href: siteConfig.whatsapp.groupUrl },
+    { name: 'WhatsApp', href: siteConfig.whatsapp.chatUrl },
     { name: 'Telegram', href: 'https://t.me/+A1v342WcNVRjNGFh' },
   ] satisfies ChannelItem[],
 };
