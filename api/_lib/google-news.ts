@@ -10,6 +10,23 @@ const parser = new Parser({
 });
 
 const RSS_BASE = 'https://news.google.com/rss/search';
+const FETCH_TIMEOUT_MS = 6_000;
+
+async function fetchRssFeed(url: string): Promise<string> {
+  const response = await fetch(url, {
+    headers: {
+      'User-Agent': 'max-maciel-landing/1.0',
+      Accept: 'application/rss+xml, application/xml, text/xml',
+    },
+    signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Google News RSS HTTP ${response.status}`);
+  }
+
+  return response.text();
+}
 
 export interface NewsSearchItem {
   title: string;
@@ -60,7 +77,8 @@ async function fetchQuery(query: string): Promise<NewsSearchItem[]> {
   });
 
   const url = `${RSS_BASE}?${params.toString()}`;
-  const feed = await parser.parseURL(url);
+  const xml = await fetchRssFeed(url);
+  const feed = await parser.parseString(xml);
 
   return (feed.items ?? [])
     .filter((item) => item.title && item.link)
@@ -80,27 +98,30 @@ async function fetchQuery(query: string): Promise<NewsSearchItem[]> {
 }
 
 export async function searchGoogleNews(): Promise<SearchResult[]> {
+  const queries = getSearchQueries();
   const seen = new Set<string>();
-  const results: SearchResult[] = [];
+  const settled = await Promise.allSettled(queries.map((query) => fetchQuery(query)));
 
-  for (const query of getSearchQueries()) {
-    try {
-      const items = await fetchQuery(query);
-      const uniqueItems: NewsSearchItem[] = [];
+  return queries.map((query, index) => {
+    const outcome = settled[index];
 
-      for (const item of items) {
-        const key = normalizeUrl(item.link);
-        if (seen.has(key)) continue;
-        seen.add(key);
-        uniqueItems.push(item);
-      }
-
-      results.push({ query, items: uniqueItems });
-    } catch (error) {
-      console.error(`Google News search failed for "${query}":`, error);
-      results.push({ query, items: [] });
+    if (!outcome || outcome.status === 'rejected') {
+      console.error(
+        `Google News search failed for "${query}":`,
+        outcome?.status === 'rejected' ? outcome.reason : 'missing result',
+      );
+      return { query, items: [] };
     }
-  }
 
-  return results;
+    const uniqueItems: NewsSearchItem[] = [];
+
+    for (const item of outcome.value) {
+      const key = normalizeUrl(item.link);
+      if (seen.has(key)) continue;
+      seen.add(key);
+      uniqueItems.push(item);
+    }
+
+    return { query, items: uniqueItems };
+  });
 }

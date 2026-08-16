@@ -35,7 +35,9 @@ async function fetchQuery(
   url.searchParams.set('lr', 'lang_pt');
   url.searchParams.set('num', '10');
 
-  const response = await fetch(url.toString());
+  const response = await fetch(url.toString(), {
+    signal: AbortSignal.timeout(6_000),
+  });
 
   if (!response.ok) {
     const body = await response.text();
@@ -56,22 +58,32 @@ export async function searchClippings(
   apiKey: string,
   cx: string,
 ): Promise<SearchResult[]> {
+  const queries = getSearchQueries();
   const seen = new Set<string>();
-  const results: SearchResult[] = [];
+  const settled = await Promise.allSettled(
+    queries.map((query) => fetchQuery(apiKey, cx, query)),
+  );
 
-  for (const query of getSearchQueries()) {
-    const items = await fetchQuery(apiKey, cx, query);
+  return queries.map((query, index) => {
+    const outcome = settled[index];
+
+    if (!outcome || outcome.status === 'rejected') {
+      console.error(
+        `Google CSE search failed for "${query}":`,
+        outcome?.status === 'rejected' ? outcome.reason : 'missing result',
+      );
+      return { query, items: [] };
+    }
+
     const uniqueItems: GoogleCseItem[] = [];
 
-    for (const item of items) {
+    for (const item of outcome.value) {
       const key = normalizeUrl(item.link);
       if (seen.has(key)) continue;
       seen.add(key);
       uniqueItems.push(item);
     }
 
-    results.push({ query, items: uniqueItems });
-  }
-
-  return results;
+    return { query, items: uniqueItems };
+  });
 }

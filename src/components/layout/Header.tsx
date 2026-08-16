@@ -6,7 +6,8 @@ import { NavLink } from '../ui/NavLink.tsx';
 import logoHeader from '../../assets/logos/logo-header.png';
 import { PAGE_GRID_INNER, PAGE_GRID_OUTER } from './pageGrid.ts';
 
-const logoClassName = 'block h-auto w-[255px] max-w-none';
+const logoClassName =
+  'block h-auto max-h-[72px] w-auto max-w-[min(200px,52vw)] sm:max-h-[86px] sm:max-w-[255px]';
 
 const navLinkClass =
   'font-nav text-base font-medium leading-6 tracking-[0.15px] text-brand-black transition-colors hover:text-navy-500';
@@ -21,13 +22,13 @@ export function Header({ variant = 'landing' }: HeaderProps) {
   const items = isInternal ? internalNavItems : navItems;
 
   const barOuterClass = PAGE_GRID_OUTER;
-  const barClass = `flex h-[101px] ${PAGE_GRID_INNER} items-center justify-between gap-4 overflow-visible`;
+  const barClass = `flex h-[101px] ${PAGE_GRID_INNER} items-center justify-between gap-4 overflow-hidden`;
 
   return (
-    <header className={`overflow-visible bg-yellow-500 ${isInternal ? 'shadow-sm' : ''}`}>
+    <header className={`overflow-hidden bg-yellow-500 ${isInternal ? 'shadow-sm' : ''}`}>
       <div className={barOuterClass}>
         <div className={barClass}>
-        <AppLink to="/" aria-label="Ir para início" className="relative z-10 mt-[10px] flex shrink-0 items-center overflow-visible">
+        <AppLink to="/" aria-label="Ir para início" className="relative z-0 flex shrink-0 items-center">
           <img
             src={logoHeader}
             alt="Max Maciel"
