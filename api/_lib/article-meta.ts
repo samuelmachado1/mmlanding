@@ -247,6 +247,32 @@ export async function fetchArticleContent(url: string): Promise<ArticleContent> 
   };
 }
 
+export async function hydrateArticleBody(card: MediaCard): Promise<MediaCard> {
+  const { isGoogleNewsUrl } = await import('./google-news-url.js');
+
+  if (card.bodyHtml) return card;
+
+  let href = card.href;
+  if (isGoogleNewsUrl(href)) {
+    href = await resolveArticleUrl(href);
+  }
+  if (isGoogleNewsUrl(href)) {
+    return href !== card.href ? { ...card, href } : card;
+  }
+
+  const content = await fetchArticleContent(href);
+  if (!content.bodyHtml && !content.excerpt) {
+    return href !== card.href ? { ...card, href } : card;
+  }
+
+  return {
+    ...card,
+    href,
+    excerpt: content.excerpt ?? card.excerpt,
+    bodyHtml: content.bodyHtml ?? card.bodyHtml,
+  };
+}
+
 export async function fetchOgImage(url: string): Promise<string | undefined> {
   const html = await fetchArticleHtml(url);
   if (!html) return undefined;

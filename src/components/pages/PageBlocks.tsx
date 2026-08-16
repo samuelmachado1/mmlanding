@@ -364,7 +364,7 @@ export function MidiaMediaGrid({ cards }: { cards: MediaCard[] }) {
           >
             <div className="relative aspect-[396/192] overflow-hidden bg-navy-100">
               {card.imageUrl ? (
-                <img src={card.imageUrl} alt="" className="size-full object-cover" />
+                <img src={card.imageUrl} alt="" referrerPolicy="no-referrer" className="size-full object-cover" />
               ) : (
                 <div className="flex size-full items-center justify-center bg-navy-500/10 font-nav text-xs font-semibold uppercase tracking-wide text-navy-500/50">
                   Max na Mídia
@@ -401,7 +401,7 @@ export function MediaGrid({ cards }: { cards: MediaCard[] }) {
           >
             <div className="aspect-video bg-navy-100">
               {card.imageUrl ? (
-                <img src={card.imageUrl} alt="" className="size-full object-cover" />
+                <img src={card.imageUrl} alt="" referrerPolicy="no-referrer" className="size-full object-cover" />
               ) : (
                 <div className="flex size-full items-center justify-center font-nav text-sm font-semibold text-navy-500">
                   {card.category}

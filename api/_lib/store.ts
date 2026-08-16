@@ -113,18 +113,26 @@ function rebuildPublishedPayload(store: ClippingsStore): ClippingsPayload {
 }
 
 async function enrichWithArticleContent(card: MediaCard): Promise<MediaCard> {
-  const { isGoogleNewsUrl } = await import('./google-news-url.js');
-  if (card.bodyHtml || isGoogleNewsUrl(card.href)) return card;
+  const { hydrateArticleBody } = await import('./article-meta.js');
+  return hydrateArticleBody(card);
+}
 
-  const { fetchArticleContent } = await import('./article-meta.js');
-  const content = await fetchArticleContent(card.href);
-  if (!content.bodyHtml && !content.excerpt) return card;
+export async function hydratePublishedItemById(id: string): Promise<MediaCard | null> {
+  const store = await getStore();
+  const index = store.published.items.findIndex((item) => item.id === id);
+  if (index === -1) return null;
 
-  return {
-    ...card,
-    excerpt: content.excerpt ?? card.excerpt,
-    bodyHtml: content.bodyHtml ?? card.bodyHtml,
-  };
+  const hydrated = await enrichWithArticleContent(store.published.items[index]);
+  const gainedBody =
+    hydrated.bodyHtml && !store.published.items[index].bodyHtml;
+
+  if (gainedBody || hydrated.href !== store.published.items[index].href) {
+    store.published.items[index] = hydrated;
+    store.published = rebuildPublishedPayload(store);
+    await saveStore(store);
+  }
+
+  return hydrated;
 }
 
 export async function approveItem(
