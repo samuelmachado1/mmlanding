@@ -1,4 +1,4 @@
-import { list, put } from '@vercel/blob';
+import { isBlobConfigured, listBlobByPrefix, putJsonBlob } from './blob-client';
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { join } from 'node:path';
 import type {
@@ -18,13 +18,6 @@ const LEGACY_BLOB_PATHNAME = 'clippings.json';
 const LOCAL_CACHE_DIR = join(process.cwd(), '.data');
 const LOCAL_STORE_FILE = join(LOCAL_CACHE_DIR, 'clippings-store.json');
 const LEGACY_LOCAL_FILE = join(LOCAL_CACHE_DIR, 'clippings.json');
-
-/** OIDC (BLOB_STORE_ID) on Vercel, or legacy BLOB_READ_WRITE_TOKEN locally/CI. */
-function isBlobConfigured(): boolean {
-  return Boolean(
-    process.env.BLOB_READ_WRITE_TOKEN?.trim() || process.env.BLOB_STORE_ID?.trim(),
-  );
-}
 
 function emptyPublished(): ClippingsPayload {
   return {
@@ -117,7 +110,7 @@ async function writeLocalStore(store: ClippingsStore): Promise<void> {
 }
 
 async function readBlobByPath(pathname: string): Promise<unknown | null> {
-  const { blobs } = await list({ prefix: pathname, limit: 1 });
+  const blobs = await listBlobByPrefix(pathname);
   const blob = blobs.find((entry) => entry.pathname === pathname);
 
   if (!blob) return null;
@@ -141,14 +134,7 @@ async function readBlobStore(): Promise<ClippingsStore | null> {
 }
 
 async function writeBlobStore(store: ClippingsStore): Promise<void> {
-  const body = JSON.stringify(store);
-
-  await put(STORE_BLOB_PATHNAME, body, {
-    access: 'public',
-    addRandomSuffix: false,
-    contentType: 'application/json',
-    allowOverwrite: true,
-  });
+  await putJsonBlob(STORE_BLOB_PATHNAME, JSON.stringify(store));
 }
 
 export async function getStore(): Promise<ClippingsStore> {
