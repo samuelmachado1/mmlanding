@@ -1,4 +1,5 @@
-import { env } from 'node:process';
+/** Vercel Edge injects env at deploy; avoid node:process for middleware typecheck. */
+declare const process: { env: Record<string, string | undefined> };
 
 const ADMIN_COOKIE = '__max_admin';
 const ADMIN_COOKIE_MAX_AGE = 60 * 60 * 24;
@@ -29,7 +30,7 @@ function buildAdminCookie(hash: string, maxAgeSeconds = ADMIN_COOKIE_MAX_AGE): s
 }
 
 function getAdminSecret(): string | undefined {
-  return env.ADMIN_SECRET?.trim() || undefined;
+  return process.env.ADMIN_SECRET?.trim() || undefined;
 }
 
 function jsonResponse(status: number, body: Record<string, string>): Response {
