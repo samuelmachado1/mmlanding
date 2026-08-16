@@ -6,10 +6,17 @@ import {
   sortPendingByRecency,
 } from '../../_lib/sort-clippings.js';
 
+function setAdminNoCache(res: VercelResponse): void {
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
+  res.setHeader('Pragma', 'no-cache');
+}
+
 export default async function handler(
   req: VercelRequest,
   res: VercelResponse,
 ) {
+  setAdminNoCache(res);
+
   if (!isAdminAuthorized(req)) {
     return res.status(401).json({ error: 'Unauthorized' });
   }

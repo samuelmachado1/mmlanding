@@ -48,9 +48,11 @@ export async function adminFetch(
 
   const headers = new Headers(options.headers);
   headers.set('Authorization', `Bearer ${token}`);
+  headers.set('Cache-Control', 'no-cache');
+  headers.set('Pragma', 'no-cache');
   if (options.body && !headers.has('Content-Type')) {
     headers.set('Content-Type', 'application/json');
   }
 
-  return fetch(path, { ...options, headers });
+  return fetch(path, { ...options, headers, cache: 'no-store' });
 }

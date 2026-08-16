@@ -100,7 +100,21 @@ export default async function middleware(request: Request): Promise<Response> {
       return jsonResponse(401, { error: 'Unauthorized' });
     }
 
-    return fetch(request);
+    const forwardHeaders = new Headers(request.headers);
+    forwardHeaders.delete('if-none-match');
+    forwardHeaders.delete('if-modified-since');
+
+    const response = await fetch(new Request(request, { headers: forwardHeaders }));
+    const outHeaders = new Headers(response.headers);
+    outHeaders.set('Cache-Control', 'no-store, no-cache, must-revalidate');
+    outHeaders.set('Pragma', 'no-cache');
+    outHeaders.delete('etag');
+
+    return new Response(response.body, {
+      status: response.status,
+      statusText: response.statusText,
+      headers: outHeaders,
+    });
   }
 
   // SPA login — always serve /max-admin; API calls still require Bearer token.

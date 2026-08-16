@@ -53,6 +53,9 @@ export default function AdminMidiaPage() {
       const response = await adminFetch('/api/admin/clippings/pending');
       const body = await response.text();
       if (!response.ok) {
+        if (response.status === 304) {
+          throw new Error('Resposta em cache inválida (304). Recarregue a página e tente novamente.');
+        }
         if (options?.silent) {
           clearAdminToken();
           setAuthenticated(false);
