@@ -1,21 +1,13 @@
-import { isBlobConfigured, listBlobByPrefix, putJsonBlob } from './blob-client';
-import { readFile, writeFile, mkdir } from 'node:fs/promises';
-import { join } from 'node:path';
-import type {
-  ClippingsPayload,
-  ClippingsStore,
-  MediaCard,
-  PendingMediaItem,
-} from './types';
+import { isBlobConfigured, putJsonBlob } from './blob-client';
+import type { ClippingsPayload, ClippingsStore, MediaCard, PendingMediaItem } from './types';
 import { buildPublishedPayload } from './map-clippings';
 import { normalizeUrl } from './normalize-url';
 import { sortMediaCardsByRecency, sortPendingByRecency } from './sort-clippings';
+import { emptyStore, getStore } from './store-read';
+
+export { emptyStore, getStore } from './store-read';
 
 const STORE_BLOB_PATHNAME = 'clippings-store.json';
-const LEGACY_BLOB_PATHNAME = 'clippings.json';
-const LOCAL_CACHE_DIR = join(process.cwd(), '.data');
-const LOCAL_STORE_FILE = join(LOCAL_CACHE_DIR, 'clippings-store.json');
-const LEGACY_LOCAL_FILE = join(LOCAL_CACHE_DIR, 'clippings.json');
 
 function emptyPublished(): ClippingsPayload {
   return {
@@ -26,134 +18,20 @@ function emptyPublished(): ClippingsPayload {
   };
 }
 
-export function emptyStore(): ClippingsStore {
-  return {
-    published: emptyPublished(),
-    pending: [],
-    rejectedUrls: [],
-    highlightId: null,
-  };
-}
-
-function normalizeStore(store: ClippingsStore): ClippingsStore {
-  if (store.highlightId === undefined) {
-    store.highlightId = null;
-  }
-
-  if (
-    store.highlightId &&
-    !store.published.items.some((item) => item.id === store.highlightId)
-  ) {
-    store.highlightId = null;
-  }
-
-  return store;
-}
-
-function isLegacyPayload(data: unknown): data is ClippingsPayload {
-  return (
-    typeof data === 'object' &&
-    data !== null &&
-    'items' in data &&
-    'fetchedAt' in data &&
-    !('published' in data)
-  );
-}
-
-function migrateToStore(data: unknown): ClippingsStore {
-  if (
-    typeof data === 'object' &&
-    data !== null &&
-    'published' in data &&
-    'pending' in data &&
-    'rejectedUrls' in data
-  ) {
-    return normalizeStore(data as ClippingsStore);
-  }
-
-  if (isLegacyPayload(data)) {
-    return normalizeStore({
-      published: data,
-      pending: [],
-      rejectedUrls: [],
-      highlightId: null,
-    });
-  }
-
-  return emptyStore();
-}
-
-async function readLocalFile(path: string): Promise<unknown | null> {
-  try {
-    const raw = await readFile(path, 'utf-8');
-    return JSON.parse(raw) as unknown;
-  } catch {
-    return null;
-  }
-}
-
-async function readLocalStore(): Promise<ClippingsStore | null> {
-  const storeData = await readLocalFile(LOCAL_STORE_FILE);
-  if (storeData) return migrateToStore(storeData);
-
-  const legacyData = await readLocalFile(LEGACY_LOCAL_FILE);
-  if (legacyData) return migrateToStore(legacyData);
-
-  return null;
-}
-
 async function writeLocalStore(store: ClippingsStore): Promise<void> {
-  await mkdir(LOCAL_CACHE_DIR, { recursive: true });
-  await writeFile(LOCAL_STORE_FILE, JSON.stringify(store, null, 2), 'utf-8');
-}
-
-async function readBlobByPath(pathname: string): Promise<unknown | null> {
-  const blobs = await listBlobByPrefix(pathname);
-  const blob = blobs.find((entry) => entry.pathname === pathname);
-
-  if (!blob) return null;
-
-  const response = await fetch(blob.url);
-  if (!response.ok) {
-    throw new Error(`Blob fetch failed: ${response.status}`);
-  }
-
-  return (await response.json()) as unknown;
-}
-
-async function readBlobStore(): Promise<ClippingsStore | null> {
-  const storeData = await readBlobByPath(STORE_BLOB_PATHNAME);
-  if (storeData) return migrateToStore(storeData);
-
-  const legacyData = await readBlobByPath(LEGACY_BLOB_PATHNAME);
-  if (legacyData) return migrateToStore(legacyData);
-
-  return null;
+  const { mkdir, writeFile } = await import('node:fs/promises');
+  const { join } = await import('node:path');
+  const cacheDir = join(process.cwd(), '.data');
+  await mkdir(cacheDir, { recursive: true });
+  await writeFile(
+    join(cacheDir, 'clippings-store.json'),
+    JSON.stringify(store, null, 2),
+    'utf-8',
+  );
 }
 
 async function writeBlobStore(store: ClippingsStore): Promise<void> {
   await putJsonBlob(STORE_BLOB_PATHNAME, JSON.stringify(store));
-}
-
-export async function getStore(): Promise<ClippingsStore> {
-  try {
-    if (isBlobConfigured()) {
-      try {
-        const blobStore = await readBlobStore();
-        if (blobStore) return normalizeStore(blobStore);
-      } catch (error) {
-        console.error('Blob store read failed, falling back to local:', error);
-        const localStore = await readLocalStore();
-        if (localStore) return normalizeStore(localStore);
-      }
-    }
-
-    const localStore = await readLocalStore();
-    return normalizeStore(localStore ?? emptyStore());
-  } catch (error) {
-    console.error('getStore failed, using empty store:', error);
-    return emptyStore();
-  }
 }
 
 export async function saveStore(store: ClippingsStore): Promise<void> {
@@ -176,17 +54,7 @@ export async function saveStore(store: ClippingsStore): Promise<void> {
   await writeLocalStore(store);
 }
 
-export async function getClippings(): Promise<ClippingsPayload | null> {
-  const store = await getStore();
-  if (
-    store.published.items.length === 0 &&
-    store.published.fetchedAt === emptyPublished().fetchedAt
-  ) {
-    return null;
-  }
-
-  return rebuildPublishedPayload(store);
-}
+export { getClippings, getPublishedItemById } from './store-read';
 
 function collectKnownUrls(store: ClippingsStore): Set<string> {
   const urls = new Set<string>();
@@ -371,12 +239,6 @@ export async function addManualItem(
   return existingIndex === -1
     ? mediaCard
     : store.published.items[existingIndex];
-}
-
-export async function getPublishedItemById(id: string): Promise<MediaCard | null> {
-  const store = await getStore();
-  const item = store.published.items.find((entry) => entry.id === id);
-  return item ?? null;
 }
 
 export async function setHighlightItem(id: string): Promise<boolean> {
