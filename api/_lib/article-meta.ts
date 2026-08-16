@@ -1,4 +1,4 @@
-import type { MediaCard } from '../../src/types/index';
+import type { MediaCard } from './types';
 import type { NewsSearchItem } from './google-news';
 import { decodeGoogleNewsUrl } from './google-news-url';
 

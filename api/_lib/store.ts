@@ -6,11 +6,9 @@ import type {
   ClippingsStore,
   MediaCard,
   PendingMediaItem,
-} from '../../src/types/index';
+} from './types';
 import { buildPublishedPayload } from './map-clippings';
 import { normalizeUrl } from './normalize-url';
-import { isBadImageUrl, fetchArticleContent, resolveArticleImage, resolveArticleUrl } from './article-meta';
-import { isGoogleNewsUrl } from './google-news-url';
 import { sortMediaCardsByRecency, sortPendingByRecency } from './sort-clippings';
 
 const STORE_BLOB_PATHNAME = 'clippings-store.json';
@@ -242,8 +240,10 @@ function rebuildPublishedPayload(store: ClippingsStore): ClippingsPayload {
 }
 
 async function enrichWithArticleContent(card: MediaCard): Promise<MediaCard> {
+  const { isGoogleNewsUrl } = await import('./google-news-url');
   if (card.bodyHtml || isGoogleNewsUrl(card.href)) return card;
 
+  const { fetchArticleContent } = await import('./article-meta');
   const content = await fetchArticleContent(card.href);
   if (!content.bodyHtml && !content.excerpt) return card;
 
@@ -264,6 +264,10 @@ export async function approveItem(
 
   const [pendingItem] = store.pending.splice(index, 1);
   const { discoveredAt: _d, searchQuery: _q, snippet, ...mediaCard } = pendingItem;
+
+  const { resolveArticleUrl, isBadImageUrl, resolveArticleImage } = await import(
+    './article-meta',
+  );
 
   mediaCard.id = `clipping-${Date.now()}`;
   mediaCard.href = await resolveArticleUrl(mediaCard.href);
