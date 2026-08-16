@@ -24,11 +24,12 @@ A seção **Max na Mídia** (landing + `/midia`) descobre matérias via **Google
 
 ### Fluxo
 
-1. Cron diário (`/api/cron/refresh-clippings`) ou **Buscar agora** no admin
-2. Busca no Google News RSS (`news.google.com/rss/search`)
-3. URLs novas vão para `pending` no Vercel Blob
-4. Equipe revisa em `/max-admin` e aprova ou rejeita
-5. Só itens aprovados aparecem em `GET /api/clippings` (site público)
+1. Admin entra em `/max-admin` (login ou link com `?admin=`) → busca automática no Google News RSS
+2. Novas matérias vão para `pending` no Vercel Blob
+3. Equipe revisa em `/max-admin` e aprova ou rejeita
+4. Só itens aprovados aparecem em `GET /api/clippings` (site público)
+
+Use **Buscar agora** no painel para rodar a busca novamente durante a sessão.
 
 ### Busca (padrão: Google News RSS)
 
@@ -48,7 +49,6 @@ Copie `.env.example` para `.env.local` e preencha:
 | `GOOGLE_CSE_ENABLED` | `true` para usar Custom Search em vez do RSS |
 | `GOOGLE_CSE_API_KEY` | (Opcional) API Key do Google Cloud |
 | `GOOGLE_CSE_ID` | (Opcional) Search Engine ID (`cx`) |
-| `CRON_SECRET` | Segredo para proteger o endpoint de cron |
 | `BLOB_READ_WRITE_TOKEN` | Token do Vercel Blob (produção) |
 | `ADMIN_SECRET` | Segredo para `/max-admin` e rotas `/api/admin/*` |
 
@@ -57,9 +57,6 @@ Copie `.env.example` para `.env.local` e preencha:
 1. Conecte o repositório na [Vercel](https://vercel.com/)
 2. Crie um **Blob store** no projeto e vincule `BLOB_READ_WRITE_TOKEN`
 3. Configure as demais variáveis de ambiente
-4. O cron diário está em `vercel.json` (`0 12 * * *`, compatível com Hobby)
-
-Configure o header `Authorization: Bearer <CRON_SECRET>` para o cron na Vercel (Settings → Cron Jobs).
 
 ### Painel admin
 
@@ -95,11 +92,11 @@ Para 1–2 aprovadores:
 
 **Hardening:** `/max-admin` retorna 404 sem auth; `/api/admin/*` exige Bearer ou cookie válido na edge; `robots.txt` bloqueia indexação.
 
-### Refresh manual (local ou produção)
+### Busca manual (local)
 
 ```bash
-curl -X POST "http://localhost:3000/api/cron/refresh-clippings" \
-  -H "Authorization: Bearer $CRON_SECRET"
+curl -X POST "http://localhost:3000/api/admin/clippings/discover" \
+  -H "Authorization: Bearer $ADMIN_SECRET"
 ```
 
 ### Endpoints
@@ -107,7 +104,7 @@ curl -X POST "http://localhost:3000/api/cron/refresh-clippings" \
 | Rota | Descrição |
 |---|---|
 | `GET /api/clippings` | Retorna matérias **aprovadas** (público) |
-| `GET/POST /api/cron/refresh-clippings` | Descobre novas matérias → fila pending (requer `Authorization: Bearer <CRON_SECRET>`) |
+| `GET /api/clippings?id=` | Matéria publicada por ID (público) |
 | `GET /api/admin/clippings/pending` | Lista pendentes + publicados (admin) |
 | `POST /api/admin/clippings/discover` | Busca no Google e adiciona à fila pending |
 | `POST /api/admin/clippings/approve` | Aprova item `{ id }` |

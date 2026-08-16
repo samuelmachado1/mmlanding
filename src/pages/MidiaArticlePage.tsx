@@ -73,7 +73,7 @@ export default function MidiaArticlePage() {
     async function loadFromApi() {
       try {
         const response = await fetch(
-          `/api/clippings/item?id=${encodeURIComponent(id!)}`,
+          `/api/clippings?id=${encodeURIComponent(id!)}`,
         );
         if (!response.ok) return;
         const payload = (await response.json()) as MediaArticle;

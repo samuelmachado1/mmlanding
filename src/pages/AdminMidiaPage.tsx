@@ -94,10 +94,14 @@ export default function AdminMidiaPage() {
   }, []);
 
   useEffect(() => {
-    captureAdminTokenFromUrl();
+    const fromUrl = captureAdminTokenFromUrl();
     const token = getAdminToken();
-    if (token) {
-      setAuthenticated(true);
+    if (!token) return;
+
+    setAuthenticated(true);
+    if (fromUrl) {
+      void handleDiscoverNow();
+    } else {
       void loadData();
     }
   }, [loadData]);
@@ -106,7 +110,8 @@ export default function AdminMidiaPage() {
     event.preventDefault();
     if (!tokenInput.trim()) return;
     setAdminToken(tokenInput.trim());
-    void loadData();
+    setAuthenticated(true);
+    void handleDiscoverNow();
   }
 
   function handleLogout() {
@@ -375,7 +380,7 @@ export default function AdminMidiaPage() {
             <ul className="mt-6 space-y-4">
             {pending.length === 0 && (
               <li className="rounded-2xl bg-white p-6 text-sm text-brand-black/70">
-                Nenhum item pendente. Clique em <strong>Buscar agora</strong> ou aguarde o cron diário.
+                Nenhum item pendente. Clique em <strong>Buscar agora</strong> para buscar novas matérias.
               </li>
             )}
             {pending.map((item) => (

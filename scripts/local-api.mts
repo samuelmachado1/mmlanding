@@ -99,16 +99,11 @@ function toVercelRequest(
 
 const routes: Record<string, () => Promise<{ default: Handler }>> = {
   '/api/clippings': () => import('../api/clippings.ts'),
-  '/api/clippings/item': () => import('../api/clippings/item.ts'),
-  '/api/admin/clippings/pending': () => import('../api/admin/clippings/pending.ts'),
-  '/api/admin/clippings/approve': () => import('../api/admin/clippings/approve.ts'),
-  '/api/admin/clippings/reject': () => import('../api/admin/clippings/reject.ts'),
-  '/api/admin/clippings/manual': () => import('../api/admin/clippings/manual.ts'),
-  '/api/admin/clippings/published': () => import('../api/admin/clippings/published.ts'),
-  '/api/admin/clippings/discover': () => import('../api/admin/clippings/discover.ts'),
-  '/api/admin/clippings/highlight': () => import('../api/admin/clippings/highlight.ts'),
-  '/api/cron/refresh-clippings': () => import('../api/cron/refresh-clippings.ts'),
 };
+
+async function loadAdminHandler() {
+  return import('../api/admin/clippings/[action].ts');
+}
 
 const server = createServer(async (req, res) => {
   const url = new URL(req.url ?? '/', 'http://localhost');
@@ -124,8 +119,10 @@ const server = createServer(async (req, res) => {
     return;
   }
 
+  const adminMatch = pathname.match(/^\/api\/admin\/clippings\/([^/]+)$/);
   const routeLoader = routes[pathname];
-  if (!routeLoader) {
+
+  if (!routeLoader && !adminMatch) {
     res.statusCode = 404;
     res.end(JSON.stringify({ error: 'Not found' }));
     return;
@@ -134,8 +131,17 @@ const server = createServer(async (req, res) => {
   try {
     const body = await readBody(req);
     const vercelReq = toVercelRequest(req, body, pathname, url.searchParams);
+
+    if (adminMatch) {
+      vercelReq.query.action = adminMatch[1];
+      const vercelRes = createMockResponse(res);
+      const { default: handler } = await loadAdminHandler();
+      await handler(vercelReq, vercelRes);
+      return;
+    }
+
     const vercelRes = createMockResponse(res);
-    const { default: handler } = await routeLoader();
+    const { default: handler } = await routeLoader!();
     await handler(vercelReq, vercelRes);
   } catch (error) {
     console.error(`[local-api] ${pathname} failed:`, error);

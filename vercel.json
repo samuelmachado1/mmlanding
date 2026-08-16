@@ -4,13 +4,8 @@
   "framework": "vite",
   "rewrites": [
     { "source": "/coming-soon.html", "destination": "/coming-soon.html" },
+    { "source": "/api/clippings/item", "destination": "/api/clippings" },
     { "source": "/((?!api/|coming-soon\\.html).*)", "destination": "/index.html" }
-  ],
-  "crons": [
-    {
-      "path": "/api/cron/refresh-clippings",
-      "schedule": "0 12 * * *"
-    }
   ],
   "headers": [
     {
