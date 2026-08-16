@@ -1,15 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { classifyMedia } from '../../_lib/classify';
 import { isAdminAuthorized } from '../../_lib/auth';
-import { discoverClippings } from '../../_lib/discover-clippings';
-import {
-  approveItem,
-  addManualItem,
-  getStore,
-  rejectItem,
-  removePublishedItem,
-  setHighlightItem,
-} from '../../_lib/store';
+import { getStore } from '../../_lib/store-read';
 import {
   sortMediaCardsByRecency,
   sortPendingByRecency,
@@ -78,6 +69,7 @@ async function handleApprove(req: VercelRequest, res: VercelResponse) {
     return res.status(400).json({ error: 'Missing id' });
   }
 
+  const { approveItem } = await import('../../_lib/store');
   const ok = await approveItem(id, asHighlight);
   if (!ok) {
     return res.status(404).json({ error: 'Pending item not found' });
@@ -96,6 +88,7 @@ async function handleReject(req: VercelRequest, res: VercelResponse) {
     return res.status(400).json({ error: 'Missing id' });
   }
 
+  const { rejectItem } = await import('../../_lib/store');
   const ok = await rejectItem(id);
   if (!ok) {
     return res.status(404).json({ error: 'Pending item not found' });
@@ -114,6 +107,7 @@ async function handleHighlight(req: VercelRequest, res: VercelResponse) {
     return res.status(400).json({ error: 'Missing id' });
   }
 
+  const { setHighlightItem } = await import('../../_lib/store');
   const ok = await setHighlightItem(id);
   if (!ok) {
     return res.status(404).json({ error: 'Published item not found' });
@@ -148,6 +142,8 @@ async function handleManual(req: VercelRequest, res: VercelResponse) {
     return res.status(400).json({ error: 'Missing title, href or source' });
   }
 
+  const { classifyMedia } = await import('../../_lib/classify');
+  const { addManualItem } = await import('../../_lib/store');
   const { category } = classifyMedia(title, href);
   const item = await addManualItem(
     {
@@ -181,6 +177,7 @@ async function handlePublished(req: VercelRequest, res: VercelResponse) {
     return res.status(400).json({ error: 'Missing id' });
   }
 
+  const { removePublishedItem } = await import('../../_lib/store');
   const ok = await removePublishedItem(id);
   if (!ok) {
     return res.status(404).json({ error: 'Published item not found' });
@@ -194,6 +191,7 @@ async function handleDiscover(req: VercelRequest, res: VercelResponse) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
+  const { discoverClippings } = await import('../../_lib/discover-clippings');
   const result = await discoverClippings();
 
   if (!result.ok) {
