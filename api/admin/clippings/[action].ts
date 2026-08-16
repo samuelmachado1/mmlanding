@@ -1,5 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { isAdminAuthorized } from '../../_lib/auth.js';
+import { isBlobStorageError, isStorageWritable } from '../../_lib/blob-client.js';
 import {
   sortMediaCardsByRecency,
   sortPendingByRecency,
@@ -54,6 +55,7 @@ async function handlePending(req: VercelRequest, res: VercelResponse) {
     pending: sortPendingByRecency(store.pending),
     published: sortMediaCardsByRecency(store.published.items),
     highlightId: store.highlightId,
+    storageConfigured: isStorageWritable(),
   });
 }
 
@@ -195,7 +197,7 @@ async function handleDiscover(req: VercelRequest, res: VercelResponse) {
   const result = await discoverClippings();
 
   if (!result.ok) {
-    const status = result.error?.includes('BLOB_READ_WRITE_TOKEN') ? 503 : 502;
+    const status = result.error && isBlobStorageError(result.error) ? 503 : 502;
     return res.status(status).json(result);
   }
 

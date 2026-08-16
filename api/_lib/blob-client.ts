@@ -24,8 +24,26 @@ function parseStoreIdFromReadWriteToken(token: string): string | null {
   return storeId ? normalizeStoreId(storeId) : null;
 }
 
+export const BLOB_NOT_CONFIGURED_MESSAGE =
+  'Armazenamento não configurado: conecte um Blob store ao projeto na Vercel (Storage → Blob).';
+
 export function isBlobConfigured(): boolean {
   return getBlobAuth() !== null;
+}
+
+/** On Vercel, writes require Blob; locally `.data/` is used as fallback. */
+export function isStorageWritable(): boolean {
+  if (process.env.VERCEL !== '1') return true;
+  return isBlobConfigured();
+}
+
+export function isBlobStorageError(message: string): boolean {
+  return (
+    message.includes('Armazenamento não configurado') ||
+    message.includes('BLOB_READ_WRITE_TOKEN') ||
+    message.includes('Blob store') ||
+    message.includes('Blob API')
+  );
 }
 
 function getBlobAuth(): BlobAuth | null {
@@ -49,9 +67,7 @@ function getBlobAuth(): BlobAuth | null {
 async function blobRequest<T>(pathname: string, init: RequestInit): Promise<T> {
   const auth = getBlobAuth();
   if (!auth) {
-    throw new Error(
-      'Armazenamento não configurado: conecte um Blob store ao projeto na Vercel (Storage → Blob).',
-    );
+    throw new Error(BLOB_NOT_CONFIGURED_MESSAGE);
   }
 
   const response = await fetch(`${BLOB_API_URL}${pathname}`, {
