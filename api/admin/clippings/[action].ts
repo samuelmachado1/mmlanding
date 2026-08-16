@@ -1,6 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { isAdminAuthorized } from '../../_lib/auth';
-import { getStore } from '../../_lib/store-read';
 import {
   sortMediaCardsByRecency,
   sortPendingByRecency,
@@ -49,6 +48,7 @@ async function handlePending(req: VercelRequest, res: VercelResponse) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
+  const { getStore } = await import('../../_lib/store-read');
   const store = await getStore();
   return res.status(200).json({
     pending: sortPendingByRecency(store.pending),

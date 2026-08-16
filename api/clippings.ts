@@ -1,5 +1,4 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { getClippings, getPublishedItemById } from './_lib/store-read';
 
 export default async function handler(
   req: VercelRequest,
@@ -12,6 +11,8 @@ export default async function handler(
   const id = typeof req.query.id === 'string' ? req.query.id : null;
 
   try {
+    const { getClippings, getPublishedItemById } = await import('./_lib/store-read');
+
     if (id) {
       const item = await getPublishedItemById(id);
       if (!item) {
@@ -32,6 +33,7 @@ export default async function handler(
     return res.status(404).json({ error: 'No clippings cached yet' });
   } catch (error) {
     console.error('GET /api/clippings failed:', error);
-    return res.status(500).json({ error: 'Failed to load clippings' });
+    const message = error instanceof Error ? error.message : 'Failed to load clippings';
+    return res.status(500).json({ error: message });
   }
 }

@@ -1,6 +1,4 @@
 import type {
-  ClippingInterview,
-  ClippingReport,
   ClippingsPayload,
   MediaCard,
   PendingMediaItem,
@@ -8,7 +6,9 @@ import type {
 import { classifyMedia } from './classify';
 import type { GoogleCseItem } from './google-cse';
 import type { NewsSearchItem } from './google-news';
-import { normalizeUrl } from './normalize-url';
+import { buildPublishedPayload } from './map-published';
+
+export { buildPublishedPayload } from './map-published';
 
 function extractImageUrl(item: GoogleCseItem): string | undefined {
   const cseImage = item.pagemap?.cse_image?.[0]?.src;
@@ -106,60 +106,6 @@ export function googleItemToPending(
     discoveredAt: new Date().toISOString(),
     searchQuery,
     snippet: item.snippet,
-  };
-}
-
-function toHighlight(item: MediaCard): ClippingInterview {
-  const badge =
-    item.tab === 'entrevistas'
-      ? 'Entrevista completa'
-      : item.tab === 'podcasts'
-        ? 'Podcast'
-        : item.tab === 'redes-sociais'
-          ? 'Redes sociais'
-          : 'Destaque';
-
-  return {
-    id: item.id,
-    badge,
-    title: item.title,
-    href: item.href,
-    imageUrl: item.imageUrl,
-  };
-}
-
-function toReport(item: MediaCard): ClippingReport {
-  return {
-    id: item.id,
-    title: item.title,
-    source: item.source,
-    href: item.href,
-    imageUrl: item.imageUrl,
-  };
-}
-
-export function buildPublishedPayload(
-  items: MediaCard[],
-  highlightId: string | null = null,
-): ClippingsPayload {
-  const highlightItem = highlightId
-    ? items.find((card) => card.id === highlightId)
-    : null;
-  const interview = highlightItem ? toHighlight(highlightItem) : null;
-
-  const highlightUrl = highlightItem ? normalizeUrl(highlightItem.href) : null;
-
-  const reports = items
-    .filter((card) => normalizeUrl(card.href) !== highlightUrl)
-    .filter((card) => card.tab === 'reportagens')
-    .slice(0, 3)
-    .map(toReport);
-
-  return {
-    fetchedAt: new Date().toISOString(),
-    items,
-    interview,
-    reports,
   };
 }
 
