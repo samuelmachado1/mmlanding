@@ -4,7 +4,7 @@ import type {
   ClippingsPayload,
   MediaCard,
   PendingMediaItem,
-} from '../../src/types/index';
+} from './types';
 import { classifyMedia } from './classify';
 import type { GoogleCseItem } from './google-cse';
 import type { NewsSearchItem } from './google-news';

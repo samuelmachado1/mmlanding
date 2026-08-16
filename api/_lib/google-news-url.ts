@@ -1,25 +1,25 @@
-import { createRequire } from 'node:module';
-
 type GoogleDecoderInstance = {
   decode: (url: string) => Promise<{ status: boolean; decoded_url?: string }>;
 };
 
-let decoder: GoogleDecoderInstance | null = null;
+let decoderPromise: Promise<GoogleDecoderInstance | null> | null = null;
 
-function getDecoder(): GoogleDecoderInstance | null {
-  if (decoder) return decoder;
-
-  try {
-    const require = createRequire(import.meta.url);
-    const { GoogleDecoder } = require('google-news-url-decoder') as {
-      GoogleDecoder: new () => GoogleDecoderInstance;
-    };
-    decoder = new GoogleDecoder();
-    return decoder;
-  } catch (error) {
-    console.error('google-news-url-decoder unavailable:', error);
-    return null;
+async function getDecoder(): Promise<GoogleDecoderInstance | null> {
+  if (!decoderPromise) {
+    decoderPromise = import('google-news-url-decoder')
+      .then((module) => {
+        const { GoogleDecoder } = module as {
+          GoogleDecoder: new () => GoogleDecoderInstance;
+        };
+        return new GoogleDecoder();
+      })
+      .catch((error) => {
+        console.error('google-news-url-decoder unavailable:', error);
+        return null;
+      });
   }
+
+  return decoderPromise;
 }
 
 export function isGoogleNewsUrl(url: string): boolean {
@@ -30,7 +30,7 @@ export async function decodeGoogleNewsUrl(url: string): Promise<string | null> {
   if (!isGoogleNewsUrl(url)) return null;
 
   try {
-    const instance = getDecoder();
+    const instance = await getDecoder();
     if (!instance) return null;
 
     const result = await instance.decode(url);

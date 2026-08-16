@@ -76,21 +76,16 @@ function hasAdminAccess(
   );
 }
 
-/** Edge middleware — protects `/api/admin/*`; `/max-admin` loads SPA for login. */
+/** Edge middleware — only admin routes; public `/api/*` bypasses middleware entirely. */
 export default async function middleware(request: Request): Promise<Response> {
   const url = new URL(request.url);
   const pathname = url.pathname;
 
   const isAdminApi = pathname.startsWith('/api/admin');
-  const isAdminPage = pathname.startsWith('/max-admin');
   const isLegacyAdminPage = pathname.startsWith('/admin');
 
   if (isLegacyAdminPage) {
     return new Response('Not Found', { status: 404 });
-  }
-
-  if (!isAdminApi && !isAdminPage) {
-    return fetch(request);
   }
 
   const adminSecret = getAdminSecret();
@@ -125,5 +120,5 @@ export default async function middleware(request: Request): Promise<Response> {
 }
 
 export const config = {
-  matcher: ['/((?!_next/static|_next/image).*)'],
+  matcher: ['/api/admin/:path*', '/max-admin/:path*', '/admin/:path*'],
 };
