@@ -76,7 +76,7 @@ function hasAdminAccess(
   );
 }
 
-/** Edge middleware — gates `/max-admin/*` SPA routes and `/api/admin/*` with ADMIN_SECRET. */
+/** Edge middleware — protects `/api/admin/*`; `/max-admin` loads SPA for login. */
 export default async function middleware(request: Request): Promise<Response> {
   const url = new URL(request.url);
   const pathname = url.pathname;
@@ -94,29 +94,29 @@ export default async function middleware(request: Request): Promise<Response> {
   }
 
   const adminSecret = getAdminSecret();
-  if (!adminSecret) {
-    if (isAdminApi) {
+
+  if (isAdminApi) {
+    if (!adminSecret) {
       return jsonResponse(503, { error: 'Admin access is not configured' });
     }
-    return new Response('Not Found', { status: 404 });
+
+    const expectedHash = await hashAdminSecret(adminSecret);
+    if (!hasAdminAccess(request, adminSecret, expectedHash)) {
+      return jsonResponse(401, { error: 'Unauthorized' });
+    }
+
+    return fetch(request);
+  }
+
+  // SPA login — always serve /max-admin; API calls still require Bearer token.
+  if (!adminSecret) {
+    return passThrough(request);
   }
 
   const expectedHash = await hashAdminSecret(adminSecret);
-
-  if (!hasAdminAccess(request, adminSecret, expectedHash)) {
-    if (isAdminApi) {
-      return jsonResponse(401, { error: 'Unauthorized' });
-    }
-    return new Response('Not Found', { status: 404 });
-  }
-
   const adminParam = url.searchParams.get('admin');
   const cookie = getCookieFromHeader(request.headers.get('cookie'), ADMIN_COOKIE);
   const shouldSetCookie = adminParam === adminSecret && cookie !== expectedHash;
-
-  if (isAdminApi) {
-    return fetch(request);
-  }
 
   return passThrough(
     request,
