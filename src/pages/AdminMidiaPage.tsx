@@ -50,14 +50,27 @@ export default function AdminMidiaPage() {
         if (response.status === 401) {
           clearAdminToken();
           setAuthenticated(false);
-          throw new Error('Segredo de admin inválido');
+          throw new Error(
+            'Segredo inválido. O token deve ser idêntico ao ADMIN_SECRET configurado na Vercel.',
+          );
+        }
+        if (response.status === 503) {
+          clearAdminToken();
+          setAuthenticated(false);
+          throw new Error('Admin não configurado no servidor (ADMIN_SECRET ausente na Vercel).');
+        }
+        if (response.status === 500 && body.includes('FUNCTION_INVOCATION_FAILED')) {
+          setAuthenticated(false);
+          throw new Error(
+            'A API do admin falhou no servidor. Confirme o Blob store conectado e faça redeploy com o fix mais recente.',
+          );
         }
         if (response.status === 502 || response.status === 503) {
           throw new Error(
             'API indisponível. Inicie a API com npm run dev:full (ou npm run dev:api na porta 3000).',
           );
         }
-        throw new Error(body.slice(0, 120) || `HTTP ${response.status}`);
+        throw new Error(body.slice(0, 200) || `HTTP ${response.status}`);
       }
 
       const data = JSON.parse(body) as {
@@ -72,8 +85,9 @@ export default function AdminMidiaPage() {
       setAuthenticated(true);
     } catch (err) {
       if (err instanceof TypeError && err.message === 'Failed to fetch') {
+        setAuthenticated(false);
         setError(
-          'API indisponível. Inicie a API com npm run dev:full (ou npm run dev:api na porta 3000).',
+          'Não foi possível conectar à API. Em produção, verifique deploy e variáveis na Vercel.',
         );
       } else {
         setError(err instanceof Error ? err.message : 'Falha ao carregar dados');
@@ -99,7 +113,6 @@ export default function AdminMidiaPage() {
     const token = getAdminToken();
     if (!token) return;
 
-    setAuthenticated(true);
     void loadData();
   }, [loadData]);
 
@@ -107,7 +120,6 @@ export default function AdminMidiaPage() {
     event.preventDefault();
     if (!tokenInput.trim()) return;
     setAdminToken(tokenInput.trim());
-    setAuthenticated(true);
     void loadData();
   }
 
@@ -280,9 +292,10 @@ export default function AdminMidiaPage() {
             />
             <button
               type="submit"
-              className="w-full rounded-xl bg-navy-500 px-4 py-3 font-nav text-sm font-bold text-white"
+              disabled={loading}
+              className="w-full rounded-xl bg-navy-500 px-4 py-3 font-nav text-sm font-bold text-white disabled:opacity-50"
             >
-              Entrar
+              {loading ? 'Verificando…' : 'Entrar'}
             </button>
           </form>
           {error && <p className="mt-4 text-sm text-brand-red">{error}</p>}
