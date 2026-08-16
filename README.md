@@ -50,7 +50,7 @@ Copie `.env.example` para `.env.local` e preencha:
 | `GOOGLE_CSE_ID` | (Opcional) Search Engine ID (`cx`) |
 | `CRON_SECRET` | Segredo para proteger o endpoint de cron |
 | `BLOB_READ_WRITE_TOKEN` | Token do Vercel Blob (produção) |
-| `PREVIEW_SECRET` | (Temporário) Segredo do admin — será substituído por `ADMIN_SECRET` |
+| `ADMIN_SECRET` | Segredo para `/admin/midia` e rotas `/api/admin/*` |
 
 ### 3. Deploy na Vercel
 
@@ -63,13 +63,13 @@ Configure o header `Authorization: Bearer <CRON_SECRET>` para o cron na Vercel (
 
 ### Painel admin
 
-Acesse `/admin/midia` e insira o `PREVIEW_SECRET` (temporário — na próxima etapa migramos para `ADMIN_SECRET` dedicado):
+Configure `ADMIN_SECRET` na Vercel (Production). Primeiro acesso com link secreto (cookie de 7 dias):
 
 ```
-https://seu-dominio.com/admin/midia?admin=SEU_SEGREDO
+https://seu-dominio.com/admin/midia?admin=SEU_ADMIN_SECRET
 ```
 
-O token é salvo no navegador para as chamadas da API admin.
+Depois, use o mesmo segredo no formulário de login se o navegador limpar a sessão. A API exige `Authorization: Bearer <ADMIN_SECRET>`.
 
 Funcionalidades: revisar pendentes, aprovar/rejeitar, definir destaque, remover publicados, adicionar matéria manual.
 

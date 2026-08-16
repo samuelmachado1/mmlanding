@@ -249,7 +249,7 @@ export default function AdminMidiaPage() {
         <div className="mx-auto max-w-md rounded-2xl border border-brand-black/10 bg-white p-8">
           <h1 className="font-nav text-2xl font-bold text-brand-black">Admin — Max na Mídia</h1>
           <p className="mt-2 text-sm text-brand-black/70">
-            Insira o segredo de admin (temporário: <code className="text-xs">PREVIEW_SECRET</code> no servidor).
+            Insira o <code className="text-xs">ADMIN_SECRET</code> configurado no servidor.
           </p>
           <form onSubmit={handleLogin} className="mt-6 space-y-4">
             <input

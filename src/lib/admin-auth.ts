@@ -14,7 +14,7 @@ export function clearAdminToken(): void {
 
 export function captureAdminTokenFromUrl(): boolean {
   const params = new URLSearchParams(window.location.search);
-  const token = params.get('admin') ?? params.get('preview');
+  const token = params.get('admin');
   if (!token) return false;
 
   setAdminToken(token);
