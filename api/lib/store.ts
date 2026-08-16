@@ -6,12 +6,12 @@ import type {
   ClippingsStore,
   MediaCard,
   PendingMediaItem,
-} from '../../src/types/index.ts';
-import { buildPublishedPayload } from './map-clippings.ts';
-import { normalizeUrl } from './normalize-url.ts';
-import { hydrateMediaCard, isBadImageUrl, fetchArticleContent, resolveArticleImage, resolveArticleUrl } from './article-meta.ts';
-import { isGoogleNewsUrl } from './google-news-url.ts';
-import { sortMediaCardsByRecency, sortPendingByRecency } from './sort-clippings.ts';
+} from '../../src/types/index';
+import { buildPublishedPayload } from './map-clippings';
+import { normalizeUrl } from './normalize-url';
+import { hydrateMediaCard, isBadImageUrl, fetchArticleContent, resolveArticleImage, resolveArticleUrl } from './article-meta';
+import { isGoogleNewsUrl } from './google-news-url';
+import { sortMediaCardsByRecency, sortPendingByRecency } from './sort-clippings';
 
 const STORE_BLOB_PATHNAME = 'clippings-store.json';
 const LEGACY_BLOB_PATHNAME = 'clippings.json';
@@ -139,9 +139,9 @@ async function writeBlobStore(store: ClippingsStore): Promise<void> {
   await put(STORE_BLOB_PATHNAME, body, {
     access: 'public',
     addRandomSuffix: false,
-    allowOverwrite: true,
     contentType: 'application/json',
-  });
+    allowOverwrite: true,
+  } as Parameters<typeof put>[2]);
 }
 
 export async function getStore(): Promise<ClippingsStore> {

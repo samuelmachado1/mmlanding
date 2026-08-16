@@ -4,11 +4,11 @@ import type {
   ClippingsPayload,
   MediaCard,
   PendingMediaItem,
-} from '../../src/types/index.ts';
-import { classifyMedia } from './classify.ts';
-import type { GoogleCseItem } from './google-cse.ts';
-import type { NewsSearchItem } from './google-news.ts';
-import { normalizeUrl } from './normalize-url.ts';
+} from '../../src/types/index';
+import { classifyMedia } from './classify';
+import type { GoogleCseItem } from './google-cse';
+import type { NewsSearchItem } from './google-news';
+import { normalizeUrl } from './normalize-url';
 
 function extractImageUrl(item: GoogleCseItem): string | undefined {
   const cseImage = item.pagemap?.cse_image?.[0]?.src;

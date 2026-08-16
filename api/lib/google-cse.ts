@@ -1,5 +1,5 @@
-import { getSearchQueries } from './search-queries.ts';
-import { normalizeUrl } from './normalize-url.ts';
+import { getSearchQueries } from './search-queries';
+import { normalizeUrl } from './normalize-url';
 
 export interface GoogleCseItem {
   title: string;

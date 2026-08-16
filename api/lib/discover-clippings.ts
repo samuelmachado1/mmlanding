@@ -1,8 +1,8 @@
-import { searchGoogleNews, type NewsSearchItem } from './google-news.ts';
-import { searchClippings as searchGoogleCse } from './google-cse.ts';
-import { enrichNewsSearchItems } from './article-meta.ts';
-import { searchItemToPending } from './map-clippings.ts';
-import { addPendingItems, getStore } from './store.ts';
+import { searchGoogleNews, type NewsSearchItem } from './google-news';
+import { searchClippings as searchGoogleCse } from './google-cse';
+import { enrichNewsSearchItems } from './article-meta';
+import { searchItemToPending } from './map-clippings';
+import { addPendingItems, getStore } from './store';
 
 export interface DiscoverResult {
   ok: boolean;

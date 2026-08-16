@@ -1,6 +1,6 @@
 import Parser from 'rss-parser';
-import { getSearchQueries } from './search-queries.ts';
-import { normalizeUrl } from './normalize-url.ts';
+import { getSearchQueries } from './search-queries';
+import { normalizeUrl } from './normalize-url';
 
 const parser = new Parser({
   headers: {

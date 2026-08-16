@@ -1,7 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { classifyMedia } from '../../lib/classify.ts';
-import { isAdminAuthorized } from '../../lib/auth.ts';
-import { discoverClippings } from '../../lib/discover-clippings.ts';
+import { classifyMedia } from '../../lib/classify';
+import { isAdminAuthorized } from '../../lib/auth';
+import { discoverClippings } from '../../lib/discover-clippings';
 import {
   approveItem,
   addManualItem,
@@ -9,11 +9,11 @@ import {
   rejectItem,
   removePublishedItem,
   setHighlightItem,
-} from '../../lib/store.ts';
+} from '../../lib/store';
 import {
   sortMediaCardsByRecency,
   sortPendingByRecency,
-} from '../../lib/sort-clippings.ts';
+} from '../../lib/sort-clippings';
 
 export default async function handler(
   req: VercelRequest,
