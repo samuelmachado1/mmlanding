@@ -17,6 +17,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@vercel/oidc": "^3.8.4",
     "framer-motion": "^12.42.2",
     "google-news-url-decoder": "^1.2.2",
     "lucide-react": "^1.25.0",

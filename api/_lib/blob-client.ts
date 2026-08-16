@@ -27,8 +27,17 @@ function parseStoreIdFromReadWriteToken(token: string): string | null {
 export const BLOB_NOT_CONFIGURED_MESSAGE =
   'Armazenamento não configurado: conecte um Blob store ao projeto na Vercel (Storage → Blob).';
 
+function hasReadWriteToken(): boolean {
+  const token = process.env.BLOB_READ_WRITE_TOKEN?.trim();
+  if (!token) return false;
+  return parseStoreIdFromReadWriteToken(token) !== null;
+}
+
+/** Detects linked Blob store — BLOB_STORE_ID is set when store is connected to the project. */
 export function isBlobConfigured(): boolean {
-  return getBlobAuth() !== null;
+  if (hasReadWriteToken()) return true;
+  if (process.env.BLOB_STORE_ID?.trim()) return true;
+  return Boolean(process.env.VERCEL_OIDC_TOKEN?.trim());
 }
 
 /** On Vercel, writes require Blob; locally `.data/` is used as fallback. */
@@ -46,7 +55,19 @@ export function isBlobStorageError(message: string): boolean {
   );
 }
 
-function getBlobAuth(): BlobAuth | null {
+async function resolveOidcToken(): Promise<string | null> {
+  const fromEnv = process.env.VERCEL_OIDC_TOKEN?.trim();
+  if (fromEnv) return fromEnv;
+
+  try {
+    const { getVercelOidcToken } = await import('@vercel/oidc');
+    return await getVercelOidcToken();
+  } catch {
+    return null;
+  }
+}
+
+async function resolveBlobAuth(): Promise<BlobAuth | null> {
   const readWriteToken = process.env.BLOB_READ_WRITE_TOKEN?.trim();
   if (readWriteToken) {
     const storeId = parseStoreIdFromReadWriteToken(readWriteToken);
@@ -55,17 +76,17 @@ function getBlobAuth(): BlobAuth | null {
     }
   }
 
-  const oidcToken = process.env.VERCEL_OIDC_TOKEN?.trim();
   const storeId = process.env.BLOB_STORE_ID?.trim();
-  if (oidcToken && storeId) {
-    return { token: oidcToken, storeId: normalizeStoreId(storeId) };
-  }
+  if (!storeId) return null;
 
-  return null;
+  const oidcToken = await resolveOidcToken();
+  if (!oidcToken) return null;
+
+  return { token: oidcToken, storeId: normalizeStoreId(storeId) };
 }
 
 async function blobRequest<T>(pathname: string, init: RequestInit): Promise<T> {
-  const auth = getBlobAuth();
+  const auth = await resolveBlobAuth();
   if (!auth) {
     throw new Error(BLOB_NOT_CONFIGURED_MESSAGE);
   }
