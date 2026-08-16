@@ -3,10 +3,12 @@ import type {
   ClippingReport,
   ClippingsPayload,
   MediaCard,
+  PendingMediaItem,
 } from '../../src/types/index.ts';
 import { classifyMedia } from './classify.ts';
 import type { GoogleCseItem } from './google-cse.ts';
-import { normalizeUrl } from './google-cse.ts';
+import type { NewsSearchItem } from './google-news.ts';
+import { normalizeUrl } from './normalize-url.ts';
 
 function extractImageUrl(item: GoogleCseItem): string | undefined {
   const cseImage = item.pagemap?.cse_image?.[0]?.src;
@@ -22,7 +24,7 @@ function extractImageUrl(item: GoogleCseItem): string | undefined {
   );
 }
 
-function extractDate(item: GoogleCseItem): string {
+function extractDateFromCse(item: GoogleCseItem): string {
   const metatags = item.pagemap?.metatags?.[0];
   const raw =
     metatags?.['article:published_time'] ??
@@ -41,29 +43,85 @@ function extractDate(item: GoogleCseItem): string {
   });
 }
 
-function formatSource(displayLink: string): string {
-  return displayLink.replace(/^www\./, '');
-}
-
-function toMediaCard(item: GoogleCseItem, index: number): MediaCard {
+export function searchItemToMediaCard(
+  item: NewsSearchItem,
+  id: string,
+): MediaCard {
   const { tab, category } = classifyMedia(item.title, item.link);
 
   return {
-    id: `clipping-${index + 1}`,
+    id,
     category,
     title: item.title,
-    source: formatSource(item.displayLink),
-    date: extractDate(item),
+    source: item.source,
+    date: item.date,
+    href: item.link,
+    imageUrl: item.imageUrl,
+    tab,
+  };
+}
+
+export function searchItemToPending(
+  item: NewsSearchItem,
+  id: string,
+  searchQuery: string,
+): PendingMediaItem {
+  const card = searchItemToMediaCard(item, id);
+
+  return {
+    ...card,
+    discoveredAt: new Date().toISOString(),
+    searchQuery,
+    snippet: item.snippet,
+  };
+}
+
+export function googleItemToMediaCard(
+  item: GoogleCseItem,
+  id: string,
+): MediaCard {
+  const { tab, category } = classifyMedia(item.title, item.link);
+
+  return {
+    id,
+    category,
+    title: item.title,
+    source: item.displayLink.replace(/^www\./, ''),
+    date: extractDateFromCse(item),
     href: item.link,
     imageUrl: extractImageUrl(item),
     tab,
   };
 }
 
-function toInterview(item: MediaCard): ClippingInterview {
+export function googleItemToPending(
+  item: GoogleCseItem,
+  id: string,
+  searchQuery: string,
+): PendingMediaItem {
+  const card = googleItemToMediaCard(item, id);
+
+  return {
+    ...card,
+    discoveredAt: new Date().toISOString(),
+    searchQuery,
+    snippet: item.snippet,
+  };
+}
+
+function toHighlight(item: MediaCard): ClippingInterview {
+  const badge =
+    item.tab === 'entrevistas'
+      ? 'Entrevista completa'
+      : item.tab === 'podcasts'
+        ? 'Podcast'
+        : item.tab === 'redes-sociais'
+          ? 'Redes sociais'
+          : 'Destaque';
+
   return {
     id: item.id,
-    badge: 'Entrevista completa',
+    badge,
     title: item.title,
     href: item.href,
     imageUrl: item.imageUrl,
@@ -80,29 +138,35 @@ function toReport(item: MediaCard): ClippingReport {
   };
 }
 
-export function mapClippings(items: GoogleCseItem[]): ClippingsPayload {
-  const mediaCards = items.map(toMediaCard);
+export function buildPublishedPayload(
+  items: MediaCard[],
+  highlightId: string | null = null,
+): ClippingsPayload {
+  const highlightItem = highlightId
+    ? items.find((card) => card.id === highlightId)
+    : null;
+  const interview = highlightItem ? toHighlight(highlightItem) : null;
 
-  const interviewItem =
-    mediaCards.find((card) => card.tab === 'entrevistas') ?? mediaCards[0];
+  const highlightUrl = highlightItem ? normalizeUrl(highlightItem.href) : null;
 
-  const interview = interviewItem ? toInterview(interviewItem) : null;
-
-  const interviewUrl = interview ? normalizeUrl(interview.href) : null;
-
-  const reports = mediaCards
-    .filter(
-      (card) =>
-        card.tab === 'reportagens' &&
-        normalizeUrl(card.href) !== interviewUrl,
-    )
+  const reports = items
+    .filter((card) => normalizeUrl(card.href) !== highlightUrl)
+    .filter((card) => card.tab === 'reportagens')
     .slice(0, 3)
     .map(toReport);
 
   return {
     fetchedAt: new Date().toISOString(),
-    items: mediaCards,
+    items,
     interview,
     reports,
   };
+}
+
+export function mapClippings(items: GoogleCseItem[]): ClippingsPayload {
+  const mediaCards = items.map((item, index) =>
+    googleItemToMediaCard(item, `clipping-${index + 1}`),
+  );
+
+  return buildPublishedPayload(mediaCards);
 }

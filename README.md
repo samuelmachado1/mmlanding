@@ -4,11 +4,12 @@
 
 ```bash
 npm install
-npm run dev          # frontend (usa fallback estático se /api não estiver disponível)
-npm run dev:api      # frontend + API serverless local (requer Vercel CLI)
+npm run dev          # só frontend (API indisponível → fallback estático)
+npm run dev:full     # frontend + API serverless (recomendado para admin/mídia)
+npm run dev:api      # só API na porta 3000 (use com npm run dev em outro terminal)
 ```
 
-Com `npm run dev:api`, o Vercel CLI sobe as rotas em `/api` na porta 3000 e o Vite faz proxy automaticamente.
+Com `npm run dev:full`, a API local sobe na porta 3000 e o Vite faz proxy automaticamente. Não exige `vercel login`. Use `npm run dev:api:vercel` se preferir o Vercel CLI.
 
 ## Build
 
@@ -17,24 +18,36 @@ npm run build
 npm run preview
 ```
 
-## Clipping automático (Google Custom Search)
+## Clipping automático (Google News RSS) + aprovação humana
 
-A seção **Max na Mídia** (landing + `/midia`) busca notícias via Google Custom Search JSON API e atualiza o cache a cada 2 horas.
+A seção **Max na Mídia** (landing + `/midia`) descobre matérias via **Google News RSS** — o mesmo método do projeto **get-news**: sem API key, sem billing. Novas descobertas entram em uma **fila de aprovação** — nada é publicado automaticamente no site.
 
-### 1. Configurar Google
+### Fluxo
 
-1. Crie um projeto no [Google Cloud Console](https://console.cloud.google.com/)
-2. Habilite a **Custom Search API** e gere uma **API Key**
-3. Crie um motor no [Programmable Search Engine](https://programmablesearchengine.google.com/) e copie o **Search Engine ID** (`cx`)
+1. Cron diário (`/api/cron/refresh-clippings`) ou **Buscar agora** no admin
+2. Busca no Google News RSS (`news.google.com/rss/search`)
+3. URLs novas vão para `pending` no Vercel Blob
+4. Equipe revisa em `/admin/midia` e aprova ou rejeita
+5. Só itens aprovados aparecem em `GET /api/clippings` (site público)
 
-### 2. Variáveis de ambiente
+### Busca (padrão: Google News RSS)
+
+Igual ao **get-news**: não precisa de `GOOGLE_CSE_API_KEY` nem envs do Google Cloud.
+
+Opcional: personalize termos via `GOOGLE_NEWS_QUERIES` (JSON array) no `.env`.
+
+**Opcional — Custom Search API:** só se quiser usar CSE em vez do RSS, defina `GOOGLE_CSE_ENABLED=true` + `GOOGLE_CSE_API_KEY` + `GOOGLE_CSE_ID` (requer billing no Google Cloud).
+
+### Variáveis de ambiente
 
 Copie `.env.example` para `.env.local` e preencha:
 
 | Variável | Descrição |
 |---|---|
-| `GOOGLE_CSE_API_KEY` | API Key do Google Cloud |
-| `GOOGLE_CSE_ID` | Search Engine ID (`cx`) |
+| `GOOGLE_NEWS_QUERIES` | (Opcional) JSON array de termos de busca |
+| `GOOGLE_CSE_ENABLED` | `true` para usar Custom Search em vez do RSS |
+| `GOOGLE_CSE_API_KEY` | (Opcional) API Key do Google Cloud |
+| `GOOGLE_CSE_ID` | (Opcional) Search Engine ID (`cx`) |
 | `CRON_SECRET` | Segredo para proteger o endpoint de cron |
 | `BLOB_READ_WRITE_TOKEN` | Token do Vercel Blob (produção) |
 | `LAUNCH_DATE` | Data de abertura pública (`YYYY-MM-DD`, fuso `America/Sao_Paulo`) |
@@ -46,8 +59,21 @@ Copie `.env.example` para `.env.local` e preencha:
 1. Conecte o repositório na [Vercel](https://vercel.com/)
 2. Crie um **Blob store** no projeto e vincule `BLOB_READ_WRITE_TOKEN`
 3. Configure as demais variáveis de ambiente
+4. O cron diário está em `vercel.json` (`0 12 * * *`, compatível com Hobby)
 
-> **Cron automático desativado** no plano Hobby (máx. 1 execução/dia). O endpoint `/api/cron/refresh-clippings` permanece disponível para refresh manual. Para agendar depois, adicione `crons` em `vercel.json` com schedule diário (`0 12 * * *`) ou migre para Pro.
+Configure o header `Authorization: Bearer <CRON_SECRET>` para o cron na Vercel (Settings → Cron Jobs).
+
+### Painel admin
+
+Acesse `/admin/midia` com o mesmo `PREVIEW_SECRET`:
+
+```
+https://seu-dominio.com/admin/midia?preview=SEU_PREVIEW_SECRET
+```
+
+O token é salvo automaticamente para as chamadas da API admin. Se o site ainda não foi lançado, use o mesmo segredo de preview.
+
+Funcionalidades: revisar pendentes, aprovar/rejeitar, remover publicados, adicionar matéria manual.
 
 ### Lançamento faseado (prévia em produção)
 
@@ -89,8 +115,14 @@ curl -X POST "http://localhost:3000/api/cron/refresh-clippings" \
 
 | Rota | Descrição |
 |---|---|
-| `GET /api/clippings` | Retorna o cache de notícias (público) |
-| `GET/POST /api/cron/refresh-clippings` | Atualiza o cache (requer `Authorization: Bearer <CRON_SECRET>`) |
+| `GET /api/clippings` | Retorna matérias **aprovadas** (público) |
+| `GET/POST /api/cron/refresh-clippings` | Descobre novas matérias → fila pending (requer `Authorization: Bearer <CRON_SECRET>`) |
+| `GET /api/admin/clippings/pending` | Lista pendentes + publicados (admin) |
+| `POST /api/admin/clippings/discover` | Busca no Google e adiciona à fila pending |
+| `POST /api/admin/clippings/approve` | Aprova item `{ id }` |
+| `POST /api/admin/clippings/reject` | Rejeita item `{ id }` |
+| `POST /api/admin/clippings/manual` | Adiciona matéria manual em published |
+| `DELETE /api/admin/clippings/published?id=` | Remove item publicado |
 
 ## Stack
 

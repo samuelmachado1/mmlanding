@@ -1,29 +1,116 @@
 import { list, put } from '@vercel/blob';
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { join } from 'node:path';
-import type { ClippingsPayload } from '../../src/types/index.ts';
+import type {
+  ClippingsPayload,
+  ClippingsStore,
+  MediaCard,
+  PendingMediaItem,
+} from '../../src/types/index.ts';
+import { buildPublishedPayload } from './map-clippings.ts';
+import { normalizeUrl } from './normalize-url.ts';
+import { hydrateMediaCard, isBadImageUrl, resolveArticleImage, resolveArticleUrl } from './article-meta.ts';
+import { sortMediaCardsByRecency, sortPendingByRecency } from './sort-clippings.ts';
 
-const BLOB_PATHNAME = 'clippings.json';
+const STORE_BLOB_PATHNAME = 'clippings-store.json';
+const LEGACY_BLOB_PATHNAME = 'clippings.json';
 const LOCAL_CACHE_DIR = join(process.cwd(), '.data');
-const LOCAL_CACHE_FILE = join(LOCAL_CACHE_DIR, 'clippings.json');
+const LOCAL_STORE_FILE = join(LOCAL_CACHE_DIR, 'clippings-store.json');
+const LEGACY_LOCAL_FILE = join(LOCAL_CACHE_DIR, 'clippings.json');
 
-async function readLocalCache(): Promise<ClippingsPayload | null> {
+function emptyPublished(): ClippingsPayload {
+  return {
+    fetchedAt: new Date(0).toISOString(),
+    items: [],
+    interview: null,
+    reports: [],
+  };
+}
+
+export function emptyStore(): ClippingsStore {
+  return {
+    published: emptyPublished(),
+    pending: [],
+    rejectedUrls: [],
+    highlightId: null,
+  };
+}
+
+function normalizeStore(store: ClippingsStore): ClippingsStore {
+  if (store.highlightId === undefined) {
+    store.highlightId = null;
+  }
+
+  if (
+    store.highlightId &&
+    !store.published.items.some((item) => item.id === store.highlightId)
+  ) {
+    store.highlightId = null;
+  }
+
+  return store;
+}
+
+function isLegacyPayload(data: unknown): data is ClippingsPayload {
+  return (
+    typeof data === 'object' &&
+    data !== null &&
+    'items' in data &&
+    'fetchedAt' in data &&
+    !('published' in data)
+  );
+}
+
+function migrateToStore(data: unknown): ClippingsStore {
+  if (
+    typeof data === 'object' &&
+    data !== null &&
+    'published' in data &&
+    'pending' in data &&
+    'rejectedUrls' in data
+  ) {
+    return normalizeStore(data as ClippingsStore);
+  }
+
+  if (isLegacyPayload(data)) {
+    return normalizeStore({
+      published: data,
+      pending: [],
+      rejectedUrls: [],
+      highlightId: null,
+    });
+  }
+
+  return emptyStore();
+}
+
+async function readLocalFile(path: string): Promise<unknown | null> {
   try {
-    const raw = await readFile(LOCAL_CACHE_FILE, 'utf-8');
-    return JSON.parse(raw) as ClippingsPayload;
+    const raw = await readFile(path, 'utf-8');
+    return JSON.parse(raw) as unknown;
   } catch {
     return null;
   }
 }
 
-async function writeLocalCache(payload: ClippingsPayload): Promise<void> {
-  await mkdir(LOCAL_CACHE_DIR, { recursive: true });
-  await writeFile(LOCAL_CACHE_FILE, JSON.stringify(payload, null, 2), 'utf-8');
+async function readLocalStore(): Promise<ClippingsStore | null> {
+  const storeData = await readLocalFile(LOCAL_STORE_FILE);
+  if (storeData) return migrateToStore(storeData);
+
+  const legacyData = await readLocalFile(LEGACY_LOCAL_FILE);
+  if (legacyData) return migrateToStore(legacyData);
+
+  return null;
 }
 
-async function readBlobCache(): Promise<ClippingsPayload | null> {
-  const { blobs } = await list({ prefix: BLOB_PATHNAME, limit: 1 });
-  const blob = blobs.find((entry) => entry.pathname === BLOB_PATHNAME);
+async function writeLocalStore(store: ClippingsStore): Promise<void> {
+  await mkdir(LOCAL_CACHE_DIR, { recursive: true });
+  await writeFile(LOCAL_STORE_FILE, JSON.stringify(store, null, 2), 'utf-8');
+}
+
+async function readBlobByPath(pathname: string): Promise<unknown | null> {
+  const { blobs } = await list({ prefix: pathname, limit: 1 });
+  const blob = blobs.find((entry) => entry.pathname === pathname);
 
   if (!blob) return null;
 
@@ -32,31 +119,281 @@ async function readBlobCache(): Promise<ClippingsPayload | null> {
     throw new Error(`Blob fetch failed: ${response.status}`);
   }
 
-  return (await response.json()) as ClippingsPayload;
+  return (await response.json()) as unknown;
 }
 
-export async function getClippings(): Promise<ClippingsPayload | null> {
+async function readBlobStore(): Promise<ClippingsStore | null> {
+  const storeData = await readBlobByPath(STORE_BLOB_PATHNAME);
+  if (storeData) return migrateToStore(storeData);
+
+  const legacyData = await readBlobByPath(LEGACY_BLOB_PATHNAME);
+  if (legacyData) return migrateToStore(legacyData);
+
+  return null;
+}
+
+async function writeBlobStore(store: ClippingsStore): Promise<void> {
+  const body = JSON.stringify(store);
+
+  await put(STORE_BLOB_PATHNAME, body, {
+    access: 'public',
+    addRandomSuffix: false,
+    allowOverwrite: true,
+    contentType: 'application/json',
+  });
+}
+
+export async function getStore(): Promise<ClippingsStore> {
   if (process.env.BLOB_READ_WRITE_TOKEN) {
     try {
-      return await readBlobCache();
+      const blobStore = await readBlobStore();
+      if (blobStore) return normalizeStore(blobStore);
     } catch {
-      return readLocalCache();
+      const localStore = await readLocalStore();
+      if (localStore) return normalizeStore(localStore);
     }
   }
 
-  return readLocalCache();
+  const localStore = await readLocalStore();
+  return normalizeStore(localStore ?? emptyStore());
 }
 
-export async function saveClippings(payload: ClippingsPayload): Promise<void> {
-  const body = JSON.stringify(payload);
-
+export async function saveStore(store: ClippingsStore): Promise<void> {
   if (process.env.BLOB_READ_WRITE_TOKEN) {
-    await put(BLOB_PATHNAME, body, {
-      access: 'public',
-      addRandomSuffix: false,
-      contentType: 'application/json',
-    });
+    await writeBlobStore(store);
   }
 
-  await writeLocalCache(payload);
+  await writeLocalStore(store);
+}
+
+async function hydratePublishedStore(store: ClippingsStore): Promise<ClippingsStore> {
+  if (store.published.items.length === 0) return store;
+
+  let changed = false;
+  const hydratedItems = await Promise.all(
+    store.published.items.map((item) => hydrateMediaCard(item)),
+  );
+
+  for (let index = 0; index < hydratedItems.length; index += 1) {
+    const hydrated = hydratedItems[index];
+    const current = store.published.items[index];
+    if (
+      hydrated.href !== current.href ||
+      hydrated.imageUrl !== current.imageUrl
+    ) {
+      store.published.items[index] = hydrated;
+      changed = true;
+    }
+  }
+
+  if (changed) {
+    store.published = rebuildPublishedPayload(store);
+    await saveStore(store);
+  }
+
+  return store;
+}
+
+export async function getClippings(): Promise<ClippingsPayload | null> {
+  let store = await getStore();
+  if (
+    store.published.items.length === 0 &&
+    store.published.fetchedAt === emptyPublished().fetchedAt
+  ) {
+    return null;
+  }
+
+  store = await hydratePublishedStore(store);
+
+  const payload = rebuildPublishedPayload(store);
+  return {
+    ...payload,
+    fetchedAt: store.published.fetchedAt,
+  };
+}
+
+function collectKnownUrls(store: ClippingsStore): Set<string> {
+  const urls = new Set<string>();
+
+  for (const item of store.published.items) {
+    urls.add(normalizeUrl(item.href));
+  }
+
+  for (const item of store.pending) {
+    urls.add(normalizeUrl(item.href));
+  }
+
+  for (const url of store.rejectedUrls) {
+    urls.add(url);
+  }
+
+  return urls;
+}
+
+export async function addPendingItems(items: PendingMediaItem[]): Promise<number> {
+  const store = await getStore();
+  const knownUrls = collectKnownUrls(store);
+  let added = 0;
+
+  for (const item of items) {
+    const url = normalizeUrl(item.href);
+    if (knownUrls.has(url)) continue;
+
+    knownUrls.add(url);
+    store.pending.push(item);
+    added += 1;
+  }
+
+  if (added > 0) {
+    store.pending = sortPendingByRecency(store.pending);
+    await saveStore(store);
+  }
+
+  return added;
+}
+
+function rebuildPublishedPayload(store: ClippingsStore): ClippingsPayload {
+  const sortedItems = sortMediaCardsByRecency(store.published.items);
+  if (sortedItems.length === 0) {
+    return emptyPublished();
+  }
+
+  const payload = buildPublishedPayload(sortedItems, store.highlightId);
+  store.published.items = sortedItems;
+  return payload;
+}
+
+export async function approveItem(
+  id: string,
+  asHighlight = false,
+): Promise<boolean> {
+  const store = await getStore();
+  const index = store.pending.findIndex((item) => item.id === id);
+  if (index === -1) return false;
+
+  const [pendingItem] = store.pending.splice(index, 1);
+  const { discoveredAt: _d, searchQuery: _q, snippet: _s, ...mediaCard } = pendingItem;
+
+  mediaCard.id = `clipping-${Date.now()}`;
+  mediaCard.href = await resolveArticleUrl(mediaCard.href);
+
+  if (isBadImageUrl(mediaCard.imageUrl)) {
+    mediaCard.imageUrl = undefined;
+  }
+
+  if (!mediaCard.imageUrl) {
+    const imageUrl = await resolveArticleImage(mediaCard.href);
+    if (imageUrl) mediaCard.imageUrl = imageUrl;
+  }
+
+  const url = normalizeUrl(mediaCard.href);
+  const existing = store.published.items.find(
+    (item) => normalizeUrl(item.href) === url,
+  );
+
+  if (!existing) {
+    store.published.items.unshift(mediaCard);
+  }
+
+  if (asHighlight) {
+    store.highlightId = existing?.id ?? mediaCard.id;
+  }
+
+  store.published = rebuildPublishedPayload(store);
+
+  await saveStore(store);
+  return true;
+}
+
+export async function rejectItem(id: string): Promise<boolean> {
+  const store = await getStore();
+  const index = store.pending.findIndex((item) => item.id === id);
+  if (index === -1) return false;
+
+  const [pendingItem] = store.pending.splice(index, 1);
+  const url = normalizeUrl(pendingItem.href);
+
+  if (!store.rejectedUrls.includes(url)) {
+    store.rejectedUrls.push(url);
+  }
+
+  await saveStore(store);
+  return true;
+}
+
+export async function addManualItem(
+  item: Omit<MediaCard, 'id'> & { id?: string },
+  asHighlight = false,
+): Promise<MediaCard> {
+  const store = await getStore();
+  const mediaCard: MediaCard = {
+    ...item,
+    id: item.id ?? `manual-${Date.now()}`,
+  };
+
+  const url = normalizeUrl(mediaCard.href);
+  const existing = store.published.items.find(
+    (entry) => normalizeUrl(entry.href) === url,
+  );
+
+  if (!existing) {
+    store.published.items.unshift(mediaCard);
+  }
+
+  if (asHighlight) {
+    store.highlightId = existing?.id ?? mediaCard.id;
+  }
+
+  if (!existing || asHighlight) {
+    store.published = rebuildPublishedPayload(store);
+    await saveStore(store);
+  }
+
+  return existing ?? mediaCard;
+}
+
+export async function getPublishedItemById(id: string): Promise<MediaCard | null> {
+  const store = await getStore();
+  const index = store.published.items.findIndex((item) => item.id === id);
+  if (index === -1) return null;
+
+  const hydrated = await hydrateMediaCard(store.published.items[index]);
+  const current = store.published.items[index];
+
+  if (
+    hydrated.href !== current.href ||
+    hydrated.imageUrl !== current.imageUrl
+  ) {
+    store.published.items[index] = hydrated;
+    store.published = rebuildPublishedPayload(store);
+    await saveStore(store);
+  }
+
+  return hydrated;
+}
+
+export async function setHighlightItem(id: string): Promise<boolean> {
+  const store = await getStore();
+  if (!store.published.items.some((item) => item.id === id)) return false;
+
+  store.highlightId = id;
+  store.published = rebuildPublishedPayload(store);
+  await saveStore(store);
+  return true;
+}
+
+export async function removePublishedItem(id: string): Promise<boolean> {
+  const store = await getStore();
+  const index = store.published.items.findIndex((item) => item.id === id);
+  if (index === -1) return false;
+
+  store.published.items.splice(index, 1);
+
+  if (store.highlightId === id) {
+    store.highlightId = null;
+  }
+
+  store.published = rebuildPublishedPayload(store);
+  await saveStore(store);
+  return true;
 }

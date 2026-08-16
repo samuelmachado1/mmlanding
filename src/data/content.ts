@@ -172,13 +172,6 @@ export const bondeProMaxBlocks: ContentBlock[] = [
     cta: 'Assinar manifesto',
     href: '#apoie-manifesto',
   },
-  {
-    id: 'missoes',
-    title: 'Missões',
-    description: 'Participe de ações pontuais: panfletagem, mutirões de escuta e mobilizações nas RAs.',
-    cta: 'Ver missões',
-    href: '#missoes',
-  },
 ];
 
 
@@ -187,7 +180,7 @@ export const bondeProMaxBlocks: ContentBlock[] = [
 export const clippingContent = {
   eyebrow: 'Max na mídia',
   title: 'Max na Mídia',
-  interviewsLabel: 'Entrevistas em vídeo',
+  interviewsLabel: 'Destaque',
   reportsLabel: 'Notícias',
   cta: 'Ver mais notícias',
   ctaHref: '/midia',
@@ -299,14 +292,6 @@ export const crewCards: CrewCard[] = [
       'Mostre que você também acredita em um DF no qual a periferia esteja no centro das decisões.',
     cta: 'Quero apoiar',
     href: '/apoie',
-  },
-  {
-    id: 'missoes',
-    title: 'Missões',
-    description:
-      'Participe de ações simples que fazem diferença: compartilhar uma proposta, conversar com sua comunidade ou mobilizar seu território.',
-    cta: 'Ver missões',
-    href: '/bonde-pro-max',
   },
   {
     id: 'fortalecer-o-corre',
@@ -498,7 +483,7 @@ export const mandateHighlights = [
 ] satisfies HighlightStatCard[];
 
 export const sitePageCta = {
-  title: 'Quer participar das decisões do mandato?',
+  title: 'Cola com a gente',
   primary: { label: 'Entrar no Bonde', href: '/bonde-pro-max' },
   variant: 'yellow' as const,
 };
@@ -773,14 +758,6 @@ export const bondePageContent = {
         cta: 'Criar avatar',
         href: '#criar-avatar',
       },
-      {
-        icon: '🎯',
-        title: 'Missões',
-        description:
-          'Participe de ações simples: compartilhar uma proposta, conversar com sua comunidade ou mobilizar seu território.',
-        cta: 'Ver missões',
-        href: '#missoes',
-      },
     ],
   },
   missions: {
@@ -846,7 +823,7 @@ export const canaisPage = {
 export const apoiePage = {
   title: 'Apoie nossa campanha',
   intro:
-    'Se você quer MAXzimizar as maravilhas para quem acorda cedo e faz a cidade funcionar todos os dias e bota fé na nossa caminhada, se torne um apoiador, assinando aqui:',
+    'Se você quer MAXimizar as maravilhas para quem acorda cedo e faz a cidade funcionar todos os dias e bota fé na nossa caminhada, se torne um apoiador, assinando aqui:',
 };
 
 export const apoiadorFormContent = {
@@ -870,7 +847,8 @@ export const apoiadorFormContent = {
   lgpdTermTitle: 'TERMO DE ACEITE DA LGPD:',
   lgpdTermText:
     'Ao enviar este formulário, você concorda que o Gabinete Aba Reta utilize os dados informados exclusivamente para responder ao seu contato/atender sua solicitação, em conformidade com a LGPD.',
-  lgpdCheckboxLabel: 'Li e concordo com o tratamento dos meus dados pessoais.',
+  lgpdCheckboxLabel: 'Li e concordo com o tratamento dos meus dados pessoais',
+  lgpdFormValue: 'Li e concordo com o tratamento dos meus dados pessoais',
   municipioLoading: 'Carregando municípios...',
   municipioSelectUf: 'Selecione a UF primeiro',
 };

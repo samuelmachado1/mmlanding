@@ -12,8 +12,10 @@ import BondeProMaxPage from './pages/BondeProMaxPage.tsx';
 import MateriaisPage from './pages/MateriaisPage.tsx';
 import ApoiePage from './pages/ApoiePage.tsx';
 import MidiaPage from './pages/MidiaPage.tsx';
+import MidiaArticlePage from './pages/MidiaArticlePage.tsx';
 import ArtigosPage from './pages/ArtigosPage.tsx';
 import ContatoPage from './pages/ContatoPage.tsx';
+import AdminMidiaPage from './pages/AdminMidiaPage.tsx';
 
 export default function App() {
   return (
@@ -31,8 +33,10 @@ export default function App() {
       <Route path="/materiais" element={<MateriaisPage />} />
       <Route path="/apoie" element={<ApoiePage />} />
       <Route path="/midia" element={<MidiaPage />} />
+      <Route path="/midia/a/:id" element={<MidiaArticlePage />} />
         <Route path="/artigos" element={<ArtigosPage />} />
         <Route path="/contato" element={<ContatoPage />} />
+        <Route path="/admin/midia" element={<AdminMidiaPage />} />
       </Routes>
     </PrivacyPolicyProvider>
   );

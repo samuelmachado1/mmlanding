@@ -1,4 +1,5 @@
 import { AppLink } from '../ui/AppLink.tsx';
+import { mediaArticlePath } from '../../lib/media-paths.ts';
 import type { ReactNode } from 'react';
 import type {
   ActionCard,
@@ -357,14 +358,18 @@ export function MidiaMediaGrid({ cards }: { cards: MediaCard[] }) {
     <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {cards.map((card) => (
         <li key={card.id}>
-          <a
-            href={card.href}
+          <AppLink
+            to={mediaArticlePath(card.id)}
             className="group flex h-full flex-col overflow-hidden rounded-2xl border border-brand-black/[0.06] bg-white transition hover:border-brand-red/30"
           >
             <div className="relative aspect-[396/192] overflow-hidden bg-navy-100">
               {card.imageUrl ? (
                 <img src={card.imageUrl} alt="" className="size-full object-cover" />
-              ) : null}
+              ) : (
+                <div className="flex size-full items-center justify-center bg-navy-500/10 font-nav text-xs font-semibold uppercase tracking-wide text-navy-500/50">
+                  Max na Mídia
+                </div>
+              )}
               <span className="absolute top-3 left-3 bg-yellow-500 px-2 py-0.5 font-nav text-[9px] font-bold tracking-[0.1em] text-brand-black uppercase">
                 {card.category}
               </span>
@@ -378,7 +383,7 @@ export function MidiaMediaGrid({ cards }: { cards: MediaCard[] }) {
                 <span className="font-nav text-xs text-brand-black/50">{card.date}</span>
               </div>
             </div>
-          </a>
+          </AppLink>
         </li>
       ))}
     </ul>
@@ -390,8 +395,8 @@ export function MediaGrid({ cards }: { cards: MediaCard[] }) {
     <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {cards.map((card) => (
         <li key={card.id}>
-          <a
-            href={card.href}
+          <AppLink
+            to={mediaArticlePath(card.id)}
             className="group flex h-full flex-col overflow-hidden rounded-2xl border border-brand-black/10 bg-white transition hover:border-navy-500"
           >
             <div className="aspect-video bg-navy-100">
@@ -412,7 +417,7 @@ export function MediaGrid({ cards }: { cards: MediaCard[] }) {
                 {card.source} · {card.date}
               </p>
             </div>
-          </a>
+          </AppLink>
         </li>
       ))}
     </ul>

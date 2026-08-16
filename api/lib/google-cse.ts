@@ -1,3 +1,6 @@
+import { getSearchQueries } from './search-queries.ts';
+import { normalizeUrl } from './normalize-url.ts';
+
 export interface GoogleCseItem {
   title: string;
   link: string;
@@ -14,17 +17,9 @@ interface GoogleCseResponse {
   error?: { message: string };
 }
 
-const SEARCH_QUERIES = ['"Max Maciel" deputado', '"Deputado Max Maciel"'];
-
-export function normalizeUrl(url: string): string {
-  try {
-    const parsed = new URL(url);
-    parsed.hash = '';
-    parsed.search = '';
-    return `${parsed.protocol}//${parsed.host.toLowerCase()}${parsed.pathname.replace(/\/$/, '')}`;
-  } catch {
-    return url.toLowerCase();
-  }
+export interface SearchResult {
+  query: string;
+  items: GoogleCseItem[];
 }
 
 async function fetchQuery(
@@ -56,22 +51,26 @@ async function fetchQuery(
   return data.items ?? [];
 }
 
+/** Opcional: usa Custom Search API se GOOGLE_CSE_API_KEY + GOOGLE_CSE_ID estão no .env */
 export async function searchClippings(
   apiKey: string,
   cx: string,
-): Promise<GoogleCseItem[]> {
+): Promise<SearchResult[]> {
   const seen = new Set<string>();
-  const results: GoogleCseItem[] = [];
+  const results: SearchResult[] = [];
 
-  for (const query of SEARCH_QUERIES) {
+  for (const query of getSearchQueries()) {
     const items = await fetchQuery(apiKey, cx, query);
+    const uniqueItems: GoogleCseItem[] = [];
 
     for (const item of items) {
       const key = normalizeUrl(item.link);
       if (seen.has(key)) continue;
       seen.add(key);
-      results.push(item);
+      uniqueItems.push(item);
     }
+
+    results.push({ query, items: uniqueItems });
   }
 
   return results;

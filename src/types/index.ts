@@ -286,3 +286,17 @@ export interface ClippingsPayload {
   interview: ClippingInterview | null;
   reports: ClippingReport[];
 }
+
+export interface PendingMediaItem extends MediaCard {
+  discoveredAt: string;
+  searchQuery: string;
+  snippet?: string;
+}
+
+export interface ClippingsStore {
+  published: ClippingsPayload;
+  pending: PendingMediaItem[];
+  rejectedUrls: string[];
+  /** ID da matéria em destaque na landing (apenas uma por vez). */
+  highlightId: string | null;
+}

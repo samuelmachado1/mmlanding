@@ -1,23 +1,16 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { discoverClippings } from '../lib/discover-clippings.ts';
-
-function isAuthorized(req: VercelRequest): boolean {
-  const cronSecret = process.env.CRON_SECRET;
-  if (!cronSecret) return false;
-
-  const auth = req.headers.authorization;
-  return auth === `Bearer ${cronSecret}`;
-}
+import { isAdminAuthorized } from '../../lib/auth.ts';
+import { discoverClippings } from '../../lib/discover-clippings.ts';
 
 export default async function handler(
   req: VercelRequest,
   res: VercelResponse,
 ) {
-  if (req.method !== 'GET' && req.method !== 'POST') {
+  if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  if (!isAuthorized(req)) {
+  if (!isAdminAuthorized(req)) {
     return res.status(401).json({ error: 'Unauthorized' });
   }
 

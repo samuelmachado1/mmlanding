@@ -5,12 +5,10 @@ import type { ClippingInterview, ClippingReport } from '../../types/index.ts';
 import { useClippings } from '../../hooks/useClippings.ts';
 import { AnimatedSection } from '../ui/AnimatedSection.tsx';
 import { NavLink } from '../ui/NavLink.tsx';
+import { AppLink } from '../ui/AppLink.tsx';
+import { mediaArticlePath } from '../../lib/media-paths.ts';
 import { ClippingSkeleton } from './ClippingSkeleton.tsx';
 import { PAGE_GRID_INNER, PAGE_GRID_OUTER } from '../layout/pageGrid.ts';
-
-function isExternalHref(href: string): boolean {
-  return href.startsWith('http://') || href.startsWith('https://');
-}
 
 function SectionLabel({ children }: { children: string }) {
   return (
@@ -20,15 +18,11 @@ function SectionLabel({ children }: { children: string }) {
   );
 }
 
-
 function InterviewCard({ interview }: { interview: ClippingInterview }) {
-  const external = isExternalHref(interview.href);
-
   return (
-    <a
-      href={interview.href}
+    <AppLink
+      to={mediaArticlePath(interview.id)}
       className="flex w-full max-w-full flex-col gap-2"
-      {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
     >
       <div className="relative isolate w-full">
         {interview.imageUrl ? (
@@ -45,19 +39,15 @@ function InterviewCard({ interview }: { interview: ClippingInterview }) {
         </span>
       </div>
       <p className="font-nav text-lg leading-7 text-cream">{interview.title}</p>
-    </a>
+    </AppLink>
   );
 }
 
-
 function ReportCard({ report }: { report: ClippingReport }) {
-  const external = isExternalHref(report.href);
-
   return (
-    <a
-      href={report.href}
+    <AppLink
+      to={mediaArticlePath(report.id)}
       className="flex w-full max-w-full flex-row gap-3"
-      {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
     >
       {report.imageUrl ? (
         <img
@@ -72,7 +62,7 @@ function ReportCard({ report }: { report: ClippingReport }) {
         <p className="font-nav text-lg leading-7 text-cream">{report.title}</p>
         <p className="font-nav text-[13px] leading-[15px] text-yellow-500">{report.source}</p>
       </div>
-    </a>
+    </AppLink>
   );
 }
 
@@ -95,7 +85,13 @@ export function Clipping() {
             <div className="flex flex-col gap-6 pt-8 lg:flex-row lg:gap-6">
               <div className="flex flex-1 flex-col gap-3">
                 <SectionLabel>{clippingContent.interviewsLabel}</SectionLabel>
-                <InterviewCard interview={interview} />
+                {interview ? (
+                  <InterviewCard interview={interview} />
+                ) : (
+                  <p className="font-nav text-sm leading-relaxed text-cream/70">
+                    Nenhuma matéria em destaque no momento.
+                  </p>
+                )}
               </div>
               <div className="flex flex-1 flex-col gap-3">
                 <SectionLabel>{clippingContent.reportsLabel}</SectionLabel>

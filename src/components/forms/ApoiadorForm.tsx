@@ -23,7 +23,7 @@ const emptyForm: ApoiadorFormData = {
   nome: '',
   email: '',
   whatsapp: '',
-  uf: '',
+  uf: 'DF',
   municipio: '',
   novidades: false,
   campanhaDigital: false,

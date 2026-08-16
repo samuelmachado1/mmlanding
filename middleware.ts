@@ -33,17 +33,21 @@ async function hashPreviewSecret(secret: string): Promise<string> {
     .join('');
 }
 
-function getPreviewCookieFromHeader(cookieHeader: string | null): string | null {
+function getCookieFromHeader(cookieHeader: string | null, name: string): string | null {
   if (!cookieHeader) return null;
 
   for (const part of cookieHeader.split(';')) {
-    const [name, ...valueParts] = part.trim().split('=');
-    if (name === PREVIEW_COOKIE) {
+    const [cookieName, ...valueParts] = part.trim().split('=');
+    if (cookieName === name) {
       return valueParts.join('=');
     }
   }
 
   return null;
+}
+
+function getPreviewCookieFromHeader(cookieHeader: string | null): string | null {
+  return getCookieFromHeader(cookieHeader, PREVIEW_COOKIE);
 }
 
 function hasValidPreviewAccess(
@@ -70,19 +74,23 @@ function shouldBypassMiddleware(pathname: string): boolean {
   if (pathname.startsWith('/assets/')) return true;
   if (pathname === '/api/launch-status') return true;
   if (pathname.startsWith('/api/cron/')) return true;
+  if (pathname.startsWith('/api/admin/')) return true;
   if (/\.[a-z0-9]+$/i.test(pathname)) return true;
   return false;
 }
 
-async function passThrough(request: Request, previewCookie?: string): Promise<Response> {
+async function passThrough(request: Request, setCookies?: string[]): Promise<Response> {
   const response = await fetch(request);
 
-  if (!previewCookie) {
+  if (!setCookies || setCookies.length === 0) {
     return response;
   }
 
   const headers = new Headers(response.headers);
-  headers.append('Set-Cookie', previewCookie);
+  for (const cookie of setCookies) {
+    headers.append('Set-Cookie', cookie);
+  }
+
   return new Response(response.body, {
     status: response.status,
     statusText: response.statusText,
@@ -119,7 +127,7 @@ export default async function middleware(request: Request): Promise<Response> {
 
     return passThrough(
       request,
-      shouldSetPreviewCookie ? buildPreviewCookie(previewHash) : undefined,
+      shouldSetPreviewCookie ? [buildPreviewCookie(previewHash)] : undefined,
     );
   }
 
