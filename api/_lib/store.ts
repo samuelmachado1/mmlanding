@@ -9,7 +9,7 @@ import type {
 } from '../../src/types/index';
 import { buildPublishedPayload } from './map-clippings';
 import { normalizeUrl } from './normalize-url';
-import { hydrateMediaCard, isBadImageUrl, fetchArticleContent, resolveArticleImage, resolveArticleUrl } from './article-meta';
+import { isBadImageUrl, fetchArticleContent, resolveArticleImage, resolveArticleUrl } from './article-meta';
 import { isGoogleNewsUrl } from './google-news-url';
 import { sortMediaCardsByRecency, sortPendingByRecency } from './sort-clippings';
 
@@ -173,36 +173,8 @@ export async function saveStore(store: ClippingsStore): Promise<void> {
   await writeLocalStore(store);
 }
 
-async function hydratePublishedStore(store: ClippingsStore): Promise<ClippingsStore> {
-  if (store.published.items.length === 0) return store;
-
-  let changed = false;
-  const hydratedItems = await Promise.all(
-    store.published.items.map((item) => hydrateMediaCard(item)),
-  );
-
-  for (let index = 0; index < hydratedItems.length; index += 1) {
-    const hydrated = hydratedItems[index];
-    const current = store.published.items[index];
-    if (
-      hydrated.href !== current.href ||
-      hydrated.imageUrl !== current.imageUrl
-    ) {
-      store.published.items[index] = hydrated;
-      changed = true;
-    }
-  }
-
-  if (changed) {
-    store.published = rebuildPublishedPayload(store);
-    await saveStore(store);
-  }
-
-  return store;
-}
-
 export async function getClippings(): Promise<ClippingsPayload | null> {
-  let store = await getStore();
+  const store = await getStore();
   if (
     store.published.items.length === 0 &&
     store.published.fetchedAt === emptyPublished().fetchedAt
@@ -210,13 +182,7 @@ export async function getClippings(): Promise<ClippingsPayload | null> {
     return null;
   }
 
-  store = await hydratePublishedStore(store);
-
-  const payload = rebuildPublishedPayload(store);
-  return {
-    ...payload,
-    fetchedAt: store.published.fetchedAt,
-  };
+  return rebuildPublishedPayload(store);
 }
 
 function collectKnownUrls(store: ClippingsStore): Set<string> {
@@ -400,25 +366,8 @@ export async function addManualItem(
 
 export async function getPublishedItemById(id: string): Promise<MediaCard | null> {
   const store = await getStore();
-  const index = store.published.items.findIndex((item) => item.id === id);
-  if (index === -1) return null;
-
-  let card = await hydrateMediaCard(store.published.items[index]);
-  card = await enrichWithArticleContent(card);
-
-  const current = store.published.items[index];
-  if (
-    card.href !== current.href ||
-    card.imageUrl !== current.imageUrl ||
-    card.bodyHtml !== current.bodyHtml ||
-    card.excerpt !== current.excerpt
-  ) {
-    store.published.items[index] = card;
-    store.published = rebuildPublishedPayload(store);
-    await saveStore(store);
-  }
-
-  return card;
+  const item = store.published.items.find((entry) => entry.id === id);
+  return item ?? null;
 }
 
 export async function setHighlightItem(id: string): Promise<boolean> {

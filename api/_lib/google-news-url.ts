@@ -6,16 +6,20 @@ type GoogleDecoderInstance = {
 
 let decoder: GoogleDecoderInstance | null = null;
 
-function getDecoder(): GoogleDecoderInstance {
-  if (!decoder) {
+function getDecoder(): GoogleDecoderInstance | null {
+  if (decoder) return decoder;
+
+  try {
     const require = createRequire(import.meta.url);
     const { GoogleDecoder } = require('google-news-url-decoder') as {
       GoogleDecoder: new () => GoogleDecoderInstance;
     };
     decoder = new GoogleDecoder();
+    return decoder;
+  } catch (error) {
+    console.error('google-news-url-decoder unavailable:', error);
+    return null;
   }
-
-  return decoder;
 }
 
 export function isGoogleNewsUrl(url: string): boolean {
@@ -26,7 +30,10 @@ export async function decodeGoogleNewsUrl(url: string): Promise<string | null> {
   if (!isGoogleNewsUrl(url)) return null;
 
   try {
-    const result = await getDecoder().decode(url);
+    const instance = getDecoder();
+    if (!instance) return null;
+
+    const result = await instance.decode(url);
     if (result.status && result.decoded_url && !isGoogleNewsUrl(result.decoded_url)) {
       return result.decoded_url;
     }
