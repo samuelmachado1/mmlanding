@@ -1,3 +1,7 @@
+import {
+  BLOB_NOT_CONFIGURED_MESSAGE,
+  isStorageWritable,
+} from './blob-client.js';
 import { searchGoogleNews, type NewsSearchItem } from './google-news.js';
 import { searchClippings as searchGoogleCse } from './google-cse.js';
 import { searchItemToPending } from './map-clippings.js';
@@ -67,6 +71,17 @@ async function runSearch(): Promise<{
 }
 
 export async function discoverClippings(): Promise<DiscoverResult> {
+  if (!isStorageWritable()) {
+    return {
+      ok: false,
+      addedToPending: 0,
+      pendingTotal: 0,
+      publishedTotal: 0,
+      message: 'Busca falhou; store inalterado',
+      error: BLOB_NOT_CONFIGURED_MESSAGE,
+    };
+  }
+
   try {
     const { results, source } = await withTimeout(runSearch(), DISCOVER_TIMEOUT_MS, 'Busca de notícias');
     const pendingItems = [];

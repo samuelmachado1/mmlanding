@@ -1,4 +1,8 @@
-import { isBlobConfigured, putJsonBlob } from './blob-client.js';
+import {
+  BLOB_NOT_CONFIGURED_MESSAGE,
+  isBlobConfigured,
+  putJsonBlob,
+} from './blob-client.js';
 import type { ClippingsPayload, ClippingsStore, MediaCard, PendingMediaItem } from './types.js';
 import { buildPublishedPayload } from './map-published.js';
 import { normalizeUrl } from './normalize-url.js';
@@ -46,9 +50,7 @@ export async function saveStore(store: ClippingsStore): Promise<void> {
   }
 
   if (process.env.VERCEL === '1') {
-    throw new Error(
-      'Armazenamento não configurado: conecte um Blob store ao projeto na Vercel (Storage → Blob).',
-    );
+    throw new Error(BLOB_NOT_CONFIGURED_MESSAGE);
   }
 
   await writeLocalStore(store);

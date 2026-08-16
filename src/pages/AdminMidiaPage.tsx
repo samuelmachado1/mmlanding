@@ -17,12 +17,16 @@ const TAB_OPTIONS: MediaCard['tab'][] = [
   'redes-sociais',
 ];
 
+const BLOB_SETUP_HINT =
+  'Conecte um Blob store na Vercel (Storage → Blob → Connect to Project, ambiente Production) e faça redeploy. Sem isso, buscar/aprovar/publicar não persiste dados em produção.';
+
 export default function AdminMidiaPage() {
   const [authenticated, setAuthenticated] = useState(false);
   const [tokenInput, setTokenInput] = useState('');
   const [activeTab, setActiveTab] = useState<AdminTab>('pending');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [storageConfigured, setStorageConfigured] = useState(true);
   const [pending, setPending] = useState<PendingMediaItem[]>([]);
   const [published, setPublished] = useState<MediaCard[]>([]);
   const [highlightId, setHighlightId] = useState<string | null>(null);
@@ -84,11 +88,13 @@ export default function AdminMidiaPage() {
         pending: PendingMediaItem[];
         published: MediaCard[];
         highlightId: string | null;
+        storageConfigured?: boolean;
       };
 
       setPending(data.pending);
       setPublished(data.published);
       setHighlightId(data.highlightId ?? null);
+      setStorageConfigured(data.storageConfigured ?? true);
       setAuthenticated(true);
     } catch (err) {
       if (options?.silent) {
@@ -276,7 +282,15 @@ export default function AdminMidiaPage() {
       }
 
       if (!response.ok || !data.ok) {
-        throw new Error(data.error ?? data.message ?? `HTTP ${response.status}`);
+        const errMsg = data.error ?? data.message ?? `HTTP ${response.status}`;
+        if (
+          errMsg.includes('Armazenamento não configurado') ||
+          errMsg.includes('BLOB_READ_WRITE_TOKEN')
+        ) {
+          setStorageConfigured(false);
+          throw new Error(BLOB_SETUP_HINT);
+        }
+        throw new Error(errMsg);
       }
 
       setDiscoverMessage(
@@ -335,7 +349,7 @@ export default function AdminMidiaPage() {
             <button
               type="button"
               onClick={() => void handleDiscoverNow()}
-              disabled={discovering || loading}
+              disabled={discovering || loading || !storageConfigured}
               className="rounded-xl bg-navy-500 px-4 py-2 font-nav text-sm font-bold text-white disabled:opacity-50"
             >
               {discovering ? 'Buscando…' : 'Buscar agora'}
@@ -357,6 +371,13 @@ export default function AdminMidiaPage() {
             </button>
           </div>
         </div>
+
+        {!storageConfigured && (
+          <div className="mt-6 rounded-xl border border-amber-500/40 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+            <p className="font-semibold">Blob store não configurado na Vercel</p>
+            <p className="mt-1">{BLOB_SETUP_HINT}</p>
+          </div>
+        )}
 
         <div className="mt-6 flex flex-wrap gap-2">
           {(
