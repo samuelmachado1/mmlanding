@@ -145,18 +145,24 @@ async function writeBlobStore(store: ClippingsStore): Promise<void> {
 }
 
 export async function getStore(): Promise<ClippingsStore> {
-  if (process.env.BLOB_READ_WRITE_TOKEN) {
-    try {
-      const blobStore = await readBlobStore();
-      if (blobStore) return normalizeStore(blobStore);
-    } catch {
-      const localStore = await readLocalStore();
-      if (localStore) return normalizeStore(localStore);
+  try {
+    if (process.env.BLOB_READ_WRITE_TOKEN) {
+      try {
+        const blobStore = await readBlobStore();
+        if (blobStore) return normalizeStore(blobStore);
+      } catch (error) {
+        console.error('Blob store read failed, falling back to local:', error);
+        const localStore = await readLocalStore();
+        if (localStore) return normalizeStore(localStore);
+      }
     }
-  }
 
-  const localStore = await readLocalStore();
-  return normalizeStore(localStore ?? emptyStore());
+    const localStore = await readLocalStore();
+    return normalizeStore(localStore ?? emptyStore());
+  } catch (error) {
+    console.error('getStore failed, using empty store:', error);
+    return emptyStore();
+  }
 }
 
 export async function saveStore(store: ClippingsStore): Promise<void> {

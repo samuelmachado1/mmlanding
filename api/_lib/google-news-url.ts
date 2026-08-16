@@ -1,16 +1,20 @@
 import { createRequire } from 'node:module';
 
-const require = createRequire(import.meta.url);
-const { GoogleDecoder } = require('google-news-url-decoder') as {
-  GoogleDecoder: new () => {
-    decode: (url: string) => Promise<{ status: boolean; decoded_url?: string }>;
-  };
+type GoogleDecoderInstance = {
+  decode: (url: string) => Promise<{ status: boolean; decoded_url?: string }>;
 };
 
-let decoder: InstanceType<typeof GoogleDecoder> | null = null;
+let decoder: GoogleDecoderInstance | null = null;
 
-function getDecoder(): InstanceType<typeof GoogleDecoder> {
-  if (!decoder) decoder = new GoogleDecoder();
+function getDecoder(): GoogleDecoderInstance {
+  if (!decoder) {
+    const require = createRequire(import.meta.url);
+    const { GoogleDecoder } = require('google-news-url-decoder') as {
+      GoogleDecoder: new () => GoogleDecoderInstance;
+    };
+    decoder = new GoogleDecoder();
+  }
+
   return decoder;
 }
 

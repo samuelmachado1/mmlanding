@@ -1,6 +1,5 @@
 import { searchGoogleNews, type NewsSearchItem } from './google-news';
 import { searchClippings as searchGoogleCse } from './google-cse';
-import { enrichNewsSearchItems } from './article-meta';
 import { searchItemToPending } from './map-clippings';
 import { addPendingItems, getStore } from './store';
 
@@ -44,17 +43,13 @@ async function runSearch(): Promise<{
 }
 
 export async function discoverClippings(): Promise<DiscoverResult> {
-  const store = await getStore();
-
   try {
     const { results, source } = await runSearch();
     const pendingItems = [];
     let counter = 0;
 
     for (const { query, items } of results) {
-      const enrichedItems = await enrichNewsSearchItems(items);
-
-      for (const item of enrichedItems) {
+      for (const item of items) {
         counter += 1;
         pendingItems.push(
           searchItemToPending(item, `pending-${Date.now()}-${counter}`, query),
@@ -75,15 +70,25 @@ export async function discoverClippings(): Promise<DiscoverResult> {
   } catch (error) {
     console.error('Discover clippings failed:', error);
 
-    const currentStore = await getStore();
-
-    return {
-      ok: false,
-      addedToPending: 0,
-      pendingTotal: currentStore.pending.length,
-      publishedTotal: currentStore.published.items.length,
-      message: 'Busca falhou; store inalterado',
-      error: error instanceof Error ? error.message : 'Unknown error',
-    };
+    try {
+      const currentStore = await getStore();
+      return {
+        ok: false,
+        addedToPending: 0,
+        pendingTotal: currentStore.pending.length,
+        publishedTotal: currentStore.published.items.length,
+        message: 'Busca falhou; store inalterado',
+        error: error instanceof Error ? error.message : 'Unknown error',
+      };
+    } catch {
+      return {
+        ok: false,
+        addedToPending: 0,
+        pendingTotal: 0,
+        publishedTotal: 0,
+        message: 'Busca falhou; store inalterado',
+        error: error instanceof Error ? error.message : 'Unknown error',
+      };
+    }
   }
 }
