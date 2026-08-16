@@ -100,18 +100,23 @@ async function readBlobByPath(pathname: string): Promise<unknown | null> {
   const fromPublic = await fetchPublicBlobJson(pathname);
   if (fromPublic) return fromPublic;
 
-  const { listBlobByPrefix } = await import('./blob-client');
-  const blobs = await listBlobByPrefix(pathname);
-  const blob = blobs.find((entry) => entry.pathname === pathname);
+  try {
+    const { listBlobByPrefix } = await import('./blob-client');
+    const blobs = await listBlobByPrefix(pathname);
+    const blob = blobs.find((entry) => entry.pathname === pathname);
 
-  if (!blob) return null;
+    if (!blob) return null;
 
-  const response = await fetch(blob.url);
-  if (!response.ok) {
-    throw new Error(`Blob fetch failed: ${response.status}`);
+    const response = await fetch(blob.url);
+    if (!response.ok) {
+      throw new Error(`Blob fetch failed: ${response.status}`);
+    }
+
+    return (await response.json()) as unknown;
+  } catch (error) {
+    console.error(`Blob read failed for ${pathname}:`, error);
+    return null;
   }
-
-  return (await response.json()) as unknown;
 }
 
 async function readBlobStore(): Promise<ClippingsStore | null> {
