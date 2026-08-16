@@ -20,6 +20,15 @@ const TAB_OPTIONS: MediaCard['tab'][] = [
 const BLOB_SETUP_HINT =
   'Conecte um Blob store na Vercel (Storage → Blob → Connect to Project, ambiente Production) e faça redeploy. Sem isso, buscar/aprovar/publicar não persiste dados em produção.';
 
+function adminErrorFromBody(status: number, body: string): string {
+  try {
+    const data = JSON.parse(body) as { error?: string; message?: string };
+    return data.error ?? data.message ?? `HTTP ${status}`;
+  } catch {
+    return body.slice(0, 200) || `HTTP ${status}`;
+  }
+}
+
 type AdminSnapshot = {
   pending?: PendingMediaItem[];
   published?: MediaCard[];
@@ -178,8 +187,14 @@ export default function AdminMidiaPage() {
         method: 'POST',
         body: JSON.stringify({ id, asHighlight }),
       });
-      const data = (await response.json()) as AdminSnapshot & { ok?: boolean };
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const body = await response.text();
+      let data = {} as AdminSnapshot & { ok?: boolean };
+      try {
+        data = JSON.parse(body) as AdminSnapshot & { ok?: boolean };
+      } catch {
+        throw new Error(body.slice(0, 120) || 'Resposta inválida da API');
+      }
+      if (!response.ok) throw new Error(adminErrorFromBody(response.status, body));
       applyAdminSnapshot(data);
       setActiveTab('published');
     } catch (err) {
@@ -197,8 +212,14 @@ export default function AdminMidiaPage() {
         method: 'POST',
         body: JSON.stringify({ id }),
       });
-      const data = (await response.json()) as AdminSnapshot & { ok?: boolean };
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const body = await response.text();
+      let data = {} as AdminSnapshot & { ok?: boolean };
+      try {
+        data = JSON.parse(body) as AdminSnapshot & { ok?: boolean };
+      } catch {
+        throw new Error(body.slice(0, 120) || 'Resposta inválida da API');
+      }
+      if (!response.ok) throw new Error(adminErrorFromBody(response.status, body));
       applyAdminSnapshot(data);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Falha ao definir destaque');
@@ -215,8 +236,14 @@ export default function AdminMidiaPage() {
         method: 'POST',
         body: JSON.stringify({ id }),
       });
-      const data = (await response.json()) as AdminSnapshot & { ok?: boolean };
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const body = await response.text();
+      let data = {} as AdminSnapshot & { ok?: boolean };
+      try {
+        data = JSON.parse(body) as AdminSnapshot & { ok?: boolean };
+      } catch {
+        throw new Error(body.slice(0, 120) || 'Resposta inválida da API');
+      }
+      if (!response.ok) throw new Error(adminErrorFromBody(response.status, body));
       applyAdminSnapshot(data);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Falha ao rejeitar');
@@ -232,8 +259,14 @@ export default function AdminMidiaPage() {
       const response = await adminFetch(`/api/admin/clippings/published?id=${encodeURIComponent(id)}`, {
         method: 'DELETE',
       });
-      const data = (await response.json()) as AdminSnapshot & { ok?: boolean };
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const body = await response.text();
+      let data = {} as AdminSnapshot & { ok?: boolean };
+      try {
+        data = JSON.parse(body) as AdminSnapshot & { ok?: boolean };
+      } catch {
+        throw new Error(body.slice(0, 120) || 'Resposta inválida da API');
+      }
+      if (!response.ok) throw new Error(adminErrorFromBody(response.status, body));
       applyAdminSnapshot(data);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Falha ao remover');
@@ -260,9 +293,15 @@ export default function AdminMidiaPage() {
         }),
       });
 
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const body = await response.text();
+      let data = {} as AdminSnapshot & { ok?: boolean };
+      try {
+        data = JSON.parse(body) as AdminSnapshot & { ok?: boolean };
+      } catch {
+        throw new Error(body.slice(0, 120) || 'Resposta inválida da API');
+      }
+      if (!response.ok) throw new Error(adminErrorFromBody(response.status, body));
 
-      const data = (await response.json()) as AdminSnapshot & { ok?: boolean };
       applyAdminSnapshot(data);
 
       setManualForm({
