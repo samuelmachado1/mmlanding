@@ -45,21 +45,22 @@ export default function AdminMidiaPage() {
 
     try {
       const response = await adminFetch('/api/admin/clippings/pending');
-        if (!response.ok) {
-          if (response.status === 401) {
-            clearAdminToken();
-            setAuthenticated(false);
-            throw new Error('Segredo de admin inválido');
-          }
-          if (response.status === 502 || response.status === 503) {
-            throw new Error(
-              'API indisponível. Inicie a API com npm run dev:full (ou npm run dev:api na porta 3000).',
-            );
-          }
-          throw new Error(`HTTP ${response.status}`);
+      const body = await response.text();
+      if (!response.ok) {
+        if (response.status === 401) {
+          clearAdminToken();
+          setAuthenticated(false);
+          throw new Error('Segredo de admin inválido');
         }
+        if (response.status === 502 || response.status === 503) {
+          throw new Error(
+            'API indisponível. Inicie a API com npm run dev:full (ou npm run dev:api na porta 3000).',
+          );
+        }
+        throw new Error(body.slice(0, 120) || `HTTP ${response.status}`);
+      }
 
-      const data = (await response.json()) as {
+      const data = JSON.parse(body) as {
         pending: PendingMediaItem[];
         published: MediaCard[];
         highlightId: string | null;
@@ -94,16 +95,12 @@ export default function AdminMidiaPage() {
   }, []);
 
   useEffect(() => {
-    const fromUrl = captureAdminTokenFromUrl();
+    captureAdminTokenFromUrl();
     const token = getAdminToken();
     if (!token) return;
 
     setAuthenticated(true);
-    if (fromUrl) {
-      void handleDiscoverNow();
-    } else {
-      void loadData();
-    }
+    void loadData();
   }, [loadData]);
 
   function handleLogin(event: React.FormEvent) {
@@ -111,7 +108,7 @@ export default function AdminMidiaPage() {
     if (!tokenInput.trim()) return;
     setAdminToken(tokenInput.trim());
     setAuthenticated(true);
-    void handleDiscoverNow();
+    void loadData();
   }
 
   function handleLogout() {
@@ -233,7 +230,8 @@ export default function AdminMidiaPage() {
       const response = await adminFetch('/api/admin/clippings/discover', {
         method: 'POST',
       });
-      const data = (await response.json()) as {
+      const body = await response.text();
+      let data: {
         ok: boolean;
         addedToPending: number;
         pendingTotal: number;
@@ -242,14 +240,20 @@ export default function AdminMidiaPage() {
         message?: string;
       };
 
+      try {
+        data = JSON.parse(body) as typeof data;
+      } catch {
+        throw new Error(body.slice(0, 120) || 'Resposta inválida da API');
+      }
+
       if (!response.ok || !data.ok) {
         throw new Error(data.error ?? data.message ?? `HTTP ${response.status}`);
       }
 
       setDiscoverMessage(
         data.addedToPending > 0
-          ? `${data.addedToPending} nova(s) matéria(s) na fila (via ${data.source ?? 'google-news'}). Total pendente: ${data.pendingTotal}.`
-          : `Busca concluída via ${data.source ?? 'google-news'}. Nenhuma matéria nova (pendentes: ${data.pendingTotal}).`,
+          ? `${data.addedToPending} nova(s) matéria(s) encontrada(s). Revise na aba Pendentes.`
+          : 'Nenhuma matéria nova encontrada desta vez. Você pode tentar de novo mais tarde.',
       );
       await loadData();
     } catch (err) {
@@ -363,17 +367,46 @@ export default function AdminMidiaPage() {
           <>
             <details className="mt-6 rounded-2xl border border-brand-black/10 bg-white p-5 text-sm text-brand-black/80">
               <summary className="cursor-pointer font-nav font-semibold text-brand-black">
-                Como funciona a busca (Google News RSS)
+                Como usar este painel
               </summary>
-              <p className="mt-3">
-                Por padrão, usamos o mesmo método do projeto <strong>get-news</strong>: feed RSS do
-                Google News — <strong>sem API key, sem billing</strong>.
-              </p>
-              <p className="mt-2">
-                Clique em <strong>Buscar agora</strong>. Não precisa de <code className="text-xs">GOOGLE_CSE_API_KEY</code> nem <code className="text-xs">GOOGLE_CSE_ID</code>.
-              </p>
-              <p className="mt-2 text-brand-black/60">
-                Opcional: se você configurar CSE no <code className="text-xs">.env</code>, o sistema usa Custom Search em vez do RSS.
+              <ol className="mt-4 list-decimal space-y-3 pl-5">
+                <li>
+                  Clique em <strong>Buscar agora</strong> para procurar notícias recentes sobre o
+                  Deputado Max Maciel na internet. Ao entrar no painel, essa busca já roda
+                  automaticamente.
+                </li>
+                <li>
+                  Na aba <strong>Pendentes</strong>, revise cada matéria encontrada. Abra o link
+                  para ler o conteúdo completo antes de decidir.
+                </li>
+                <li>
+                  Para cada matéria, escolha uma ação:
+                  <ul className="mt-2 list-disc space-y-1 pl-5">
+                    <li>
+                      <strong>Aprovar</strong> — publica no site, na seção de mídia.
+                    </li>
+                    <li>
+                      <strong>Tornar destaque</strong> — publica e coloca em evidência na página
+                      inicial (substitui o destaque anterior).
+                    </li>
+                    <li>
+                      <strong>Rejeitar</strong> — descarta a matéria; ela não aparece no site.
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  Na aba <strong>Publicados</strong>, veja o que já está no ar. Você pode{' '}
+                  <strong>definir destaque</strong> ou <strong>remover</strong> uma matéria a
+                  qualquer momento.
+                </li>
+                <li>
+                  Se uma notícia não apareceu na busca, use a aba{' '}
+                  <strong>Adicionar manual</strong> para cadastrá-la com título, link e fonte.
+                </li>
+              </ol>
+              <p className="mt-4 text-brand-black/60">
+                Dica: volte e clique em <strong>Buscar agora</strong> sempre que quiser atualizar
+                a lista de matérias pendentes.
               </p>
             </details>
 
@@ -394,7 +427,6 @@ export default function AdminMidiaPage() {
                       {item.source} · {item.date}
                     </p>
                     <h2 className="mt-1 font-nav text-lg font-bold text-brand-black">{item.title}</h2>
-                    <p className="mt-1 text-xs text-brand-black/50">Busca: {item.searchQuery}</p>
                     {item.snippet && (
                       <p className="mt-2 text-sm leading-relaxed text-brand-black/80">{item.snippet}</p>
                     )}
