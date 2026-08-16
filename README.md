@@ -50,9 +50,7 @@ Copie `.env.example` para `.env.local` e preencha:
 | `GOOGLE_CSE_ID` | (Opcional) Search Engine ID (`cx`) |
 | `CRON_SECRET` | Segredo para proteger o endpoint de cron |
 | `BLOB_READ_WRITE_TOKEN` | Token do Vercel Blob (produção) |
-| `LAUNCH_DATE` | Data de abertura pública (`YYYY-MM-DD`, fuso `America/Sao_Paulo`) |
-| `SITE_LAUNCHED` | `true` para abrir antes da data; `false` para manter bloqueado |
-| `PREVIEW_SECRET` | Segredo para testar o site em produção antes do lançamento |
+| `PREVIEW_SECRET` | (Temporário) Segredo do admin — será substituído por `ADMIN_SECRET` |
 
 ### 3. Deploy na Vercel
 
@@ -65,46 +63,17 @@ Configure o header `Authorization: Bearer <CRON_SECRET>` para o cron na Vercel (
 
 ### Painel admin
 
-Acesse `/admin/midia` com o mesmo `PREVIEW_SECRET`:
+Acesse `/admin/midia` e insira o `PREVIEW_SECRET` (temporário — na próxima etapa migramos para `ADMIN_SECRET` dedicado):
 
 ```
-https://seu-dominio.com/admin/midia?preview=SEU_PREVIEW_SECRET
+https://seu-dominio.com/admin/midia?admin=SEU_SEGREDO
 ```
 
-O token é salvo automaticamente para as chamadas da API admin. Se o site ainda não foi lançado, use o mesmo segredo de preview.
+O token é salvo no navegador para as chamadas da API admin.
 
-Funcionalidades: revisar pendentes, aprovar/rejeitar, remover publicados, adicionar matéria manual.
+Funcionalidades: revisar pendentes, aprovar/rejeitar, definir destaque, remover publicados, adicionar matéria manual.
 
-### Lançamento faseado (prévia em produção)
-
-O `middleware.ts` bloqueia o site até a data de lançamento. Visitantes veem uma página "Em breve"; a equipe testa em produção com URL secreta.
-
-**Configuração na Vercel (Production):**
-
-```
-LAUNCH_DATE=2026-08-15
-SITE_LAUNCHED=false
-PREVIEW_SECRET=um-segredo-longo-e-aleatorio
-```
-
-**Testar em produção (antes do dia 15):**
-
-```
-https://seu-dominio.com/?preview=um-segredo-longo-e-aleatorio
-```
-
-O middleware define um cookie de 7 dias — depois da primeira visita, não precisa do `?preview=` em cada página.
-
-**Abrir para o público no dia 15:**
-
-- Opção 1: aguardar a meia-noite (horário de Brasília) — o middleware libera automaticamente
-- Opção 2: definir `SITE_LAUNCHED=true` no dashboard da Vercel (liberação imediata)
-
-> O middleware roda na Vercel e com `vercel dev`. O `npm run dev` (só Vite) não aplica o bloqueio — ideal para desenvolvimento local.
->
-> **Importante:** `LAUNCH_DATE`, `SITE_LAUNCHED` e `PREVIEW_SECRET` precisam estar em **Environment Variables → Production** antes do build. Após alterar, faça **Redeploy**. O app também aplica um bloqueio no client (build-time) como fallback.
-
-### 4. Refresh manual (local ou produção)
+### Refresh manual (local ou produção)
 
 ```bash
 curl -X POST "http://localhost:3000/api/cron/refresh-clippings" \
@@ -122,6 +91,7 @@ curl -X POST "http://localhost:3000/api/cron/refresh-clippings" \
 | `POST /api/admin/clippings/approve` | Aprova item `{ id }` |
 | `POST /api/admin/clippings/reject` | Rejeita item `{ id }` |
 | `POST /api/admin/clippings/manual` | Adiciona matéria manual em published |
+| `POST /api/admin/clippings/highlight` | Define matéria em destaque `{ id }` |
 | `DELETE /api/admin/clippings/published?id=` | Remove item publicado |
 
 ## Stack

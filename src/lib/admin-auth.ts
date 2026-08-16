@@ -14,7 +14,7 @@ export function clearAdminToken(): void {
 
 export function captureAdminTokenFromUrl(): boolean {
   const params = new URLSearchParams(window.location.search);
-  const token = params.get('preview') ?? params.get('admin');
+  const token = params.get('admin') ?? params.get('preview');
   if (!token) return false;
 
   setAdminToken(token);
@@ -27,7 +27,7 @@ export async function adminFetch(
 ): Promise<Response> {
   const token = getAdminToken();
   if (!token) {
-    throw new Error('Token de preview não configurado');
+    throw new Error('Token de admin não configurado');
   }
 
   const headers = new Headers(options.headers);
