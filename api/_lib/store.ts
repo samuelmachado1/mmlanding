@@ -19,6 +19,13 @@ const LOCAL_CACHE_DIR = join(process.cwd(), '.data');
 const LOCAL_STORE_FILE = join(LOCAL_CACHE_DIR, 'clippings-store.json');
 const LEGACY_LOCAL_FILE = join(LOCAL_CACHE_DIR, 'clippings.json');
 
+/** OIDC (BLOB_STORE_ID) on Vercel, or legacy BLOB_READ_WRITE_TOKEN locally/CI. */
+function isBlobConfigured(): boolean {
+  return Boolean(
+    process.env.BLOB_READ_WRITE_TOKEN?.trim() || process.env.BLOB_STORE_ID?.trim(),
+  );
+}
+
 function emptyPublished(): ClippingsPayload {
   return {
     fetchedAt: new Date(0).toISOString(),
@@ -141,12 +148,12 @@ async function writeBlobStore(store: ClippingsStore): Promise<void> {
     addRandomSuffix: false,
     contentType: 'application/json',
     allowOverwrite: true,
-  } as Parameters<typeof put>[2]);
+  });
 }
 
 export async function getStore(): Promise<ClippingsStore> {
   try {
-    if (process.env.BLOB_READ_WRITE_TOKEN) {
+    if (isBlobConfigured()) {
       try {
         const blobStore = await readBlobStore();
         if (blobStore) return normalizeStore(blobStore);
@@ -166,7 +173,7 @@ export async function getStore(): Promise<ClippingsStore> {
 }
 
 export async function saveStore(store: ClippingsStore): Promise<void> {
-  if (process.env.BLOB_READ_WRITE_TOKEN) {
+  if (isBlobConfigured()) {
     await writeBlobStore(store);
 
     if (process.env.VERCEL !== '1') {
@@ -178,7 +185,7 @@ export async function saveStore(store: ClippingsStore): Promise<void> {
 
   if (process.env.VERCEL === '1') {
     throw new Error(
-      'Armazenamento não configurado: defina BLOB_READ_WRITE_TOKEN no Vercel.',
+      'Armazenamento não configurado: conecte um Blob store ao projeto na Vercel (Storage → Blob).',
     );
   }
 
