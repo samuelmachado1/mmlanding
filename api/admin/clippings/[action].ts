@@ -1,4 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
+import type { ClippingsStore } from '../../_lib/types.js';
 import { isAdminAuthorized } from '../../_lib/auth.js';
 import { isBlobStorageError, isStorageWritable } from '../../_lib/blob-client.js';
 import { runWithApiContext } from '../../_lib/request-context.js';
@@ -54,12 +55,12 @@ export default async function handler(
       }
     } catch (error) {
       console.error(`Admin clippings action "${action}" failed:`, error);
-      return res.status(500).json({ error: 'Internal server error' });
+      const message =
+        error instanceof Error ? error.message : 'Internal server error';
+      return res.status(500).json({ error: message });
     }
   });
 }
-
-import type { ClippingsStore } from '../../_lib/types.js';
 
 function adminSnapshotFromStore(store: ClippingsStore) {
   return {

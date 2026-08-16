@@ -8,8 +8,9 @@ import { buildPublishedPayload } from './map-published.js';
 import { normalizeUrl } from './normalize-url.js';
 import { sortMediaCardsByRecency, sortPendingByRecency } from './sort-clippings.js';
 import { setStoreSnapshot } from './request-context.js';
+import { emptyStore, getStore } from './store-read.js';
 
-export { emptyStore, getStore } from './store-read.js';
+export { emptyStore, getStore };
 
 const STORE_BLOB_PATHNAME = 'clippings-store.json';
 
