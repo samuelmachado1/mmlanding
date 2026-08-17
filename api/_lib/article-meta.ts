@@ -52,11 +52,20 @@ export function extractImageFromRssHtml(html?: string): string | undefined {
 
 function decodeHtmlEntities(value: string): string {
   return value
+    .replace(/&#(\d+);/g, (_, code) => String.fromCharCode(Number(code)))
+    .replace(/&#x([0-9a-f]+);/gi, (_, hex) => String.fromCharCode(parseInt(hex, 16)))
     .replace(/&amp;/g, '&')
     .replace(/&quot;/g, '"')
     .replace(/&#39;/g, "'")
     .replace(/&lt;/g, '<')
     .replace(/&gt;/g, '>');
+}
+
+function escapeHtmlText(value: string): string {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
 }
 
 const GOOGLE_NEWS_PATTERN = /news\.google\.com/i;
@@ -155,7 +164,89 @@ export async function fetchArticleExcerpt(url: string): Promise<string | undefin
 }
 
 const BODY_SKIP_PATTERN =
-  /whatsapp|siga o canal|saiba mais|estagi[aá]rio do correio|receba as principais not[ií]cias|assine o correio/i;
+  /whatsapp|siga o canal|saiba mais|estagi[aá]rio do correio|receba as principais not[ií]cias|assine o correio|notifica[cç][aã]o|ficar por dentro das not[ií]cias/i;
+
+interface JsonLdArticleFields {
+  description?: string;
+  bodyHtml?: string;
+  imageUrl?: string;
+}
+
+function articleBodyTextToHtml(text: string): string | undefined {
+  const decoded = decodeHtmlEntities(text.trim());
+  if (decoded.length < 60) return undefined;
+
+  const paragraphs = decoded
+    .split(/\n{2,}/)
+    .map((part) => part.trim())
+    .filter((part) => part.length > 40);
+
+  if (paragraphs.length === 0) {
+    return `<p>${escapeHtmlText(decoded)}</p>`;
+  }
+
+  return paragraphs.map((part) => `<p>${escapeHtmlText(part)}</p>`).join('');
+}
+
+function extractJsonLdArticle(html: string): JsonLdArticleFields | null {
+  const scriptRegex =
+    /<script[^>]*type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi;
+
+  for (const match of html.matchAll(scriptRegex)) {
+    try {
+      const data = JSON.parse(match[1].trim()) as Record<string, unknown>;
+      const nodes = Array.isArray(data['@graph'])
+        ? (data['@graph'] as Record<string, unknown>[])
+        : [data];
+
+      for (const node of nodes) {
+        const type = String(node['@type'] ?? '');
+        if (!/Article|NewsArticle|OpinionNewsArticle|ReportageNewsArticle/i.test(type)) {
+          continue;
+        }
+
+        const fields: JsonLdArticleFields = {};
+
+        if (typeof node.description === 'string' && node.description.trim()) {
+          fields.description = decodeHtmlEntities(node.description.trim());
+        }
+
+        if (typeof node.articleBody === 'string' && node.articleBody.trim()) {
+          fields.bodyHtml = articleBodyTextToHtml(node.articleBody);
+        }
+
+        const image = node.image as unknown;
+        if (typeof image === 'string') {
+          fields.imageUrl = image;
+        } else if (Array.isArray(image)) {
+          const first = image[0];
+          if (typeof first === 'string') fields.imageUrl = first;
+          else if (first && typeof first === 'object' && 'url' in first) {
+            fields.imageUrl = String((first as { url: string }).url);
+          }
+        } else if (image && typeof image === 'object' && 'url' in image) {
+          fields.imageUrl = String((image as { url: string }).url);
+        }
+
+        if (fields.bodyHtml || fields.imageUrl || fields.description) {
+          return fields;
+        }
+      }
+    } catch {
+      // ignore invalid JSON-LD blocks
+    }
+  }
+
+  return null;
+}
+
+function isLowQualityBodyHtml(html: string): boolean {
+  if (html.length < 200) return true;
+  const preview = stripHtmlTags(html.slice(0, 500));
+  return /notifica[cç][aã]o|ficar por dentro das not[ií]cias|colunistas|rádio brasil de fato/i.test(
+    preview,
+  );
+}
 
 function stripHtmlTags(html: string): string {
   return html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
@@ -241,16 +332,40 @@ export async function fetchArticleContent(url: string): Promise<ArticleContent> 
   const html = await fetchArticleHtml(url);
   if (!html) return {};
 
+  const jsonLd = extractJsonLdArticle(html);
+  const fromHtml = extractArticleBodyHtml(html);
+  let bodyHtml = fromHtml;
+
+  if (jsonLd?.bodyHtml) {
+    if (!fromHtml || isLowQualityBodyHtml(fromHtml)) {
+      bodyHtml = jsonLd.bodyHtml;
+    }
+  }
+
+  const excerpt =
+    extractOgDescriptionFromHtml(html) ?? jsonLd?.description;
+
   return {
-    excerpt: extractOgDescriptionFromHtml(html),
-    bodyHtml: extractArticleBodyHtml(html),
+    excerpt,
+    bodyHtml,
   };
 }
 
-export async function hydrateArticleBody(card: MediaCard): Promise<MediaCard> {
-  const { isGoogleNewsUrl } = await import('./google-news-url.js');
+function isWeakExcerpt(excerpt: string | undefined, card: MediaCard): boolean {
+  if (!excerpt?.trim()) return true;
+  const normalized = excerpt.trim();
+  if (normalized.length < 40) return true;
+  if (normalized === `${card.title} ${card.source}`) return true;
+  if (normalized === `${card.title} ${card.source}`.trim()) return true;
+  if (normalized.endsWith(card.source) && normalized.length < card.title.length + 30) {
+    return true;
+  }
+  return false;
+}
 
-  if (card.bodyHtml) return card;
+/** Fetches missing body, excerpt and image for a published clipping. */
+export async function hydratePublishedArticle(card: MediaCard): Promise<MediaCard> {
+  const { isGoogleNewsUrl } = await import('./google-news-url.js');
 
   let href = card.href;
   if (isGoogleNewsUrl(href)) {
@@ -260,17 +375,64 @@ export async function hydrateArticleBody(card: MediaCard): Promise<MediaCard> {
     return href !== card.href ? { ...card, href } : card;
   }
 
-  const content = await fetchArticleContent(href);
-  if (!content.bodyHtml && !content.excerpt) {
+  const needsBody = !card.bodyHtml;
+  const needsImage = isBadImageUrl(card.imageUrl);
+  const needsExcerpt = isWeakExcerpt(card.excerpt, card);
+
+  if (!needsBody && !needsImage && !needsExcerpt) {
     return href !== card.href ? { ...card, href } : card;
+  }
+
+  const html = await fetchArticleHtml(href);
+  if (!html) {
+    return href !== card.href ? { ...card, href } : card;
+  }
+
+  const jsonLd = extractJsonLdArticle(html);
+  const fromHtml = needsBody ? extractArticleBodyHtml(html) : undefined;
+  let bodyHtml = card.bodyHtml;
+
+  if (needsBody) {
+    if (jsonLd?.bodyHtml && (!fromHtml || isLowQualityBodyHtml(fromHtml))) {
+      bodyHtml = jsonLd.bodyHtml;
+    } else {
+      bodyHtml = fromHtml ?? jsonLd?.bodyHtml;
+    }
+  }
+
+  const excerpt = needsExcerpt
+    ? extractOgDescriptionFromHtml(html) ?? jsonLd?.description ?? card.excerpt
+    : card.excerpt;
+
+  let imageUrl = card.imageUrl;
+  if (needsImage) {
+    const resolved =
+      extractOgImageFromHtml(html) ?? jsonLd?.imageUrl;
+    if (resolved && !isBadImageUrl(resolved)) {
+      imageUrl = resolved;
+    }
+  }
+
+  if (
+    bodyHtml === card.bodyHtml &&
+    excerpt === card.excerpt &&
+    imageUrl === card.imageUrl &&
+    href === card.href
+  ) {
+    return card;
   }
 
   return {
     ...card,
     href,
-    excerpt: content.excerpt ?? card.excerpt,
-    bodyHtml: content.bodyHtml ?? card.bodyHtml,
+    excerpt,
+    bodyHtml,
+    imageUrl,
   };
+}
+
+export async function hydrateArticleBody(card: MediaCard): Promise<MediaCard> {
+  return hydratePublishedArticle(card);
 }
 
 export async function fetchOgImage(url: string): Promise<string | undefined> {
