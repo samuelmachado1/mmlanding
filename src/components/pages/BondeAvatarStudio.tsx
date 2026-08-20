@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import frameQuemEhMax from '../../assets/backgrounds/frame-quem-eh-max.png';
 import bondeAvatarMari from '../../assets/pictures/bonde-avatar-mari.png';
 import bondeProMaxAbaReto from '../../assets/pictures/bonde-pro-max-aba-reto.png';
@@ -9,6 +10,9 @@ const previewAvatars = [
   { src: bondeProMaxAbaReta, label: 'Exemplo de avatar Aba Reta' },
   { src: bondeAvatarMari, label: 'Exemplo de avatar Mari' },
 ] as const;
+
+const embedPanelClassName =
+  'relative aspect-[980/580] w-full max-h-[min(80dvh,45rem)]';
 
 function AvatarPreview({ src, label }: { src: string; label: string }) {
   return (
@@ -36,9 +40,12 @@ export function BondeAvatarStudio({
   description,
   embedUrl,
   embedTitle,
+  embedLaunchLabel,
+  embedLaunchHint,
   embedUnavailableMessage,
 }: BondeAvatarStudioProps) {
   const resolvedEmbedUrl = import.meta.env.VITE_BONDE_AVATAR_EMBED_URL || embedUrl;
+  const [isEmbedActive, setIsEmbedActive] = useState(false);
 
   return (
     <section id="criar-avatar" className="scroll-mt-24 bg-navy-500 px-6 py-20 sm:px-8">
@@ -60,18 +67,41 @@ export function BondeAvatarStudio({
 
           <div className="min-w-0 overflow-hidden rounded-2xl border border-white/10 bg-white shadow-[0_24px_64px_rgba(0,0,0,0.28)]">
             {resolvedEmbedUrl ? (
-              <div className="relative aspect-[980/580] w-full max-h-[min(80dvh,45rem)] bg-[#333333]">
-                <iframe
-                  src={resolvedEmbedUrl}
-                  title={embedTitle}
-                  className="absolute inset-0 h-full w-full border-0"
-                  allow="clipboard-write; fullscreen"
-                  allowFullScreen
-                  referrerPolicy="strict-origin-when-cross-origin"
-                />
-              </div>
+              isEmbedActive ? (
+                <div className={`${embedPanelClassName} bg-[#333333]`}>
+                  <iframe
+                    src={resolvedEmbedUrl}
+                    title={embedTitle}
+                    tabIndex={-1}
+                    className="absolute inset-0 h-full w-full border-0"
+                    allow="clipboard-write; fullscreen"
+                    allowFullScreen
+                    referrerPolicy="strict-origin-when-cross-origin"
+                  />
+                </div>
+              ) : (
+                <div
+                  className={`${embedPanelClassName} flex flex-col items-center justify-center gap-4 bg-[#333333] px-6 text-center`}
+                >
+                  <button
+                    type="button"
+                    aria-label={embedLaunchLabel}
+                    onClick={() => setIsEmbedActive(true)}
+                    className="inline-flex min-h-11 items-center justify-center rounded-[10px] bg-yellow-500 px-8 py-3 font-nav text-base font-bold text-navy-500 transition hover:opacity-90 active:opacity-80"
+                  >
+                    {embedLaunchLabel}
+                  </button>
+                  {embedLaunchHint ? (
+                    <p className="max-w-sm font-nav text-sm leading-relaxed text-cream/80">
+                      {embedLaunchHint}
+                    </p>
+                  ) : null}
+                </div>
+              )
             ) : (
-              <div className="flex aspect-[980/580] max-h-[min(80dvh,45rem)] w-full items-center justify-center bg-cream px-6 text-center">
+              <div
+                className={`${embedPanelClassName} flex items-center justify-center bg-cream px-6 text-center`}
+              >
                 <p className="max-w-md font-nav text-base leading-relaxed text-brand-black/80">
                   {embedUnavailableMessage}
                 </p>

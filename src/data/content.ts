@@ -729,6 +729,8 @@ export const bondePageContent = {
       'Monte seu avatar no estilo Bonde Pro Max, como nos exemplos ao lado, e compartilhe nas redes para mostrar que você faz parte dessa caminhada.',
     embedUrl: 'https://itch.io/embed-upload/18864275?color=333333',
     embedTitle: 'MaxAvatar2026 no itch.io',
+    embedLaunchLabel: 'Iniciar criador',
+    embedLaunchHint: 'O jogo carrega aqui na página. Toque para abrir o criador de avatar.',
     embedUnavailableMessage:
       'O criador de avatares estará disponível em breve. Enquanto isso, acompanhe o Bonde Pro Max pelos canais oficiais.',
   },

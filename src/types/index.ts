@@ -258,6 +258,8 @@ export interface BondeAvatarStudioContent {
   description: string;
   embedUrl: string;
   embedTitle: string;
+  embedLaunchLabel: string;
+  embedLaunchHint?: string;
   embedUnavailableMessage: string;
 }
 
