@@ -46,9 +46,10 @@ export function buildPublishedPayload(
 
   const highlightUrl = highlightItem ? normalizeUrl(highlightItem.href) : null;
 
+  // Todas as publicadas exceto o destaque aparecem em "Notícias" na landing
+  // (entrevistas/podcasts/redes também; o filtro por tab ficava só na /midia).
   const reports = items
     .filter((card) => normalizeUrl(card.href) !== highlightUrl)
-    .filter((card) => card.tab === 'reportagens')
     .slice(0, 10)
     .map(toReport);
 

@@ -113,18 +113,65 @@ function rebuildPublishedPayload(store: ClippingsStore): ClippingsPayload {
 }
 
 async function enrichWithArticleContent(card: MediaCard): Promise<MediaCard> {
-  const { isGoogleNewsUrl } = await import('./google-news-url.js');
-  if (card.bodyHtml || isGoogleNewsUrl(card.href)) return card;
+  const { hydratePublishedArticle } = await import('./article-meta.js');
+  return hydratePublishedArticle(card);
+}
 
-  const { fetchArticleContent } = await import('./article-meta.js');
-  const content = await fetchArticleContent(card.href);
-  if (!content.bodyHtml && !content.excerpt) return card;
+function publishedItemChanged(before: MediaCard, after: MediaCard): boolean {
+  return (
+    after.bodyHtml !== before.bodyHtml ||
+    after.imageUrl !== before.imageUrl ||
+    after.excerpt !== before.excerpt ||
+    after.href !== before.href
+  );
+}
 
-  return {
-    ...card,
-    excerpt: content.excerpt ?? card.excerpt,
-    bodyHtml: content.bodyHtml ?? card.bodyHtml,
-  };
+export async function ensurePublishedMetadata(
+  store: ClippingsStore,
+): Promise<ClippingsStore> {
+  const { hydratePublishedArticle, isBadImageUrl } = await import('./article-meta.js');
+
+  const targets = store.published.items.filter(
+    (item) => !item.bodyHtml || isBadImageUrl(item.imageUrl),
+  );
+
+  if (targets.length === 0) return store;
+
+  let changed = false;
+
+  for (const target of targets.slice(0, 6)) {
+    const index = store.published.items.findIndex((item) => item.id === target.id);
+    if (index === -1) continue;
+
+    const hydrated = await hydratePublishedArticle(store.published.items[index]);
+    if (publishedItemChanged(store.published.items[index], hydrated)) {
+      store.published.items[index] = hydrated;
+      changed = true;
+    }
+  }
+
+  if (changed) {
+    store.published = rebuildPublishedPayload(store);
+    await saveStore(store);
+  }
+
+  return store;
+}
+
+export async function hydratePublishedItemById(id: string): Promise<MediaCard | null> {
+  const store = await getStore();
+  const index = store.published.items.findIndex((item) => item.id === id);
+  if (index === -1) return null;
+
+  const hydrated = await enrichWithArticleContent(store.published.items[index]);
+
+  if (publishedItemChanged(store.published.items[index], hydrated)) {
+    store.published.items[index] = hydrated;
+    store.published = rebuildPublishedPayload(store);
+    await saveStore(store);
+  }
+
+  return hydrated;
 }
 
 export async function approveItem(

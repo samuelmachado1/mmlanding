@@ -26,6 +26,7 @@ function ArticleBody({ article }: { article: MediaArticle }) {
         <img
           src={article.imageUrl}
           alt=""
+          referrerPolicy="no-referrer"
           className="w-full rounded-xl object-cover"
         />
       ) : null}

@@ -179,7 +179,9 @@ export async function getClippings(): Promise<ClippingsPayload | null> {
     return null;
   }
 
-  return rebuildPublishedPayload(store);
+  const { ensurePublishedMetadata } = await import('./store.js');
+  const updatedStore = await ensurePublishedMetadata(store);
+  return rebuildPublishedPayload(updatedStore);
 }
 
 export async function getPublishedItemById(id: string): Promise<MediaCard | null> {

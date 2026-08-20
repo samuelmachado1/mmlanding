@@ -29,6 +29,7 @@ function InterviewCard({ interview }: { interview: ClippingInterview }) {
           <img
             src={interview.imageUrl}
             alt=""
+            referrerPolicy="no-referrer"
             className="aspect-[424/283] w-full rounded object-cover bg-white/10"
           />
         ) : (
@@ -53,6 +54,7 @@ function ReportCard({ report }: { report: ClippingReport }) {
         <img
           src={report.imageUrl}
           alt=""
+          referrerPolicy="no-referrer"
           className="aspect-[120/80] w-[120px] shrink-0 rounded-md bg-white/10 object-cover"
         />
       ) : (

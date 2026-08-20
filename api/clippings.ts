@@ -11,10 +11,10 @@ export default async function handler(
   const id = typeof req.query.id === 'string' ? req.query.id : null;
 
   try {
-    const { getClippings, getPublishedItemById } = await import('./_lib/store-read.js');
+    const { getClippings, hydratePublishedItemById } = await import('./_lib/store.js');
 
     if (id) {
-      const item = await getPublishedItemById(id);
+      const item = await hydratePublishedItemById(id);
       if (!item) {
         return res.status(404).json({ error: 'Article not found' });
       }

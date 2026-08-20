@@ -51,25 +51,27 @@ export function BondeAvatarStudio({
         </h2>
         <p className="mt-4 max-w-2xl font-nav text-lg leading-relaxed text-cream/80">{description}</p>
 
-        <div className="mt-10 grid gap-8 lg:grid-cols-[minmax(0,15rem)_minmax(0,1fr)] lg:items-stretch lg:gap-10">
-          <div className="flex justify-center gap-4 lg:h-full lg:flex-col lg:justify-between lg:gap-6">
+        <div className="mt-10 grid min-w-0 gap-8 lg:grid-cols-[minmax(0,15rem)_minmax(0,1fr)] lg:items-start lg:gap-10">
+          <div className="flex min-w-0 justify-center gap-4 lg:flex-col lg:gap-6">
             {previewAvatars.map((avatar) => (
               <AvatarPreview key={avatar.label} src={avatar.src} label={avatar.label} />
             ))}
           </div>
 
-          <div className="flex min-h-[clamp(28rem,70vh,45rem)] flex-col overflow-hidden rounded-2xl border border-white/10 bg-white shadow-[0_24px_64px_rgba(0,0,0,0.28)] lg:h-full lg:min-h-0">
+          <div className="min-w-0 overflow-hidden rounded-2xl border border-white/10 bg-white shadow-[0_24px_64px_rgba(0,0,0,0.28)]">
             {resolvedEmbedUrl ? (
-              <iframe
-                src={resolvedEmbedUrl}
-                title={embedTitle}
-                className="block h-full min-h-[clamp(28rem,70vh,45rem)] w-full lg:min-h-0"
-                loading="lazy"
-                allow="clipboard-write; fullscreen"
-                referrerPolicy="strict-origin-when-cross-origin"
-              />
+              <div className="relative aspect-[980/580] w-full max-h-[min(80dvh,45rem)] bg-[#333333]">
+                <iframe
+                  src={resolvedEmbedUrl}
+                  title={embedTitle}
+                  className="absolute inset-0 h-full w-full border-0"
+                  allow="clipboard-write; fullscreen"
+                  allowFullScreen
+                  referrerPolicy="strict-origin-when-cross-origin"
+                />
+              </div>
             ) : (
-              <div className="flex h-full min-h-[clamp(28rem,70vh,45rem)] items-center justify-center bg-cream px-6 text-center lg:min-h-0">
+              <div className="flex aspect-[980/580] max-h-[min(80dvh,45rem)] w-full items-center justify-center bg-cream px-6 text-center">
                 <p className="max-w-md font-nav text-base leading-relaxed text-brand-black/80">
                   {embedUnavailableMessage}
                 </p>
