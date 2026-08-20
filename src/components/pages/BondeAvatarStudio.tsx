@@ -65,7 +65,9 @@ export function BondeAvatarStudio({
                 title={embedTitle}
                 className="block h-full min-h-[clamp(28rem,70vh,45rem)] w-full lg:min-h-0"
                 loading="lazy"
+                frameBorder={0}
                 allow="clipboard-write; fullscreen"
+                allowFullScreen
                 referrerPolicy="strict-origin-when-cross-origin"
               />
             ) : (
