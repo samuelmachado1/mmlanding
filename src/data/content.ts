@@ -32,8 +32,9 @@ import midiaCamaraPec from '../assets/pictures/midia/camara-pec.png';
 import midiaFolha from '../assets/pictures/midia/folha.png';
 import midiaGlobo from '../assets/pictures/midia/globo.png';
 import midiaPodcast from '../assets/pictures/midia/podcast.png';
+import { getContactEmail } from '../lib/contact-email.ts';
 
-export const siteConfig = {
+const siteIdentity = {
   name: 'Deputado Max Maciel',
   tagline: 'Coragem para defender o Distrito Federal',
   phase: 'Campanha de Reeleição',
@@ -53,8 +54,14 @@ export const siteConfig = {
     bondeGroupUrl:
       'https://chat.whatsapp.com/Erw07ITrsnl2qIYO6mNKOP?s=cl&p=a&mlu=0&ilr=0',
   },
-  email: 'contato@maxmaciel.com.br',
 } as const;
+
+export const siteConfig = {
+  ...siteIdentity,
+  get email() {
+    return getContactEmail();
+  },
+};
 
 export const navItems: NavItem[] = [
   { label: 'Quem é Max', href: '/quem-e-max' },
@@ -863,7 +870,7 @@ export const privacyPolicyContent = {
       heading: '1. Quem é o controlador dos dados',
       paragraphs: [
         `Esta Política de Privacidade descreve como ${siteConfig.name} e o comitê de campanha responsável pela reeleição tratam os dados pessoais coletados por este site.`,
-        `Para questões sobre privacidade e proteção de dados, entre em contato pelo e-mail ${siteConfig.email}.`,
+        'Para questões sobre privacidade e proteção de dados, entre em contato pelo e-mail {{CONTACT_EMAIL}}.',
       ],
     },
     {
@@ -907,7 +914,7 @@ export const privacyPolicyContent = {
     {
       heading: '8. Como exercer seus direitos',
       paragraphs: [
-        `Para exercer qualquer um desses direitos, envie um e-mail a ${siteConfig.email} com o assunto "Privacidade — LGPD". Responderemos em prazo razoável, conforme a legislação aplicável.`,
+        'Para exercer qualquer um desses direitos, envie um e-mail a {{CONTACT_EMAIL}} com o assunto "Privacidade — LGPD". Responderemos em prazo razoável, conforme a legislação aplicável.',
       ],
     },
     {
@@ -1102,6 +1109,8 @@ export const contatoPage = {
   title: 'Contato',
   intro:
     'Entre em contato com a gente através das nossas redes sociais ou, se preferir, pelo e-mail e telefone abaixo:',
-  email: siteConfig.email,
+  get email() {
+    return siteConfig.email;
+  },
   phone: '(61) 0000-0000',
 };

@@ -1,4 +1,4 @@
-import { privacyPolicyContent } from '../../data/content.ts';
+import { privacyPolicyContent, siteConfig } from '../../data/content.ts';
 import { Modal } from '../ui/Modal.tsx';
 
 interface PrivacyPolicyModalProps {
@@ -17,11 +17,14 @@ export function PrivacyPolicyModal({ isOpen, onClose }: PrivacyPolicyModalProps)
           <section key={section.heading}>
             <h3 className="font-nav text-sm font-bold text-brand-black">{section.heading}</h3>
             <div className="mt-2 space-y-2">
-              {section.paragraphs.map((paragraph) => (
-                <p key={paragraph.slice(0, 48)} className="font-nav text-sm leading-relaxed text-gray-700">
-                  {paragraph}
-                </p>
-              ))}
+              {section.paragraphs.map((paragraph) => {
+                const text = paragraph.replaceAll('{{CONTACT_EMAIL}}', siteConfig.email);
+                return (
+                  <p key={paragraph.slice(0, 48)} className="font-nav text-sm leading-relaxed text-gray-700">
+                    {text}
+                  </p>
+                );
+              })}
             </div>
           </section>
         ))}
