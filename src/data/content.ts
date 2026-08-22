@@ -51,8 +51,7 @@ const siteIdentity = {
   },
   whatsapp: {
     chatUrl: 'https://wa.me/5561982521212',
-    bondeGroupUrl:
-      'https://chat.whatsapp.com/Erw07ITrsnl2qIYO6mNKOP?s=cl&p=a&mlu=0&ilr=0',
+    bondeGroupUrl: 'https://lnkl.st/orv_mo8fy9',
   },
 } as const;
 
