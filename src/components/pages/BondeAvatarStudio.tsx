@@ -29,16 +29,26 @@ function AvatarPreview({ src, label }: { src: string; label: string }) {
   );
 }
 
+function AvatarStudioCredit({ children }: { children: string }) {
+  return (
+    <p className="border-t border-white/10 bg-navy-500 px-4 py-3 text-center font-nav text-sm font-semibold italic tracking-wide text-yellow-500">
+      {children}
+    </p>
+  );
+}
+
 interface MobileAvatarLauncherProps {
   embedTitle: string;
   externalPlayUrl: string;
   externalPlayCta: string;
+  humanCredit: string;
 }
 
 function MobileAvatarLauncher({
   embedTitle,
   externalPlayUrl,
   externalPlayCta,
+  humanCredit,
 }: MobileAvatarLauncherProps) {
   return (
     <div className="overflow-hidden rounded-2xl border border-white/10 bg-cream shadow-[0_24px_64px_rgba(0,0,0,0.28)]">
@@ -70,6 +80,7 @@ function MobileAvatarLauncher({
           {externalPlayCta}
         </a>
       </div>
+      <AvatarStudioCredit>{humanCredit}</AvatarStudioCredit>
     </div>
   );
 }
@@ -119,28 +130,45 @@ export function BondeAvatarStudio({
                     referrerPolicy="strict-origin-when-cross-origin"
                   />
                 </div>
+                <AvatarStudioCredit>{humanCredit}</AvatarStudioCredit>
               </div>
             ) : isMobileLayout && resolvedEmbedUrl ? (
               <MobileAvatarLauncher
                 embedTitle={embedTitle}
                 externalPlayUrl={externalPlayUrl}
                 externalPlayCta={externalPlayCta}
+                humanCredit={humanCredit}
               />
             ) : (
-              <div className="flex min-h-[20rem] flex-col items-center justify-center gap-6 rounded-2xl bg-cream px-6 py-10 text-center">
-                <p className="max-w-md font-nav text-base leading-relaxed text-brand-black/80">
-                  {embedUnavailableMessage}
-                </p>
-                <a
-                  href={externalPlayUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center rounded-full bg-yellow-500 px-6 py-3 font-nav text-base font-bold text-brand-black transition hover:bg-yellow-400"
-                >
-                  {externalPlayCta}
-                </a>
+              <div className="overflow-hidden rounded-2xl border border-white/10 bg-cream shadow-[0_24px_64px_rgba(0,0,0,0.28)]">
+                <div className="flex min-h-[20rem] flex-col items-center justify-center gap-6 px-6 py-10 text-center">
+                  <p className="max-w-md font-nav text-base leading-relaxed text-brand-black/80">
+                    {embedUnavailableMessage}
+                  </p>
+                  <a
+                    href={externalPlayUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center rounded-full bg-yellow-500 px-6 py-3 font-nav text-base font-bold text-brand-black transition hover:bg-yellow-400"
+                  >
+                    {externalPlayCta}
+                  </a>
+                </div>
+                <AvatarStudioCredit>{humanCredit}</AvatarStudioCredit>
               </div>
             )}
+
+            <p className="mt-3 text-center font-nav text-sm text-cream/70">
+              Problemas para carregar?{' '}
+              <a
+                href={externalPlayUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-semibold text-yellow-500 underline-offset-2 hover:underline"
+              >
+                Abrir no itch.io
+              </a>
+            </p>
           </div>
 
           <div className="order-2 grid min-w-0 grid-cols-3 gap-2 sm:gap-3 lg:order-1 lg:flex lg:h-full lg:flex-col lg:justify-between lg:gap-6">
@@ -149,10 +177,6 @@ export function BondeAvatarStudio({
             ))}
           </div>
         </div>
-
-        <p className="mt-8 text-center font-nav text-sm italic leading-relaxed text-cream/60 lg:mt-10">
-          {humanCredit}
-        </p>
       </div>
     </section>
   );
