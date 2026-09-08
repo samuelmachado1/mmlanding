@@ -256,6 +256,8 @@ export interface BondeAvatarStudioContent {
   eyebrow: string;
   title: string;
   description: string;
+  iosNotice: string;
+  humanCredit: string;
   embedUrl: string;
   embedTitle: string;
   embedUnavailableMessage: string;
