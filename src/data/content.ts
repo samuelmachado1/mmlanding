@@ -742,12 +742,15 @@ export const bondePageContent = {
     title: 'Crie seu personagem aba reta',
     description:
       'Monte seu avatar no estilo Bonde Pro Max, como nos exemplos ao lado, e compartilhe nas redes para mostrar que você faz parte dessa caminhada.',
+    iosNotice:
+      'Atenção: algumas versões do iOS podem ter dificuldade em rodar o Gerador de avatar. Caso seja seu caso, tente via desktop.',
+    humanCredit: 'Pensado e criado por mentes e mãos humanas',
     embedUrl: 'https://itch.io/embed-upload/19160506?color=333333',
     embedTitle: 'MaxAvatar2026 — Criador de avatares Bonde Pro Max',
     embedUnavailableMessage:
       'Não foi possível carregar o criador de avatares. Use o botão abaixo para abrir no itch.io.',
     externalPlayUrl: 'https://kombits.itch.io/maxavatar2026',
-    externalPlayCta: 'Abrir criador no itch.io',
+    externalPlayCta: 'Criar meu avatar',
   },
   actions: {
     eyebrow: 'Como participar',
