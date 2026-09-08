@@ -63,9 +63,10 @@ export function BondeAvatarStudio({
               <iframe
                 src={resolvedEmbedUrl}
                 title={embedTitle}
-                className="block h-full min-h-[clamp(28rem,70vh,45rem)] w-full lg:min-h-0"
+                className="block h-full min-h-[clamp(28rem,70vh,45rem)] w-full border-0 lg:min-h-0"
                 loading="lazy"
                 allow="clipboard-write; fullscreen"
+                allowFullScreen
                 referrerPolicy="strict-origin-when-cross-origin"
               />
             ) : (
