@@ -263,6 +263,27 @@ export interface BondeAvatarStudioContent {
   externalPlayCta: string;
 }
 
+export interface FlickrPhoto {
+  id: string;
+  title: string;
+  href: string;
+  imageUrl: string;
+  dateTaken: string;
+}
+
+export interface FlickrGalleryContent {
+  eyebrow: string;
+  title: string;
+  description: string;
+  profileUrl: string;
+  profileCta: string;
+}
+
+export interface FlickrPhotosPayload {
+  fetchedAt: string;
+  items: FlickrPhoto[];
+}
+
 export interface MissionCard {
   points: string;
   title: string;

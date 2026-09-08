@@ -1,6 +1,7 @@
 import frameQuemEhMax from '../assets/backgrounds/frame-quem-eh-max.png';
 import quemEhMax from '../assets/pictures/quem-eh-max.png';
-import { quemEPage } from '../data/content.ts';
+import { flickrGalleryContent, quemEPage } from '../data/content.ts';
+import { FlickrGallery } from '../components/pages/FlickrGallery.tsx';
 import {
   InternalPageLayout,
   PageHero,
@@ -38,6 +39,8 @@ export default function QuemEPage() {
           </div>
         </div>
       </PageSection>
+
+      <FlickrGallery {...flickrGalleryContent} />
     </InternalPageLayout>
   );
 }

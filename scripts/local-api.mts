@@ -99,6 +99,7 @@ function toVercelRequest(
 
 const routes: Record<string, () => Promise<{ default: Handler }>> = {
   '/api/clippings': () => import('../api/clippings.ts'),
+  '/api/flickr-photos': () => import('../api/flickr-photos.ts'),
 };
 
 async function loadAdminHandler() {

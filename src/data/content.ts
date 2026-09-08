@@ -457,6 +457,15 @@ export const quemEPage: PageContent = {
 /** Resumo para a seção da landing page */
 export const quemEPageSummary = quemEPage.paragraphs.slice(0, 3);
 
+export const flickrGalleryContent = {
+  eyebrow: 'Registros visuais',
+  title: 'Fotos do mandato no Flickr',
+  description:
+    'Acompanhe momentos da caminhada, eventos e ações do mandato no acervo oficial de fotos no Flickr.',
+  profileUrl: 'https://www.flickr.com/photos/maxmacieldf/',
+  profileCta: 'Ver todas as fotos no Flickr',
+};
+
 export const mandatoHub = {
   title: 'Mandato Aba Reta',
   intro: 'Conheça as principais frentes de trabalho do primeiro mandato:',
@@ -733,10 +742,10 @@ export const bondePageContent = {
     title: 'Crie seu personagem aba reta',
     description:
       'Monte seu avatar no estilo Bonde Pro Max, como nos exemplos ao lado, e compartilhe nas redes para mostrar que você faz parte dessa caminhada.',
-    embedUrl: '',
+    embedUrl: 'https://itch.io/embed-upload/18864275?color=333333',
     embedTitle: 'MaxAvatar2026 — Criador de avatares Bonde Pro Max',
     embedUnavailableMessage:
-      'O embed do criador precisa ser atualizado. Use o botão abaixo para abrir o MaxAvatar2026 no itch.io.',
+      'Não foi possível carregar o criador de avatares. Use o botão abaixo para abrir no itch.io.',
     externalPlayUrl: 'https://kombits.itch.io/maxavatar2026',
     externalPlayCta: 'Abrir criador no itch.io',
   },
