@@ -37,6 +37,8 @@ export function BondeAvatarStudio({
   embedUrl,
   embedTitle,
   embedUnavailableMessage,
+  externalPlayUrl,
+  externalPlayCta,
 }: BondeAvatarStudioProps) {
   const resolvedEmbedUrl = import.meta.env.VITE_BONDE_AVATAR_EMBED_URL || embedUrl;
 
@@ -70,10 +72,18 @@ export function BondeAvatarStudio({
                 referrerPolicy="strict-origin-when-cross-origin"
               />
             ) : (
-              <div className="flex h-full min-h-[clamp(28rem,70vh,45rem)] items-center justify-center bg-cream px-6 text-center lg:min-h-0">
+              <div className="flex h-full min-h-[clamp(28rem,70vh,45rem)] flex-col items-center justify-center gap-6 bg-cream px-6 text-center lg:min-h-0">
                 <p className="max-w-md font-nav text-base leading-relaxed text-brand-black/80">
                   {embedUnavailableMessage}
                 </p>
+                <a
+                  href={externalPlayUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center rounded-full bg-yellow-500 px-6 py-3 font-nav text-base font-bold text-brand-black transition hover:bg-yellow-400"
+                >
+                  {externalPlayCta}
+                </a>
               </div>
             )}
           </div>

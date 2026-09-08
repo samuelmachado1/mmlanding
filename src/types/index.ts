@@ -259,6 +259,8 @@ export interface BondeAvatarStudioContent {
   embedUrl: string;
   embedTitle: string;
   embedUnavailableMessage: string;
+  externalPlayUrl: string;
+  externalPlayCta: string;
 }
 
 export interface MissionCard {
