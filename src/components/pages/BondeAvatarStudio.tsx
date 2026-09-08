@@ -12,7 +12,7 @@ const previewAvatars = [
 
 function AvatarPreview({ src, label }: { src: string; label: string }) {
   return (
-    <div className="relative aspect-square w-full max-w-[11rem] overflow-hidden rounded-2xl bg-cream sm:max-w-[12.5rem]">
+    <div className="relative aspect-square w-full overflow-hidden rounded-xl bg-cream sm:rounded-2xl lg:max-w-[12.5rem]">
       <img
         src={frameQuemEhMax}
         alt=""
@@ -43,8 +43,8 @@ export function BondeAvatarStudio({
   const resolvedEmbedUrl = import.meta.env.VITE_BONDE_AVATAR_EMBED_URL || embedUrl;
 
   return (
-    <section id="criar-avatar" className="scroll-mt-24 bg-navy-500 px-6 py-20 sm:px-8">
-      <div className="mx-auto max-w-6xl">
+    <section id="criar-avatar" className="scroll-mt-24 overflow-x-clip bg-navy-500 px-4 py-14 sm:px-6 sm:py-20 lg:px-8">
+      <div className="mx-auto w-full min-w-0 max-w-6xl">
         <p className="font-nav text-[17px] font-semibold uppercase tracking-[0.05em] text-cream/80">
           {eyebrow}
         </p>
@@ -53,39 +53,57 @@ export function BondeAvatarStudio({
         </h2>
         <p className="mt-4 max-w-2xl font-nav text-lg leading-relaxed text-cream/80">{description}</p>
 
-        <div className="mt-10 grid gap-8 lg:grid-cols-[minmax(0,15rem)_minmax(0,1fr)] lg:items-stretch lg:gap-10">
-          <div className="flex justify-center gap-4 lg:h-full lg:flex-col lg:justify-between lg:gap-6">
-            {previewAvatars.map((avatar) => (
-              <AvatarPreview key={avatar.label} src={avatar.src} label={avatar.label} />
-            ))}
-          </div>
+        <div className="mt-8 grid min-w-0 gap-6 lg:mt-10 lg:grid-cols-[minmax(0,15rem)_minmax(0,1fr)] lg:items-stretch lg:gap-10">
+          <div className="order-1 min-w-0 lg:order-2 lg:h-full">
+            <div className="overflow-hidden rounded-2xl border border-white/10 bg-white shadow-[0_24px_64px_rgba(0,0,0,0.28)]">
+              <div className="relative aspect-[980/580] w-full max-w-full lg:aspect-auto lg:min-h-[min(45rem,70vh)] lg:h-full">
+                {resolvedEmbedUrl ? (
+                  <iframe
+                    src={resolvedEmbedUrl}
+                    title={embedTitle}
+                    className="absolute inset-0 h-full w-full max-w-full border-0"
+                    loading="lazy"
+                    allow="clipboard-write; fullscreen"
+                    allowFullScreen
+                    referrerPolicy="strict-origin-when-cross-origin"
+                  />
+                ) : (
+                  <div className="absolute inset-0 flex flex-col items-center justify-center gap-6 bg-cream px-6 text-center">
+                    <p className="max-w-md font-nav text-base leading-relaxed text-brand-black/80">
+                      {embedUnavailableMessage}
+                    </p>
+                    <a
+                      href={externalPlayUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center rounded-full bg-yellow-500 px-6 py-3 font-nav text-base font-bold text-brand-black transition hover:bg-yellow-400"
+                    >
+                      {externalPlayCta}
+                    </a>
+                  </div>
+                )}
+              </div>
+            </div>
 
-          <div className="flex min-h-[clamp(28rem,70vh,45rem)] flex-col overflow-hidden rounded-2xl border border-white/10 bg-white shadow-[0_24px_64px_rgba(0,0,0,0.28)] lg:h-full lg:min-h-0">
             {resolvedEmbedUrl ? (
-              <iframe
-                src={resolvedEmbedUrl}
-                title={embedTitle}
-                className="block h-full min-h-[clamp(28rem,70vh,45rem)] w-full border-0 lg:min-h-0"
-                loading="lazy"
-                allow="clipboard-write; fullscreen"
-                allowFullScreen
-                referrerPolicy="strict-origin-when-cross-origin"
-              />
-            ) : (
-              <div className="flex h-full min-h-[clamp(28rem,70vh,45rem)] flex-col items-center justify-center gap-6 bg-cream px-6 text-center lg:min-h-0">
-                <p className="max-w-md font-nav text-base leading-relaxed text-brand-black/80">
-                  {embedUnavailableMessage}
-                </p>
+              <p className="mt-3 text-center font-nav text-sm text-cream/70 lg:hidden">
+                Problemas para carregar?{' '}
                 <a
                   href={externalPlayUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center rounded-full bg-yellow-500 px-6 py-3 font-nav text-base font-bold text-brand-black transition hover:bg-yellow-400"
+                  className="font-semibold text-yellow-500 underline-offset-2 hover:underline"
                 >
-                  {externalPlayCta}
+                  Abrir no itch.io
                 </a>
-              </div>
-            )}
+              </p>
+            ) : null}
+          </div>
+
+          <div className="order-2 grid min-w-0 grid-cols-3 gap-2 sm:gap-3 lg:order-1 lg:flex lg:h-full lg:flex-col lg:justify-between lg:gap-6">
+            {previewAvatars.map((avatar) => (
+              <AvatarPreview key={avatar.label} src={avatar.src} label={avatar.label} />
+            ))}
           </div>
         </div>
       </div>
