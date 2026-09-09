@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import frameQuemEhMax from '../../assets/backgrounds/frame-quem-eh-max.png';
 import bondeAvatarMari from '../../assets/pictures/bonde-avatar-mari.png';
 import bondeProMaxAbaReto from '../../assets/pictures/bonde-pro-max-aba-reto.png';
@@ -50,7 +51,9 @@ export function BondeAvatarStudio({
   externalPlayUrl,
   externalPlayCta,
 }: BondeAvatarStudioProps) {
+  const [embedFailed, setEmbedFailed] = useState(false);
   const resolvedEmbedUrl = import.meta.env.VITE_BONDE_AVATAR_EMBED_URL || embedUrl;
+  const showEmbed = Boolean(resolvedEmbedUrl) && !embedFailed;
 
   return (
     <section id="criar-avatar" className="scroll-mt-24 overflow-x-clip bg-navy-500 px-4 py-14 sm:px-6 sm:py-20 lg:px-8">
@@ -68,15 +71,16 @@ export function BondeAvatarStudio({
           <div className="order-1 flex min-w-0 flex-col lg:order-2 lg:h-full">
             <div className="flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-white shadow-[0_24px_64px_rgba(0,0,0,0.28)] lg:h-full">
               <div className="relative aspect-[980/580] w-full min-w-0 lg:min-h-[min(45rem,70vh)] lg:flex-1 lg:aspect-auto">
-                {resolvedEmbedUrl ? (
+                {showEmbed ? (
                   <iframe
                     src={resolvedEmbedUrl}
                     title={embedTitle}
                     className="absolute inset-0 h-full w-full max-w-full border-0"
-                    loading="lazy"
-                    allow="clipboard-write; fullscreen"
+                    allow="autoplay; clipboard-write; fullscreen; gamepad; gyroscope; accelerometer"
                     allowFullScreen
                     referrerPolicy="strict-origin-when-cross-origin"
+                    sandbox="allow-scripts allow-same-origin allow-pointer-lock allow-downloads allow-popups allow-forms allow-modals"
+                    onError={() => setEmbedFailed(true)}
                   />
                 ) : (
                   <div className="absolute inset-0 flex flex-col items-center justify-center gap-6 bg-cream px-6 text-center">
