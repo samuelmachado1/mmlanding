@@ -2,7 +2,6 @@ import frameQuemEhMax from '../../assets/backgrounds/frame-quem-eh-max.png';
 import bondeAvatarMari from '../../assets/pictures/bonde-avatar-mari.png';
 import bondeProMaxAbaReto from '../../assets/pictures/bonde-pro-max-aba-reto.png';
 import bondeProMaxAbaReta from '../../assets/pictures/bonde-pro-max-aba-reta.png';
-import { useMobileLayout } from '../../hooks/useMobileLayout.ts';
 import type { BondeAvatarStudioContent } from '../../types/index.ts';
 
 const previewAvatars = [
@@ -31,57 +30,9 @@ function AvatarPreview({ src, label }: { src: string; label: string }) {
 
 function AvatarStudioCredit({ children }: { children: string }) {
   return (
-    <p className="border-t border-white/10 bg-navy-500 px-4 py-3 text-center font-nav text-sm font-semibold italic tracking-wide text-yellow-500">
+    <p className="shrink-0 border-t border-white/10 bg-navy-500 px-4 py-3 text-center font-nav text-sm font-semibold italic tracking-wide text-yellow-500">
       {children}
     </p>
-  );
-}
-
-interface MobileAvatarLauncherProps {
-  embedTitle: string;
-  externalPlayUrl: string;
-  externalPlayCta: string;
-  humanCredit: string;
-}
-
-function MobileAvatarLauncher({
-  embedTitle,
-  externalPlayUrl,
-  externalPlayCta,
-  humanCredit,
-}: MobileAvatarLauncherProps) {
-  return (
-    <div className="overflow-hidden rounded-2xl border border-white/10 bg-cream shadow-[0_24px_64px_rgba(0,0,0,0.28)]">
-      <div className="relative mx-auto aspect-square w-full max-w-[16rem]">
-        <img
-          src={frameQuemEhMax}
-          alt=""
-          aria-hidden
-          className="absolute inset-0 h-full w-full object-contain object-bottom"
-        />
-        <img
-          src={bondeProMaxAbaReto}
-          alt=""
-          aria-hidden
-          className="absolute inset-0 h-full w-full object-contain object-bottom"
-        />
-      </div>
-      <div className="space-y-4 px-5 py-6 text-center">
-        <p className="font-nav text-base leading-relaxed text-brand-black/80">
-          No celular, o criador abre em tela cheia no itch.io para funcionar melhor com toque e download do avatar.
-        </p>
-        <a
-          href={externalPlayUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label={embedTitle}
-          className="inline-flex min-h-12 w-full items-center justify-center rounded-full bg-yellow-500 px-6 py-3 font-nav text-base font-bold text-brand-black transition hover:bg-yellow-400"
-        >
-          {externalPlayCta}
-        </a>
-      </div>
-      <AvatarStudioCredit>{humanCredit}</AvatarStudioCredit>
-    </div>
   );
 }
 
@@ -99,9 +50,7 @@ export function BondeAvatarStudio({
   externalPlayUrl,
   externalPlayCta,
 }: BondeAvatarStudioProps) {
-  const isMobileLayout = useMobileLayout();
   const resolvedEmbedUrl = import.meta.env.VITE_BONDE_AVATAR_EMBED_URL || embedUrl;
-  const showEmbed = Boolean(resolvedEmbedUrl) && !isMobileLayout;
 
   return (
     <section id="criar-avatar" className="scroll-mt-24 overflow-x-clip bg-navy-500 px-4 py-14 sm:px-6 sm:py-20 lg:px-8">
@@ -117,9 +66,9 @@ export function BondeAvatarStudio({
 
         <div className="mt-8 grid min-w-0 gap-6 lg:mt-10 lg:grid-cols-[minmax(0,15rem)_minmax(0,1fr)] lg:items-stretch lg:gap-10">
           <div className="order-1 min-w-0 lg:order-2 lg:h-full">
-            {showEmbed ? (
-              <div className="overflow-hidden rounded-2xl border border-white/10 bg-white shadow-[0_24px_64px_rgba(0,0,0,0.28)]">
-                <div className="relative aspect-[980/620] w-full max-w-full lg:aspect-auto lg:min-h-[min(45rem,70vh)] lg:h-full">
+            <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-white/10 bg-white shadow-[0_24px_64px_rgba(0,0,0,0.28)]">
+              <div className="relative aspect-[980/580] w-full min-w-0 flex-1 lg:aspect-auto lg:min-h-[min(45rem,70vh)]">
+                {resolvedEmbedUrl ? (
                   <iframe
                     src={resolvedEmbedUrl}
                     title={embedTitle}
@@ -129,46 +78,38 @@ export function BondeAvatarStudio({
                     allowFullScreen
                     referrerPolicy="strict-origin-when-cross-origin"
                   />
-                </div>
-                <AvatarStudioCredit>{humanCredit}</AvatarStudioCredit>
+                ) : (
+                  <div className="absolute inset-0 flex flex-col items-center justify-center gap-6 bg-cream px-6 text-center">
+                    <p className="max-w-md font-nav text-base leading-relaxed text-brand-black/80">
+                      {embedUnavailableMessage}
+                    </p>
+                    <a
+                      href={externalPlayUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center rounded-full bg-yellow-500 px-6 py-3 font-nav text-base font-bold text-brand-black transition hover:bg-yellow-400"
+                    >
+                      {externalPlayCta}
+                    </a>
+                  </div>
+                )}
               </div>
-            ) : isMobileLayout && resolvedEmbedUrl ? (
-              <MobileAvatarLauncher
-                embedTitle={embedTitle}
-                externalPlayUrl={externalPlayUrl}
-                externalPlayCta={externalPlayCta}
-                humanCredit={humanCredit}
-              />
-            ) : (
-              <div className="overflow-hidden rounded-2xl border border-white/10 bg-cream shadow-[0_24px_64px_rgba(0,0,0,0.28)]">
-                <div className="flex min-h-[20rem] flex-col items-center justify-center gap-6 px-6 py-10 text-center">
-                  <p className="max-w-md font-nav text-base leading-relaxed text-brand-black/80">
-                    {embedUnavailableMessage}
-                  </p>
-                  <a
-                    href={externalPlayUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center rounded-full bg-yellow-500 px-6 py-3 font-nav text-base font-bold text-brand-black transition hover:bg-yellow-400"
-                  >
-                    {externalPlayCta}
-                  </a>
-                </div>
-                <AvatarStudioCredit>{humanCredit}</AvatarStudioCredit>
-              </div>
-            )}
+              <AvatarStudioCredit>{humanCredit}</AvatarStudioCredit>
+            </div>
 
-            <p className="mt-3 text-center font-nav text-sm text-cream/70">
-              Problemas para carregar?{' '}
-              <a
-                href={externalPlayUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-semibold text-yellow-500 underline-offset-2 hover:underline"
-              >
-                Abrir no itch.io
-              </a>
-            </p>
+            {resolvedEmbedUrl ? (
+              <p className="mt-3 text-center font-nav text-sm text-cream/70">
+                Problemas para carregar?{' '}
+                <a
+                  href={externalPlayUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-semibold text-yellow-500 underline-offset-2 hover:underline"
+                >
+                  Abrir no itch.io
+                </a>
+              </p>
+            ) : null}
           </div>
 
           <div className="order-2 grid min-w-0 grid-cols-3 gap-2 sm:gap-3 lg:order-1 lg:flex lg:h-full lg:flex-col lg:justify-between lg:gap-6">
