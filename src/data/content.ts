@@ -745,8 +745,7 @@ export const bondePageContent = {
     iosNotice:
       'Atenção: algumas versões do iOS podem ter dificuldade em rodar o Gerador de avatar. Caso seja seu caso, tente via desktop.',
     humanCredit: 'Pensado e criado por mentes e mãos humanas',
-    embedUrl:
-      'https://html-classic.itch.zone/html/19160506/MaxAvatar2026%20v6/index.html?v=1788904705',
+    embedUrl: 'https://itch.io/embed-upload/19160506?color=333333',
     embedTitle: 'MaxAvatar2026 — Criador de avatares Bonde Pro Max',
     embedUnavailableMessage:
       'Não foi possível carregar o criador de avatares. Use o botão abaixo para abrir no itch.io.',

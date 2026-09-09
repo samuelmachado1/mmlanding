@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import frameQuemEhMax from '../../assets/backgrounds/frame-quem-eh-max.png';
 import bondeAvatarMari from '../../assets/pictures/bonde-avatar-mari.png';
 import bondeProMaxAbaReto from '../../assets/pictures/bonde-pro-max-aba-reto.png';
@@ -52,8 +52,14 @@ export function BondeAvatarStudio({
   externalPlayCta,
 }: BondeAvatarStudioProps) {
   const [embedFailed, setEmbedFailed] = useState(false);
+  const [embedStarted, setEmbedStarted] = useState(false);
   const resolvedEmbedUrl = import.meta.env.VITE_BONDE_AVATAR_EMBED_URL || embedUrl;
-  const showEmbed = Boolean(resolvedEmbedUrl) && !embedFailed;
+  const showEmbed = Boolean(resolvedEmbedUrl) && !embedFailed && embedStarted;
+
+  useEffect(() => {
+    const desktop = window.matchMedia('(min-width: 1024px)');
+    if (desktop.matches) setEmbedStarted(true);
+  }, []);
 
   return (
     <section id="criar-avatar" className="scroll-mt-24 overflow-x-clip bg-navy-500 px-4 py-14 sm:px-6 sm:py-20 lg:px-8">
@@ -79,11 +85,10 @@ export function BondeAvatarStudio({
                     allow="autoplay; clipboard-write; fullscreen; gamepad; gyroscope; accelerometer"
                     allowFullScreen
                     referrerPolicy="strict-origin-when-cross-origin"
-                    sandbox="allow-scripts allow-same-origin allow-pointer-lock allow-downloads allow-popups allow-forms allow-modals"
                     onError={() => setEmbedFailed(true)}
                   />
-                ) : (
-                  <div className="absolute inset-0 flex flex-col items-center justify-center gap-6 bg-cream px-6 text-center">
+                ) : embedFailed || !resolvedEmbedUrl ? (
+                  <div className="absolute inset-0 flex flex-col items-center justify-center gap-6 bg-[#f2efe7] px-6 text-center">
                     <p className="max-w-md font-nav text-base leading-relaxed text-brand-black/80">
                       {embedUnavailableMessage}
                     </p>
@@ -91,9 +96,30 @@ export function BondeAvatarStudio({
                       href={externalPlayUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center rounded-full bg-yellow-500 px-6 py-3 font-nav text-base font-bold text-brand-black transition hover:bg-yellow-400"
+                      className="inline-flex min-h-12 items-center justify-center rounded-full bg-yellow-500 px-6 py-3 font-nav text-base font-bold text-brand-black transition hover:bg-yellow-400"
                     >
                       {externalPlayCta}
+                    </a>
+                  </div>
+                ) : (
+                  <div className="absolute inset-0 flex flex-col items-center justify-center gap-5 bg-[#f2efe7] px-6 text-center">
+                    <p className="max-w-md font-nav text-base leading-relaxed text-brand-black/80">
+                      No celular, toque para carregar o gerador. Se a página travar, use o itch.io.
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => setEmbedStarted(true)}
+                      className="inline-flex min-h-12 items-center justify-center rounded-full bg-yellow-500 px-6 py-3 font-nav text-base font-bold text-brand-black transition hover:bg-yellow-400"
+                    >
+                      Iniciar gerador
+                    </button>
+                    <a
+                      href={externalPlayUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-nav text-sm font-semibold text-navy-500 underline-offset-2 hover:underline"
+                    >
+                      Abrir no itch.io
                     </a>
                   </div>
                 )}
