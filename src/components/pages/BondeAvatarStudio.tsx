@@ -64,10 +64,10 @@ export function BondeAvatarStudio({
         <p className="mt-4 max-w-2xl font-nav text-lg leading-relaxed text-cream/80">{description}</p>
         <p className="mt-3 max-w-2xl font-nav text-base leading-relaxed text-yellow-500/90">{iosNotice}</p>
 
-        <div className="mt-8 grid min-w-0 gap-6 lg:mt-10 lg:grid-cols-[minmax(0,15rem)_minmax(0,1fr)] lg:items-stretch lg:gap-10">
-          <div className="order-1 min-w-0 lg:order-2 lg:h-full">
-            <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-white/10 bg-white shadow-[0_24px_64px_rgba(0,0,0,0.28)]">
-              <div className="relative aspect-[980/580] w-full min-w-0 flex-1 lg:aspect-auto lg:min-h-[min(45rem,70vh)]">
+        <div className="mt-8 grid min-w-0 gap-8 lg:mt-10 lg:grid-cols-[minmax(0,15rem)_minmax(0,1fr)] lg:items-stretch lg:gap-10">
+          <div className="order-1 flex min-w-0 flex-col lg:order-2 lg:h-full">
+            <div className="flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-white shadow-[0_24px_64px_rgba(0,0,0,0.28)] lg:h-full">
+              <div className="relative aspect-[980/580] w-full min-w-0 lg:min-h-[min(45rem,70vh)] lg:flex-1 lg:aspect-auto">
                 {resolvedEmbedUrl ? (
                   <iframe
                     src={resolvedEmbedUrl}
@@ -98,7 +98,7 @@ export function BondeAvatarStudio({
             </div>
 
             {resolvedEmbedUrl ? (
-              <p className="mt-3 text-center font-nav text-sm text-cream/70">
+              <p className="relative z-10 mt-4 shrink-0 text-center font-nav text-sm leading-relaxed text-cream/70">
                 Problemas para carregar?{' '}
                 <a
                   href={externalPlayUrl}
@@ -112,7 +112,7 @@ export function BondeAvatarStudio({
             ) : null}
           </div>
 
-          <div className="order-2 grid min-w-0 grid-cols-3 gap-2 sm:gap-3 lg:order-1 lg:flex lg:h-full lg:flex-col lg:justify-between lg:gap-6">
+          <div className="relative z-0 order-2 grid min-w-0 grid-cols-3 gap-2 sm:gap-3 lg:order-1 lg:flex lg:h-full lg:flex-col lg:justify-between lg:gap-6">
             {previewAvatars.map((avatar) => (
               <AvatarPreview key={avatar.label} src={avatar.src} label={avatar.label} />
             ))}
