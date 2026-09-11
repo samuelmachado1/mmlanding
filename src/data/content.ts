@@ -733,10 +733,7 @@ export const bondePageContent = {
     title: 'Crie seu personagem aba reta',
     description:
       'Monte seu avatar no estilo Bonde Pro Max, como nos exemplos ao lado, e compartilhe nas redes para mostrar que você faz parte dessa caminhada.',
-    embedUrl: '',
     embedTitle: 'Criador de avatares Bonde Pro Max',
-    embedUnavailableMessage:
-      'O criador de avatares estará disponível em breve. Enquanto isso, acompanhe o Bonde Pro Max pelos canais oficiais.',
   },
   actions: {
     eyebrow: 'Como participar',
