@@ -110,6 +110,33 @@ export interface VolunteerForm {
   region: string;
 }
 
+export interface ApoiadorFormData {
+  nome: string;
+  email: string;
+  whatsapp: string;
+  uf: string;
+  municipio: string;
+  novidades: boolean;
+  campanhaDigital: boolean;
+  campanhaRua: boolean;
+  lgpdAceite: boolean;
+}
+
+export interface PrivacyPolicySection {
+  heading: string;
+  paragraphs: string[];
+}
+
+export interface PrivacyPolicyContent {
+  title: string;
+  lastUpdated: string;
+  sections: PrivacyPolicySection[];
+}
+
+export type FooterLink =
+  | { label: string; href: string }
+  | { label: string; action: 'privacy-policy' };
+
 export interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -120,6 +147,12 @@ export interface ModalProps {
 export interface PageContent {
   title: string;
   subtitle?: string;
+  paragraphs: string[];
+}
+
+export interface Article {
+  id: string;
+  title: string;
   paragraphs: string[];
 }
 
@@ -197,6 +230,7 @@ export interface ProposalCard {
   status: ProposalStatus;
   title: string;
   description: string;
+  href: string;
 }
 
 export interface StatCard {
@@ -218,6 +252,15 @@ export interface ActionCard {
   href: string;
 }
 
+export interface BondeAvatarStudioContent {
+  eyebrow: string;
+  title: string;
+  description: string;
+  embedUrl: string;
+  embedTitle: string;
+  embedUnavailableMessage: string;
+}
+
 export interface MissionCard {
   points: string;
   title: string;
@@ -235,6 +278,8 @@ export interface MediaCard {
   href: string;
   imageUrl?: string;
   tab: string;
+  excerpt?: string;
+  bodyHtml?: string;
 }
 
 export interface ClippingsPayload {
@@ -242,4 +287,18 @@ export interface ClippingsPayload {
   items: MediaCard[];
   interview: ClippingInterview | null;
   reports: ClippingReport[];
+}
+
+export interface PendingMediaItem extends MediaCard {
+  discoveredAt: string;
+  searchQuery: string;
+  snippet?: string;
+}
+
+export interface ClippingsStore {
+  published: ClippingsPayload;
+  pending: PendingMediaItem[];
+  rejectedUrls: string[];
+  /** ID da matéria em destaque na landing (apenas uma por vez). */
+  highlightId: string | null;
 }

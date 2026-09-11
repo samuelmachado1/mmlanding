@@ -1,31 +1,10 @@
-const PREVIEW_COOKIE = '__max_preview';
+/** Vercel Edge injects env at deploy; avoid node:process for middleware typecheck. */
+declare const process: { env: Record<string, string | undefined> };
 
-const STATIC_PATHS = new Set(['/coming-soon.html', '/favicon.svg', '/logo.svg', '/icons.svg']);
+const ADMIN_COOKIE = '__max_admin';
+const ADMIN_COOKIE_MAX_AGE = 60 * 60 * 24;
 
-function formatDateInBrazil(date: Date): string {
-  return new Intl.DateTimeFormat('en-CA', {
-    timeZone: 'America/Sao_Paulo',
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-  }).format(date);
-}
-
-function isSiteLaunchedFromEnv(env: Record<string, string | undefined>): boolean {
-  const siteLaunched = env.SITE_LAUNCHED?.trim() ?? '';
-  const launchDate = env.LAUNCH_DATE?.trim() ?? '';
-
-  if (siteLaunched === 'true') return true;
-
-  if (!launchDate) {
-    if (siteLaunched === 'false') return false;
-    return env.VERCEL_ENV !== 'production';
-  }
-
-  return formatDateInBrazil(new Date()) >= launchDate;
-}
-
-async function hashPreviewSecret(secret: string): Promise<string> {
+async function hashAdminSecret(secret: string): Promise<string> {
   const data = new TextEncoder().encode(secret);
   const digest = await crypto.subtle.digest('SHA-256', data);
   return Array.from(new Uint8Array(digest))
@@ -33,12 +12,12 @@ async function hashPreviewSecret(secret: string): Promise<string> {
     .join('');
 }
 
-function getPreviewCookieFromHeader(cookieHeader: string | null): string | null {
+function getCookieFromHeader(cookieHeader: string | null, name: string): string | null {
   if (!cookieHeader) return null;
 
   for (const part of cookieHeader.split(';')) {
-    const [name, ...valueParts] = part.trim().split('=');
-    if (name === PREVIEW_COOKIE) {
+    const [cookieName, ...valueParts] = part.trim().split('=');
+    if (cookieName === name) {
       return valueParts.join('=');
     }
   }
@@ -46,43 +25,26 @@ function getPreviewCookieFromHeader(cookieHeader: string | null): string | null 
   return null;
 }
 
-function hasValidPreviewAccess(
-  url: URL,
-  cookieHeader: string | null,
-  previewSecret: string | undefined,
-  expectedHash: string | null,
-): boolean {
-  if (!previewSecret || !expectedHash) return false;
-
-  const previewParam = url.searchParams.get('preview');
-  if (previewParam && previewParam === previewSecret) return true;
-
-  return getPreviewCookieFromHeader(cookieHeader) === expectedHash;
+function buildAdminCookie(hash: string, maxAgeSeconds = ADMIN_COOKIE_MAX_AGE): string {
+  return `${ADMIN_COOKIE}=${hash}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${maxAgeSeconds}`;
 }
 
-function buildPreviewCookie(token: string, maxAgeSeconds = 60 * 60 * 24 * 7): string {
-  return `${PREVIEW_COOKIE}=${token}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${maxAgeSeconds}`;
+function getAdminSecret(): string | undefined {
+  return process.env.ADMIN_SECRET?.trim() || undefined;
 }
 
-function shouldBypassMiddleware(pathname: string): boolean {
-  if (STATIC_PATHS.has(pathname)) return true;
-  if (pathname.startsWith('/fonts/')) return true;
-  if (pathname.startsWith('/assets/')) return true;
-  if (pathname === '/api/launch-status') return true;
-  if (pathname.startsWith('/api/cron/')) return true;
-  if (/\.[a-z0-9]+$/i.test(pathname)) return true;
-  return false;
-}
-
-async function passThrough(request: Request, previewCookie?: string): Promise<Response> {
+async function passThrough(request: Request, setCookies?: string[]): Promise<Response> {
   const response = await fetch(request);
 
-  if (!previewCookie) {
+  if (!setCookies || setCookies.length === 0) {
     return response;
   }
 
   const headers = new Headers(response.headers);
-  headers.append('Set-Cookie', previewCookie);
+  for (const cookie of setCookies) {
+    headers.append('Set-Cookie', cookie);
+  }
+
   return new Response(response.body, {
     status: response.status,
     statusText: response.statusText,
@@ -90,46 +52,35 @@ async function passThrough(request: Request, previewCookie?: string): Promise<Re
   });
 }
 
+/**
+ * Edge middleware — only `/max-admin` (cookie on ?admin= link).
+ * `/api/admin/*` bypasses middleware so Vercel injects OIDC for Blob auth.
+ * API routes still enforce Bearer token in the serverless handler.
+ */
 export default async function middleware(request: Request): Promise<Response> {
   const url = new URL(request.url);
+  const pathname = url.pathname;
 
-  if (shouldBypassMiddleware(url.pathname)) {
-    return fetch(request);
+  if (pathname.startsWith('/admin')) {
+    return new Response('Not Found', { status: 404 });
   }
 
-  const env = process.env;
-  const previewSecret = env.PREVIEW_SECRET?.trim();
-  const previewHash = previewSecret ? await hashPreviewSecret(previewSecret) : null;
-  const launched = isSiteLaunchedFromEnv(env);
-  const hasPreview = hasValidPreviewAccess(
-    url,
-    request.headers.get('cookie'),
-    previewSecret,
-    previewHash,
+  const adminSecret = getAdminSecret();
+  if (!adminSecret) {
+    return passThrough(request);
+  }
+
+  const expectedHash = await hashAdminSecret(adminSecret);
+  const adminParam = url.searchParams.get('admin');
+  const cookie = getCookieFromHeader(request.headers.get('cookie'), ADMIN_COOKIE);
+  const shouldSetCookie = adminParam === adminSecret && cookie !== expectedHash;
+
+  return passThrough(
+    request,
+    shouldSetCookie ? [buildAdminCookie(expectedHash)] : undefined,
   );
-
-  if (launched || hasPreview) {
-    const previewParam = url.searchParams.get('preview');
-    const shouldSetPreviewCookie =
-      !launched &&
-      previewSecret &&
-      previewHash &&
-      previewParam === previewSecret &&
-      getPreviewCookieFromHeader(request.headers.get('cookie')) !== previewHash;
-
-    return passThrough(
-      request,
-      shouldSetPreviewCookie ? buildPreviewCookie(previewHash) : undefined,
-    );
-  }
-
-  if (url.pathname === '/api/clippings') {
-    return Response.json({ error: 'Not available yet' }, { status: 403 });
-  }
-
-  return Response.redirect(new URL('/coming-soon.html', request.url), 307);
 }
 
 export const config = {
-  matcher: ['/((?!_next/static|_next/image).*)'],
+  matcher: ['/max-admin/:path*', '/admin/:path*'],
 };

@@ -24,6 +24,7 @@ import type {
   MidiaSection,
   PageLink,
   HighlightStatCard,
+  Article,
 } from '../types/index.ts';
 
 import midiaRedetv from '../assets/pictures/midia/redetv.png';
@@ -31,8 +32,9 @@ import midiaCamaraPec from '../assets/pictures/midia/camara-pec.png';
 import midiaFolha from '../assets/pictures/midia/folha.png';
 import midiaGlobo from '../assets/pictures/midia/globo.png';
 import midiaPodcast from '../assets/pictures/midia/podcast.png';
+import { getContactEmail } from '../lib/contact-email.ts';
 
-export const siteConfig = {
+const siteIdentity = {
   name: 'Deputado Max Maciel',
   tagline: 'Coragem para defender o Distrito Federal',
   phase: 'Campanha de Reeleição',
@@ -48,11 +50,17 @@ export const siteConfig = {
     cream: '#f5f1e8',
   },
   whatsapp: {
-    number: '5561999999999',
-    message: 'Olá! Quero acompanhar o mandato do Deputado Max Maciel.',
+    chatUrl: 'https://wa.me/5561982521212',
+    bondeGroupUrl: 'https://lnkl.st/orv_mo8fy9',
   },
-  email: 'contato@maxmaciel.df.br',
 } as const;
+
+export const siteConfig = {
+  ...siteIdentity,
+  get email() {
+    return getContactEmail();
+  },
+};
 
 export const navItems: NavItem[] = [
   { label: 'Quem é Max', href: '/quem-e-max' },
@@ -60,7 +68,7 @@ export const navItems: NavItem[] = [
   { label: 'Maximizando o DF', href: '/maximizando-df' },
   { label: 'Bonde Pro Max', href: '/bonde-pro-max' },
   { label: 'Max na Mídia', href: '/midia' },
-  { label: 'Materiais', href: '/materiais' },
+  { label: 'Artigos', href: '/artigos' },
   { label: 'Contato', href: '/contato' },
 ];
 
@@ -70,7 +78,7 @@ export const internalNavItems: NavItem[] = [
   { label: 'Maximizando o DF', href: '/maximizando-df' },
   { label: 'Bonde Pro Max', href: '/bonde-pro-max' },
   { label: 'Max na Mídia', href: '/midia' },
-  { label: 'Materiais', href: '/materiais' },
+  { label: 'Artigos', href: '/artigos' },
   { label: 'Contato', href: '/contato' },
 ];
 
@@ -163,7 +171,7 @@ export const bondeProMaxBlocks: ContentBlock[] = [
     title: 'Grupo de apoiadores',
     description: 'Receba atualizações do mandato, votações e convites para audiências no WhatsApp e Telegram.',
     cta: 'Entrar no grupo',
-    href: 'https://chat.whatsapp.com/exemplo',
+    href: siteConfig.whatsapp.bondeGroupUrl,
   },
   {
     id: 'apoie-manifesto',
@@ -171,13 +179,6 @@ export const bondeProMaxBlocks: ContentBlock[] = [
     description: 'Assine e divulgue nossas propostas por um DF mais justo, acessível e transparente.',
     cta: 'Assinar manifesto',
     href: '#apoie-manifesto',
-  },
-  {
-    id: 'missoes',
-    title: 'Missões',
-    description: 'Participe de ações pontuais: panfletagem, mutirões de escuta e mobilizações nas RAs.',
-    cta: 'Ver missões',
-    href: '#missoes',
   },
 ];
 
@@ -187,7 +188,7 @@ export const bondeProMaxBlocks: ContentBlock[] = [
 export const clippingContent = {
   eyebrow: 'Max na mídia',
   title: 'Max na Mídia',
-  interviewsLabel: 'Entrevistas em vídeo',
+  interviewsLabel: 'Destaque',
   reportsLabel: 'Notícias',
   cta: 'Ver mais notícias',
   ctaHref: '/midia',
@@ -278,7 +279,7 @@ export const crewContent = {
 export const crewCards: CrewCard[] = [
   {
     id: 'espalhe-material',
-    title: 'Espalhe nosso material',
+    title: 'Mostre seu apoio nas redes',
     description:
       'Leve nossas ideias para as ruas e para as redes. Baixe cards, vídeos e materiais para compartilhar com sua comunidade.',
     cta: 'Acessar materiais',
@@ -290,7 +291,7 @@ export const crewCards: CrewCard[] = [
     description:
       'Entre no grupo, acompanhe as novidades e participe das próximas mobilizações do Bonde.',
     cta: 'Entrar no bonde',
-    href: '/bonde-pro-max',
+    href: siteConfig.whatsapp.bondeGroupUrl,
   },
   {
     id: 'apoie-manifesto',
@@ -301,12 +302,20 @@ export const crewCards: CrewCard[] = [
     href: '/apoie',
   },
   {
-    id: 'missoes',
-    title: 'Missões',
+    id: 'fortalecer-o-corre',
+    title: 'Espalhe nosso material nas ruas',
     description:
-      'Participe de ações simples que fazem diferença: compartilhar uma proposta, conversar com sua comunidade ou mobilizar seu território.',
-    cta: 'Ver missões',
-    href: '/bonde-pro-max',
+      'Cola com a gente! Preenche os dados abaixo que a gente separa seu material e leva até você.',
+    cta: 'Cola com a gente',
+    href: 'https://docs.google.com/forms/d/e/1FAIpQLSfN6eMANJTcC4tQULeIbmuQh4HYVOoww0qUsPMgkRiVqvGsNw/viewform',
+  },
+  {
+    id: 'cafe-com-max',
+    title: 'Café com Max',
+    description:
+      'Não sou a dona Florinda, mas quero te fazer um convite: aceitas tomar uma xícara de café comigo?',
+    cta: 'Aceitar convite',
+    href: 'https://docs.google.com/forms/d/1nJoS_loU2qvbv6lXujp4N8Mu_YH7VN9pzNJt-sTvGV0/viewform',
   },
 ];
 
@@ -370,14 +379,13 @@ export const socialLinks: SocialLink[] = [
   { name: 'YouTube', href: 'https://www.youtube.com/@MaxMacielDF', icon: MessageCircle },
 ];
 
-export function whatsappUrl(customMessage?: string): string {
-  const msg = encodeURIComponent(customMessage ?? siteConfig.whatsapp.message);
-  return 'https://wa.me/' + siteConfig.whatsapp.number + '?text=' + msg;
+export function whatsappUrl(): string {
+  return siteConfig.whatsapp.chatUrl;
 }
 
 export const socialBarLinks: SocialBarLink[] = [
   { name: 'Instagram', href: 'https://www.instagram.com/maxmacieldf', platform: 'instagram' },
-  { name: 'WhatsApp', href: 'https://wa.me/5561999999999', platform: 'whatsapp' },
+  { name: 'WhatsApp', href: siteConfig.whatsapp.chatUrl, platform: 'whatsapp' },
   { name: 'YouTube', href: 'https://www.youtube.com/@MaxMacielDF', platform: 'youtube' },
   { name: 'TikTok', href: 'https://www.tiktok.com/@maxmacieldf', platform: 'tiktok' },
   { name: 'Facebook', href: 'https://www.facebook.com/maxmacieldf', platform: 'facebook' },
@@ -387,10 +395,46 @@ export const socialBarLinks: SocialBarLink[] = [
 
 export const volunteerRegions = ['Plano Piloto', 'Ceilândia', 'Taguatinga', 'Samambaia', 'Gama', 'São Sebastião', 'Planaltina', 'Outra RA'];
 
+/** Todas as regiões administrativas do Distrito Federal (ordem alfabética). */
+export const distritoFederalRegioesAdministrativas = [
+  'Águas Claras',
+  'Arniqueira',
+  'Arapoanga',
+  'Brazlândia',
+  'Candangolândia',
+  'Ceilândia',
+  'Cidade Estrutural',
+  'Cruzeiro',
+  'Fercal',
+  'Gama',
+  'Guará',
+  'Itapoã',
+  'Jardim Botânico',
+  'Lago Norte',
+  'Lago Sul',
+  'Núcleo Bandeirante',
+  'Park Way',
+  'Planaltina',
+  'Plano Piloto',
+  'Recanto das Emas',
+  'Riacho Fundo',
+  'Riacho Fundo II',
+  'Samambaia',
+  'Santa Maria',
+  'São Sebastião',
+  'SIA',
+  'Sobradinho',
+  'Sobradinho II',
+  'Sol Nascente/Pôr do Sol',
+  'Sudoeste/Octogonal',
+  'Taguatinga',
+  'Varjão',
+  'Vicente Pires',
+] as const;
+
 export const footerLinks = [
-  { label: 'Apoie a campanha', href: '/apoie' },
-  { label: 'Doe', href: '/doe' },
   { label: 'Contato', href: '/contato' },
+  { label: 'Política de Privacidade', action: 'privacy-policy' as const },
 ];
 
 export const quemEPage: PageContent = {
@@ -399,9 +443,9 @@ export const quemEPage: PageContent = {
     'Nascido em Ceilândia, deputado distrital e presidente da CTMU — quase 30 anos de luta nas quebradas do DF.',
   paragraphs: [
     'Max Maciel é candidato à Deputado Distrital e com seu apoio ele vai para o seu segundo mandato.',
-    'Nascido em 1982 em Ceilândia, Max Maciel é o filho caçula do Seu Agamenon e da Dona Goreth, casal nordestino que veio para Brasília, assim como tantos outros, para lutar por mais oportunidades.',
+    'Nascido em 1982 em Ceilândia, Max Maciel é o filho caçula do Seu Agamenon e da Dona Gorete, casal nordestino que veio para Brasília, assim como tantos outros, para lutar por mais oportunidades.',
     'Em 2022, Max Maciel se tornou o terceiro Deputado Distrital mais votado do DF, eleito com 35.758 votos.',
-    'Mas antes disso, o nosso deputado aba reta começou sua trajetória no movimento estudantil, especificamente no grêmio da sua escola, e depois formou o grupo Atitude com seus amigos, que circulava escolas públicas de ensino médio falando sobre prevenção e educação sexual.',
+    'Mas antes disso, o nosso deputado aba reta começou sua trajetória no movimento estudantil, especificamente no grêmio da sua escola, e depois participou de vários projetos sociais, circulando as escolas, promovendo cultura e direito à cidade.',
     'Com o passar dos anos passou a integrar conselhos, fazer atividades junto com o movimento Hip Hop nas quebradas, contribuir com pesquisas, atuar dentro e fora da institucionalidade em defesa da juventude. Ele também participou ativamente de campanhas pelo desarmamento e pelo fim do extermínio da juventude negra no Brasil.',
     'Ele não começou há pouco tempo, por isso soma quase 30 anos de luta dentro dos movimentos estudantis, sociais e culturais de Ceilândia e de outras quebradas do DF.',
     'Além de ter nascido na RA mais populosa do Distrito Federal, o Max fez morada na cidade: cresceu, estudou, trabalhou, se casou há mais de 20 anos com Ildely Ana, teve duas filhas e ainda mora em Ceilândia.',
@@ -447,8 +491,8 @@ export const mandateHighlights = [
 ] satisfies HighlightStatCard[];
 
 export const sitePageCta = {
-  title: 'Quer participar das decisões do mandato?',
-  primary: { label: 'Entrar no Bonde', href: '/bonde-pro-max' },
+  title: 'Cola com a gente',
+  primary: { label: 'Entrar no Bonde', href: siteConfig.whatsapp.bondeGroupUrl },
   variant: 'yellow' as const,
 };
 
@@ -470,6 +514,7 @@ export const mandatoPageContent = {
         title: 'Tarifa Zero aos domingos e feriados',
         description:
           'Mais de 37,8 milhões de acessos ao STPC/DF em 82 dias de gratuidade no transporte público.',
+        href: '/mandato/tarifa-zero',
       },
       {
         icon: '📜',
@@ -478,6 +523,7 @@ export const mandatoPageContent = {
         title: '14 leis sancionadas',
         description:
           'Em quase 4 anos de Gabinete Aba Reta, leis que mudam a realidade do DF com vontade do Poder Executivo.',
+        href: '/mandato/projetos-de-lei',
       },
       {
         icon: '💰',
@@ -486,6 +532,7 @@ export const mandatoPageContent = {
         title: 'R$ 116 milhões em emendas',
         description:
           'Recursos destinados para educação, saúde, cultura, mobilidade e assistência social nas periferias.',
+        href: '/maximizando-df',
       },
       {
         icon: '🏛️',
@@ -494,6 +541,7 @@ export const mandatoPageContent = {
         title: 'Presidência da CTMU',
         description:
           'Liderança da Comissão de Transporte e Mobilidade Urbana na Câmara Legislativa do DF.',
+        href: '/mandato/ctmu',
       },
     ],
   },
@@ -680,6 +728,16 @@ export const bondePageContent = {
     { value: '48', label: 'regiões cobertas' },
     { value: '230+', label: 'eventos realizados' },
   ],
+  avatarStudio: {
+    eyebrow: 'Seu avatar no bonde',
+    title: 'Crie seu personagem aba reta',
+    description:
+      'Monte seu avatar no estilo Bonde Pro Max, como nos exemplos ao lado, e compartilhe nas redes para mostrar que você faz parte dessa caminhada.',
+    embedUrl: '',
+    embedTitle: 'Criador de avatares Bonde Pro Max',
+    embedUnavailableMessage:
+      'O criador de avatares estará disponível em breve. Enquanto isso, acompanhe o Bonde Pro Max pelos canais oficiais.',
+  },
   actions: {
     eyebrow: 'Como participar',
     title: 'Escolha sua forma de agir',
@@ -690,7 +748,7 @@ export const bondePageContent = {
         description:
           'Entre no grupo do WhatsApp e receba em primeira mão notícias, convocações e materiais de campanha.',
         cta: 'Entrar no grupo',
-        href: 'https://wa.me/5561999999999',
+        href: siteConfig.whatsapp.bondeGroupUrl,
       },
       {
         icon: '📦',
@@ -701,12 +759,12 @@ export const bondePageContent = {
         href: '/materiais',
       },
       {
-        icon: '🎯',
-        title: 'Missões',
+        icon: '🎨',
+        title: 'Crie seu avatar',
         description:
-          'Participe de ações simples: compartilhar uma proposta, conversar com sua comunidade ou mobilizar seu território.',
-        cta: 'Ver missões',
-        href: '#missoes',
+          'Personalize seu personagem aba reto ou aba reta e use nas redes para mostrar que você está no Bonde.',
+        cta: 'Criar avatar',
+        href: '#criar-avatar',
       },
     ],
   },
@@ -765,15 +823,112 @@ export const canaisPage = {
   intro: 'Vem trocar uma ideia com a gente através dos nossos canais:',
   channels: [
     { name: 'Instagram', href: 'https://www.instagram.com/maxmacieldf' },
-    { name: 'WhatsApp', href: 'https://wa.me/5561999999999' },
-    { name: 'Telegram', href: 'https://t.me/maxmaciel' },
+    { name: 'WhatsApp', href: siteConfig.whatsapp.chatUrl },
+    { name: 'Telegram', href: 'https://t.me/+A1v342WcNVRjNGFh' },
   ] satisfies ChannelItem[],
 };
 
 export const apoiePage = {
   title: 'Apoie nossa campanha',
   intro:
-    'Se você quer MAXzimizar as maravilhas para quem acorda cedo e faz a cidade funcionar todos os dias e bota fé na nossa caminhada, se torne um apoiador, assinando aqui:',
+    'Se você quer MAXimizar as maravilhas para quem acorda cedo e faz a cidade funcionar todos os dias e bota fé na nossa caminhada, se torne um apoiador, assinando aqui:',
+};
+
+export const apoiadorFormContent = {
+  title: 'PREENCHA COM SEUS DADOS E ASSINE O MANIFESTO',
+  placeholders: {
+    nome: 'Nome Completo',
+    email: 'E-mail',
+    whatsapp: 'Whatsapp',
+    uf: 'UF',
+    municipio: 'Selecione um município',
+    regiaoAdministrativa: 'Selecione uma RA',
+  },
+  checkboxes: {
+    novidades: 'Marque aqui para receber novidades',
+    campanhaDigital: 'Marque aqui para participar da campanha digital',
+    campanhaRua: 'Marque aqui para participar da campanha de rua',
+  },
+  submitLabel: 'ASSINAR',
+  successMessage: 'Manifesto assinado! Obrigado pelo apoio.',
+  notConfiguredMessage: 'Cadastro temporariamente indisponível. Tente novamente em breve.',
+  lgpdTermTitle: 'TERMO DE ACEITE DA LGPD:',
+  lgpdTermText:
+    'Ao enviar este formulário, você concorda que o Gabinete Aba Reta utilize os dados informados exclusivamente para responder ao seu contato/atender sua solicitação, em conformidade com a LGPD.',
+  lgpdCheckboxLabel: 'Li e concordo com o tratamento dos meus dados pessoais',
+  lgpdFormValue: 'Li e concordo com o tratamento dos meus dados pessoais',
+  municipioLoading: 'Carregando municípios...',
+  municipioSelectUf: 'Selecione a UF primeiro',
+};
+
+export const privacyPolicyContent = {
+  title: 'Política de Privacidade',
+  lastUpdated: 'Agosto de 2026',
+  sections: [
+    {
+      heading: '1. Quem é o controlador dos dados',
+      paragraphs: [
+        `Esta Política de Privacidade descreve como ${siteConfig.name} e o comitê de campanha responsável pela reeleição tratam os dados pessoais coletados por este site.`,
+        'Para questões sobre privacidade e proteção de dados, entre em contato pelo e-mail {{CONTACT_EMAIL}}.',
+      ],
+    },
+    {
+      heading: '2. Dados que coletamos',
+      paragraphs: [
+        'Ao assinar o manifesto e tornar-se apoiador, podemos coletar: nome completo, e-mail, número de WhatsApp, UF, município e suas preferências de participação (receber novidades, campanha digital ou campanha de rua).',
+        'Não coletamos dados além do necessário para as finalidades descritas nesta política.',
+      ],
+    },
+    {
+      heading: '3. Finalidade do tratamento',
+      paragraphs: [
+        'Utilizamos seus dados para cadastrar apoiadores da campanha, comunicar novidades e convites relacionados ao mandato e à campanha de reeleição, organizar mobilização digital e de rua, e fortalecer a rede de apoiadores do Distrito Federal.',
+      ],
+    },
+    {
+      heading: '4. Base legal',
+      paragraphs: [
+        'O tratamento dos dados pessoais basea-se no consentimento (art. 7º, I, da Lei nº 13.709/2018 — LGPD), manifestado ao assinar o manifesto e marcar as opções de participação, e no legítimo interesse para comunicações relacionadas à finalidade declarada pelo titular.',
+      ],
+    },
+    {
+      heading: '5. Compartilhamento de dados',
+      paragraphs: [
+        'Os dados podem ser armazenados em ferramentas de formulário e planilhas (Google Forms e Google Sheets) utilizadas para organização da campanha. Não vendemos nem comercializamos dados pessoais.',
+        'O compartilhamento com terceiros ocorre apenas quando necessário para operação dessas ferramentas ou quando exigido por lei ou ordem judicial.',
+      ],
+    },
+    {
+      heading: '6. Retenção dos dados',
+      paragraphs: [
+        'Os dados são mantidos durante o período da campanha e pelo prazo necessário para cumprimento de obrigações legais aplicáveis. Após esse período, buscamos eliminar ou anonimizar os dados quando não houver necessidade de manutenção.',
+      ],
+    },
+    {
+      heading: '7. Seus direitos como titular',
+      paragraphs: [
+        'Nos termos do art. 18 da LGPD, você pode solicitar: confirmação da existência de tratamento, acesso aos dados, correção de dados incompletos ou desatualizados, anonimização, bloqueio ou eliminação de dados desnecessários, informação sobre compartilhamento e revogação do consentimento.',
+      ],
+    },
+    {
+      heading: '8. Como exercer seus direitos',
+      paragraphs: [
+        'Para exercer qualquer um desses direitos, envie um e-mail a {{CONTACT_EMAIL}} com o assunto "Privacidade — LGPD". Responderemos em prazo razoável, conforme a legislação aplicável.',
+      ],
+    },
+    {
+      heading: '9. Segurança',
+      paragraphs: [
+        'Adotamos medidas técnicas e organizacionais razoáveis para proteger os dados pessoais contra acessos não autorizados, perda ou uso indevido. Ferramentas de terceiros utilizadas para armazenamento operam como subprocessadores sob suas próprias políticas de segurança.',
+      ],
+    },
+    {
+      heading: '10. Alterações nesta política',
+      paragraphs: [
+        'Esta política pode ser atualizada para refletir mudanças nas práticas de tratamento de dados ou exigências legais. A data da última revisão consta no topo deste documento.',
+      ],
+    },
+  ],
 };
 
 export const doePageContent = {
@@ -794,7 +949,7 @@ export const doePageContent = {
     namePlaceholder: 'Seu nome completo',
     emailPlaceholder: 'E-mail',
     cpfPlaceholder: 'CPF',
-    legalNote: 'Doação regulamentada pelo TSE. CNPJ do comitê financeiro em breve.',
+    legalNote: 'Doação regulamentada pelo TSE. CNPJ Max Maciel: 68.267.093/0001-59.',
   },
   impactCards: [
     {
@@ -818,12 +973,56 @@ export const doePageContent = {
   ],
 };
 
+export const artigos: Article[] = [
+  {
+    id: 'algoritmo-da-privatizacao',
+    title: 'O algoritmo da privatização',
+    paragraphs: [
+      'Em um mundo em que a inteligência artificial promete prever o futuro, não precisamos de um prompt sofisticado para saber o que pode acontecer com o Metrô do Distrito Federal. O roteiro já é um velho conhecido: primeiro diminuem os investimentos, a manutenção deixa de acompanhar as necessidades do sistema, os equipamentos envelhecem, a qualidade do serviço piora e a população perde a confiança no transporte público. É justamente nesse momento que surge o discurso de que a privatização seria a única solução.',
+      'Esse processo não acontece por acaso. Afinal, sucatear também é uma escolha política. O descarrilamento registrado no Metrô-DF somente reforça a urgência dos alertas que a Comissão de Transporte e Mobilidade Urbana tem feito à Secretaria de Mobilidade do DF, ao Tribunal de Contas do Distrito Federal e ao Ministério Público.',
+      'É grave que um descarrilamento tenha acontecido, ao que tudo indica, por uma peça que caiu de uma composição. Felizmente, não houve feridos, mas é o prenuncio de que se nada for feito para mudar, algo pior pode acontecer. Desde 2023, a CTMU vem apontando após inspeções: frota envelhecida, redução do número de trens disponíveis, equipes de manutenção sobrecarregadas e um sistema que, diante da dificuldade para obter peças de reposição, passou a depender da canibalização de composições para continuar funcionando.',
+      'Dos 32 trens da frota, apenas 19 circulam regularmente. Em alguns momentos deste ano, o sistema chegou a operar com apenas 12 composições nos horários de maior demanda. Outros dez trens aguardam manutenção e quatro sequer têm condições de voltar à operação, servindo apenas para fornecer peças às demais composições. Agora, mais um trem ficará fora de operação por tempo indeterminado.',
+      'A investigação dirá a relação entre esses fatos. O que já se pode afirmar é que o episódio evidencia um sistema que deixou de preocupar apenas pela perda de eficiência e passou a exigir atenção redobrada com sua segurança operacional.',
+      'Nada disso aconteceu de um dia para o outro. Um sistema de transporte não chega a esse nível de deterioração por acidente. Entre 2019 e 2024, o Governo do Distrito Federal empenhou cerca de apenas 1% dos recursos previstos para investimentos no Metrô-DF. Na prática, R$ 1 bilhão deixou de ser investido no sistema metroviário enquanto o governo aportou bilhões em viadutos e rodovias.',
+      'O problema não é apenas quanto se investe, mas também como o sistema é financiado. Enquanto as empresas de ônibus recebem por meio da tarifa técnica — um modelo que cobre custos operacionais, manutenção e renovação da frota independentemente da arrecadação das passagens —, o Metrô-DF continua dependendo, em grande medida, da receita obtida com os próprios passageiros para custear sua operação. Esse desequilíbrio compromete um sistema que deveria ser planejado de forma integrada.',
+      'O metrô precisa voltar a ser a espinha dorsal da mobilidade do Distrito Federal, realizando os grandes deslocamentos entre as regiões administrativas e o Plano Piloto, enquanto os ônibus cumprem o papel de alimentar essa rede.',
+      'É indispensável modernizar o sistema de energia para ampliar a capacidade operacional da rede, reduzir a dependência de equipamentos obsoletos e permitir a entrada de novas composições. Também é urgente recompor o quadro de servidores, fortalecer a manutenção preventiva e garantir investimentos permanentes para que a companhia deixe de atuar apenas apagando incêndios e volte a planejar o futuro.',
+      'O futuro do Metrô-DF ainda pode ser reescrito. Mas isso exige coragem para abandonar a política do improviso e transformar o transporte público em uma verdadeira prioridade de Estado. Com um modelo de financiamento mais justo, investimentos permanentes e planejamento de longo prazo será possível adquirir novos trens, ampliar o quadro de servidores, recuperar a capacidade operacional da companhia e levar o metrô às regiões administrativas que há décadas aguardam essa expansão.',
+      'Não precisamos escolher entre um metrô sucateado e um metrô privatizado. Precisamos escolher um metrô forte, moderno, seguro e capaz de atender às necessidades da população. Porque patrimônio público não se abandona. Patrimônio público se fortalece.',
+    ],
+  },
+  {
+    id: 'racismo-ambiental',
+    title: 'Sem enfrentar o racismo ambiental, não existe projeto de cidade',
+    paragraphs: [
+      'Em breve, estaremos em mais um período eleitoral. As campanhas ocuparão as ruas e as redes sociais. Falaremos sobre saúde, segurança, transporte, educação, geração de emprego e desenvolvimento econômico. No entanto, existe uma pauta que continua praticamente ausente do debate público: o racismo ambiental.',
+      'Enquanto esse tema permanecer invisível, continuaremos discutindo apenas os efeitos da desigualdade, sem enfrentar suas causas. Muita gente ainda acredita que racismo ambiental é apenas uma questão ligada ao meio ambiente, mas não é. Na verdade, é compreender quem convive diariamente com enchentes, calor extremo, falta de árvores, esgoto a céu aberto, rios contaminados e infraestrutura precária. E, principalmente, entender por que isso acontece sempre nos mesmos lugares.',
+      'No Brasil, e em especial no Distrito Federal, a desigualdade tem endereço. Basta comparar o Plano Piloto com a maioria das regiões administrativas. Quando chegam as chuvas, as cidades param. Quando chega a seca, o calor se torna quase insuportável. As mudanças climáticas atingem todos nós, mas seus impactos são muito mais severos para quem vive onde o GDF historicamente investiu menos.',
+      'Brasília foi construída sobre um projeto urbano profundamente desigual. Enquanto servidores públicos, militares, arquitetos e engenheiros recebiam moradias estruturadas no centro da nova capital, milhares de trabalhadores responsáveis por erguer a cidade foram empurrados para ocupações distantes, sem infraestrutura e, posteriormente, removidos para regiões cada vez mais afastadas. Essa lógica de segregação territorial permanece viva até hoje.',
+      'As periferias foram planejadas para garantir um teto, mas não qualidade de vida. Como se o direito do pobre terminasse na porta de casa. Dignidade não é apenas ter um endereço. É viver em uma cidade que ofereça sombra, parques urbanos, áreas de convivência e espaços públicos onde crianças podem brincar, famílias podem se encontrar e a população pode exercer plenamente o direito à cidade.',
+      'Todas as regiões administrativas possuem um plano urbanístico de desenvolvimento. No entanto, o Plano Piloto e os lagos Sul e Norte concentram grande parte da arborização e recebem, com mais frequência, novas mudas de árvores. Já as periferias convivem com menos áreas verdes, mais calor e maior vulnerabilidade às mudanças climáticas.',
+      'Essa desigualdade também se revela na forma como cuidamos do Rio Melchior e do Lago Paranoá. Mesmo sendo importante para o abastecimento de água de grande parte da população, o Melchior, que passas pela Ceilândia e Samambaia, continua recebendo esgoto, resíduos e sofrendo sucessivos processos de degradação. Já o Lago Paranoá, cartão-postal cercado por grandes mansões, recebe investimentos para manter suas águas próprias para banhistas, turistas e donos de embarcações.',
+      'Quando afirmo que existe racismo ambiental, não estou dizendo que a chuva escolhe onde cair. Estou dizendo que o poder público escolhe, há décadas, onde investir. Escolhe onde plantar árvores, construir parques, ampliar a drenagem, levar saneamento, recuperar córregos e regularizar bairros. Também escolhe quais territórios podem continuar esperando.',
+      'As nossas casas alagam, as ruas se transformam em rios e as cidades se tornam verdadeiras ilhas de calor porque o planejamento urbano nunca preparou as periferias para enfrentar esses desafios. Garantiram moradia, mas não construíram cidades sustentáveis, humanas e resilientes. Retiraram áreas verdes para dar lugar ao concreto, impermeabilizaram o solo sem investir em drenagem e deixaram a periferia mais vulnerável aos efeitos da crise climática.',
+      'No DF, o CEP ainda determina a velocidade com que o Estado chega. É justamente por isso que o racismo ambiental precisa ocupar o centro do debate eleitoral. Ainda dá tempo de mudar essa história, mas, para isso, precisamos pensar o desenvolvimento do Distrito Federal a partir das periferias, ouvindo quem mais sente os efeitos da desigualdade territorial e da crise climática, e não apenas a partir da realidade do centro.',
+      'As eleições são o momento em que decidimos quais prioridades orientarão o orçamento público pelos próximos anos. Ignorar o racismo ambiental significa continuar destinando recursos de forma desigual e aceitar que algumas regiões sigam acumulando riscos, enquanto outras concentram qualidade de vida.',
+      'Não existe justiça climática sem justiça territorial. E não existe democracia plena enquanto o lugar onde uma pessoa mora continuar determinando o tamanho da proteção que ela recebe do Estado.',
+    ],
+  },
+];
+
+export const artigosPage = {
+  title: 'Artigos',
+  intro:
+    'Reflexões sobre mobilidade, cidade e justiça territorial — o que Max Maciel escreve para colocar a periferia no centro do debate público.',
+};
+
 export const midiaPage = {
   title: 'Max na Mídia',
   sections: [
     { title: 'Notícias', items: newsItems.map((item) => item.title) },
     { title: 'Entrevistas em vídeo', items: videoItems.map((item) => item.title) },
-    { title: 'Artigos', items: ['Em breve'] },
+    { title: 'Artigos', items: artigos.map((article) => article.title) },
   ] satisfies MidiaSection[],
 };
 
@@ -909,6 +1108,8 @@ export const contatoPage = {
   title: 'Contato',
   intro:
     'Entre em contato com a gente através das nossas redes sociais ou, se preferir, pelo e-mail e telefone abaixo:',
-  email: siteConfig.email,
+  get email() {
+    return siteConfig.email;
+  },
   phone: '(61) 0000-0000',
 };

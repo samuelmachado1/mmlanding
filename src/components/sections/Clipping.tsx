@@ -5,12 +5,10 @@ import type { ClippingInterview, ClippingReport } from '../../types/index.ts';
 import { useClippings } from '../../hooks/useClippings.ts';
 import { AnimatedSection } from '../ui/AnimatedSection.tsx';
 import { NavLink } from '../ui/NavLink.tsx';
+import { AppLink } from '../ui/AppLink.tsx';
+import { mediaArticlePath } from '../../lib/media-paths.ts';
 import { ClippingSkeleton } from './ClippingSkeleton.tsx';
-import { PAGE_GRID_INNER, PAGE_GRID_OUTER } from '../layout/pageGrid.ts';
-
-function isExternalHref(href: string): boolean {
-  return href.startsWith('http://') || href.startsWith('https://');
-}
+import { PAGE_GRID_INNER, PAGE_GRID_OUTER, LANDING_SECTION_PY } from '../layout/pageGrid.ts';
 
 function SectionLabel({ children }: { children: string }) {
   return (
@@ -20,15 +18,11 @@ function SectionLabel({ children }: { children: string }) {
   );
 }
 
-
 function InterviewCard({ interview }: { interview: ClippingInterview }) {
-  const external = isExternalHref(interview.href);
-
   return (
-    <a
-      href={interview.href}
+    <AppLink
+      to={mediaArticlePath(interview.id)}
       className="flex w-full max-w-full flex-col gap-2"
-      {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
     >
       <div className="relative isolate w-full">
         {interview.imageUrl ? (
@@ -45,19 +39,15 @@ function InterviewCard({ interview }: { interview: ClippingInterview }) {
         </span>
       </div>
       <p className="font-nav text-lg leading-7 text-cream">{interview.title}</p>
-    </a>
+    </AppLink>
   );
 }
 
-
 function ReportCard({ report }: { report: ClippingReport }) {
-  const external = isExternalHref(report.href);
-
   return (
-    <a
-      href={report.href}
+    <AppLink
+      to={mediaArticlePath(report.id)}
       className="flex w-full max-w-full flex-row gap-3"
-      {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
     >
       {report.imageUrl ? (
         <img
@@ -72,7 +62,7 @@ function ReportCard({ report }: { report: ClippingReport }) {
         <p className="font-nav text-lg leading-7 text-cream">{report.title}</p>
         <p className="font-nav text-[13px] leading-[15px] text-yellow-500">{report.source}</p>
       </div>
-    </a>
+    </AppLink>
   );
 }
 
@@ -81,21 +71,27 @@ export function Clipping() {
 
   return (
     <AnimatedSection id="max-na-midia" className="bg-brand-red">
-      <div className={`py-12 sm:py-16 lg:py-20 ${PAGE_GRID_OUTER}`}>
-        <div className={`flex min-h-[clamp(32rem,61vw,54.9375rem)] flex-col ${PAGE_GRID_INNER}`}>
+      <div className={`${LANDING_SECTION_PY} ${PAGE_GRID_OUTER}`}>
+        <div className={`flex flex-col ${PAGE_GRID_INNER}`}>
           <p className="font-nav text-lg font-semibold leading-5 tracking-[0.05em] text-cream uppercase">
             {clippingContent.eyebrow}
           </p>
-          <h2 className="pt-4 font-nav text-[clamp(2rem,5vw,3.75rem)] font-black leading-none text-yellow-500">
+          <h2 className="pt-3 font-nav text-[clamp(2rem,5vw,3.75rem)] font-black leading-none text-yellow-500">
             {clippingContent.title}
           </h2>
           {loading ? (
             <ClippingSkeleton />
           ) : (
-            <div className="flex flex-col gap-6 pt-8 lg:flex-row lg:gap-6">
+            <div className="flex flex-col gap-6 pt-6 lg:flex-row lg:gap-6">
               <div className="flex flex-1 flex-col gap-3">
                 <SectionLabel>{clippingContent.interviewsLabel}</SectionLabel>
-                <InterviewCard interview={interview} />
+                {interview ? (
+                  <InterviewCard interview={interview} />
+                ) : (
+                  <p className="font-nav text-sm leading-relaxed text-cream/70">
+                    Nenhuma matéria em destaque no momento.
+                  </p>
+                )}
               </div>
               <div className="flex flex-1 flex-col gap-3">
                 <SectionLabel>{clippingContent.reportsLabel}</SectionLabel>

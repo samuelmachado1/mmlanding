@@ -1,4 +1,5 @@
 import { AppLink } from '../ui/AppLink.tsx';
+import { mediaArticlePath } from '../../lib/media-paths.ts';
 import type { ReactNode } from 'react';
 import type {
   ActionCard,
@@ -61,24 +62,31 @@ export function ProposalGrid({ cards }: { cards: ProposalCard[] }) {
   return (
     <ul className="grid gap-6 sm:grid-cols-2">
       {cards.map((card) => (
-        <li key={card.title} className="rounded-2xl border border-brand-black/[0.06] bg-white p-6">
-          <div className="flex items-center justify-between gap-3">
-            <div className="flex items-center gap-2">
-              <span className="text-2xl leading-8" aria-hidden>
-                {card.icon}
+        <li key={card.title}>
+          <AppLink
+            to={card.href}
+            className="group flex h-full flex-col rounded-2xl border border-brand-black/[0.06] bg-white p-6 transition hover:border-navy-500"
+          >
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2">
+                <span className="text-2xl leading-8" aria-hidden>
+                  {card.icon}
+                </span>
+                <p className="font-nav text-sm font-semibold uppercase tracking-[0.05em] text-navy-500">
+                  {card.category}
+                </p>
+              </div>
+              <span
+                className={`shrink-0 rounded-full px-2 py-1 font-nav text-xs font-semibold ${statusStyles[card.status]}`}
+              >
+                {card.status}
               </span>
-              <p className="font-nav text-sm font-semibold uppercase tracking-[0.05em] text-navy-500">
-                {card.category}
-              </p>
             </div>
-            <span
-              className={`shrink-0 rounded-full px-2 py-1 font-nav text-xs font-semibold ${statusStyles[card.status]}`}
-            >
-              {card.status}
-            </span>
-          </div>
-          <h3 className="pt-3 font-nav text-lg font-bold text-brand-black">{card.title}</h3>
-          <p className="pt-2 text-sm leading-[1.625] text-brand-black">{card.description}</p>
+            <h3 className="pt-3 font-nav text-lg font-bold text-brand-black group-hover:text-navy-500">
+              {card.title}
+            </h3>
+            <p className="pt-2 text-sm leading-[1.625] text-brand-black">{card.description}</p>
+          </AppLink>
         </li>
       ))}
     </ul>
@@ -254,19 +262,19 @@ function MandateSeal({ className = 'size-5' }: { className?: string }) {
 
 export function MandateHighlightGrid({ cards }: { cards: HighlightStatCard[] }) {
   return (
-    <ul className="mx-auto grid max-w-5xl grid-cols-2 gap-3 lg:grid-cols-4">
+    <ul className="mx-auto grid max-w-4xl grid-cols-2 gap-2 sm:gap-2.5 lg:grid-cols-4">
       {cards.map((card) => (
         <li key={card.label}>
           <article
             aria-label={card.srLabel ?? `${card.value} ${card.label}`}
-            className="flex h-[100px] max-h-[100px] items-center gap-2.5 rounded-xl bg-brand-black px-3 py-2 shadow-[0_12px_32px_rgba(37,33,30,0.22)] ring-1 ring-white/10 sm:gap-3 sm:px-4"
+            className="flex h-[68px] max-h-[68px] items-center gap-2 rounded-lg bg-brand-black px-2.5 py-1.5 shadow-[0_8px_20px_rgba(37,33,30,0.16)] ring-1 ring-white/10 sm:h-[72px] sm:max-h-[72px] sm:gap-2.5 sm:px-3"
           >
-            <MandateSeal />
+            <MandateSeal className="size-4" />
             <div className="min-w-0 text-left">
-              <p className="font-nav text-[clamp(1.125rem,2.5vw,1.5rem)] font-black leading-none text-white">
+              <p className="font-nav text-[clamp(0.95rem,2vw,1.125rem)] font-black leading-none text-white">
                 {card.value}
               </p>
-              <p className="pt-1 font-nav text-[10px] font-bold uppercase leading-tight tracking-[0.06em] text-white/90 sm:text-[11px]">
+              <p className="pt-0.5 font-nav text-[9px] font-bold uppercase leading-tight tracking-[0.05em] text-white/90 sm:text-[10px]">
                 {card.label}
               </p>
             </div>
@@ -350,14 +358,18 @@ export function MidiaMediaGrid({ cards }: { cards: MediaCard[] }) {
     <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {cards.map((card) => (
         <li key={card.id}>
-          <a
-            href={card.href}
+          <AppLink
+            to={mediaArticlePath(card.id)}
             className="group flex h-full flex-col overflow-hidden rounded-2xl border border-brand-black/[0.06] bg-white transition hover:border-brand-red/30"
           >
             <div className="relative aspect-[396/192] overflow-hidden bg-navy-100">
               {card.imageUrl ? (
                 <img src={card.imageUrl} alt="" className="size-full object-cover" />
-              ) : null}
+              ) : (
+                <div className="flex size-full items-center justify-center bg-navy-500/10 font-nav text-xs font-semibold uppercase tracking-wide text-navy-500/50">
+                  Max na Mídia
+                </div>
+              )}
               <span className="absolute top-3 left-3 bg-yellow-500 px-2 py-0.5 font-nav text-[9px] font-bold tracking-[0.1em] text-brand-black uppercase">
                 {card.category}
               </span>
@@ -371,7 +383,7 @@ export function MidiaMediaGrid({ cards }: { cards: MediaCard[] }) {
                 <span className="font-nav text-xs text-brand-black/50">{card.date}</span>
               </div>
             </div>
-          </a>
+          </AppLink>
         </li>
       ))}
     </ul>
@@ -383,8 +395,8 @@ export function MediaGrid({ cards }: { cards: MediaCard[] }) {
     <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {cards.map((card) => (
         <li key={card.id}>
-          <a
-            href={card.href}
+          <AppLink
+            to={mediaArticlePath(card.id)}
             className="group flex h-full flex-col overflow-hidden rounded-2xl border border-brand-black/10 bg-white transition hover:border-navy-500"
           >
             <div className="aspect-video bg-navy-100">
@@ -405,7 +417,7 @@ export function MediaGrid({ cards }: { cards: MediaCard[] }) {
                 {card.source} · {card.date}
               </p>
             </div>
-          </a>
+          </AppLink>
         </li>
       ))}
     </ul>

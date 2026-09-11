@@ -1,21 +1,39 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { getClippings } from './lib/store.ts';
 
 export default async function handler(
-  _req: VercelRequest,
+  req: VercelRequest,
   res: VercelResponse,
 ) {
+  if (req.method !== 'GET') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  const id = typeof req.query.id === 'string' ? req.query.id : null;
+
   try {
+    const { getClippings, getPublishedItemById } = await import('./_lib/store-read.js');
+
+    if (id) {
+      const item = await getPublishedItemById(id);
+      if (!item) {
+        return res.status(404).json({ error: 'Article not found' });
+      }
+
+      res.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate=120');
+      return res.status(200).json(item);
+    }
+
     const cached = await getClippings();
 
     if (cached) {
-      res.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate=600');
+      res.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate=120');
       return res.status(200).json(cached);
     }
 
     return res.status(404).json({ error: 'No clippings cached yet' });
   } catch (error) {
     console.error('GET /api/clippings failed:', error);
-    return res.status(500).json({ error: 'Failed to load clippings' });
+    const message = error instanceof Error ? error.message : 'Failed to load clippings';
+    return res.status(500).json({ error: message });
   }
 }

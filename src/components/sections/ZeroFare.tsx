@@ -2,7 +2,7 @@ import { AppLink } from '../ui/AppLink.tsx';
 import { zeroFareCards, zeroFareContent } from "../../data/content.ts";
 import type { ZeroFareCard } from "../../types/index.ts";
 import { AnimatedSection } from "../ui/AnimatedSection.tsx";
-import { PAGE_GRID_INNER, PAGE_GRID_OUTER } from "../layout/pageGrid.ts";
+import { PAGE_GRID_INNER, PAGE_GRID_OUTER, LANDING_SECTION_PY } from "../layout/pageGrid.ts";
 
 function StatCard({ value, label }: { value: string; label: string }) {
   return (
@@ -36,22 +36,22 @@ function ZeroFareCardItem({ card }: { card: ZeroFareCard }) {
 export function ZeroFare() {
   return (
     <AnimatedSection id="tarifa-zero" className="bg-cream">
-      <div className={`py-12 sm:py-16 lg:py-20 ${PAGE_GRID_OUTER}`}>
-        <div className={`min-h-[clamp(32rem,61vw,54.9375rem)] ${PAGE_GRID_INNER}`}>
+      <div className={`${LANDING_SECTION_PY} ${PAGE_GRID_OUTER}`}>
+        <div className={PAGE_GRID_INNER}>
           <h2 className="font-nav text-[clamp(2rem,8vw,3.75rem)] font-black leading-[1.05] text-black">
             {zeroFareContent.title}
           </h2>
-          <p className="max-w-[672px] pt-4 font-nav text-lg leading-7 text-brand-black">
+          <p className="max-w-[672px] pt-3 font-nav text-lg leading-7 text-brand-black">
             {zeroFareContent.description}
           </p>
           <AppLink
             to="/mandato/tarifa-zero"
-            className="mt-4 inline-flex font-nav text-sm font-bold text-navy-500 underline underline-offset-4"
+            className="mt-3 inline-flex font-nav text-sm font-bold text-navy-500 underline underline-offset-4"
           >
             Saiba mais
           </AppLink>
 
-          <div className="w-full max-w-[890.41px] pt-12">
+          <div className="w-full max-w-[890.41px] pt-6">
             <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2">
               {zeroFareCards.map((card) => (
                 <li key={card.id} className="flex">

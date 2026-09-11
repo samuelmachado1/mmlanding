@@ -7,7 +7,12 @@ import { NavLink } from '../ui/NavLink.tsx';
 import logoHeader from '../../assets/logos/logo-header.png';
 import { PAGE_GRID_INNER, PAGE_GRID_OUTER } from './pageGrid.ts';
 
-const logoClassName = 'block h-auto w-[255px] max-w-none';
+// logo-header.png (596×596): bounds da arte em y=185..326
+const logoLinkClassName =
+  'relative z-10 mt-[10px] block h-[68px] w-[min(255px,calc(100vw-5rem))] shrink-0 overflow-hidden sm:w-[255px]';
+
+const logoClassName =
+  'block w-[255px] max-w-[min(255px,calc(100vw-5rem))] h-auto -mt-[79px] sm:max-w-none';
 
 const landingNavLinkClass =
   'font-nav text-base font-medium leading-6 tracking-[0.15px] text-brand-black transition-colors hover:text-navy-500';
@@ -30,13 +35,13 @@ export function Header({ variant = 'landing' }: HeaderProps) {
   const linkClass = isInternal ? getInternalNavLinkClass : () => landingNavLinkClass;
 
   const barOuterClass = PAGE_GRID_OUTER;
-  const barClass = `flex h-[101px] ${PAGE_GRID_INNER} items-center justify-between gap-4 overflow-visible`;
+  const barClass = `flex h-[101px] ${PAGE_GRID_INNER} items-center justify-between gap-4 overflow-hidden`;
 
   return (
-    <header className={`overflow-visible bg-yellow-500 ${isInternal ? 'shadow-sm' : ''}`}>
+    <header className={`overflow-hidden bg-yellow-500 ${isInternal ? 'shadow-sm' : ''}`}>
       <div className={barOuterClass}>
         <div className={barClass}>
-        <AppLink to="/" aria-label="Ir para início" className="relative z-10 mt-[10px] flex shrink-0 items-center overflow-visible">
+        <AppLink to="/" aria-label="Ir para início" className={logoLinkClassName}>
           <img
             src={logoHeader}
             alt="Max Maciel"
