@@ -41,8 +41,8 @@ export function BondeAvatarStudio({
   const embedUrl = import.meta.env.VITE_BONDE_AVATAR_EMBED_URL || LOCAL_AVATAR_URL;
 
   return (
-    <section id="criar-avatar" className="scroll-mt-24 bg-navy-500 px-6 py-20 sm:px-8">
-      <div className="mx-auto max-w-6xl">
+    <section id="criar-avatar" className="scroll-mt-[101px] bg-navy-500 py-20">
+      <div className="mx-auto max-w-6xl px-6 sm:px-8">
         <p className="font-nav text-[17px] font-semibold uppercase tracking-[0.05em] text-cream/80">
           {eyebrow}
         </p>
@@ -50,16 +50,18 @@ export function BondeAvatarStudio({
           {title}
         </h2>
         <p className="mt-4 max-w-2xl font-nav text-lg leading-relaxed text-cream/80">{description}</p>
+      </div>
 
-        <div className="mt-10 grid min-w-0 gap-8 lg:grid-cols-[minmax(0,15rem)_minmax(0,1fr)] lg:items-stretch lg:gap-10">
-          <div className="flex min-w-0 justify-center gap-4 lg:h-full lg:flex-col lg:justify-between lg:gap-6">
+      <div className="mt-10 lg:mx-auto lg:max-w-6xl lg:px-8">
+        <div className="grid min-w-0 gap-8 lg:grid-cols-[minmax(0,15rem)_minmax(0,1fr)] lg:items-stretch lg:gap-10">
+          <div className="flex min-w-0 justify-center gap-4 px-6 sm:px-8 lg:h-full lg:flex-col lg:justify-between lg:gap-6 lg:px-0">
             {previewAvatars.map((avatar) => (
               <AvatarPreview key={avatar.label} src={avatar.src} label={avatar.label} />
             ))}
           </div>
 
-          <div className="-mx-6 flex w-[calc(100%+3rem)] min-w-0 flex-col overflow-hidden border-y border-white/10 bg-[#f2efe7] shadow-[0_24px_64px_rgba(0,0,0,0.28)] sm:-mx-8 sm:w-[calc(100%+4rem)] lg:mx-0 lg:h-full lg:w-full lg:rounded-2xl lg:border">
-            <div className="relative aspect-[9/19.5] w-full lg:aspect-auto lg:min-h-[clamp(28rem,70vh,45rem)] lg:flex-1">
+          <div className="flex w-full min-w-0 flex-col overflow-hidden border-y border-white/10 bg-[#f2efe7] shadow-[0_24px_64px_rgba(0,0,0,0.28)] lg:rounded-2xl lg:border">
+            <div className="relative w-full max-lg:h-[calc(100dvh-101px)] lg:min-h-[clamp(28rem,70vh,45rem)] lg:flex-1">
               <iframe
                 src={embedUrl}
                 title={embedTitle}
