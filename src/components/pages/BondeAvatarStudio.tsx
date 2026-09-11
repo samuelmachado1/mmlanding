@@ -5,7 +5,8 @@ import bondeProMaxAbaReto from '../../assets/pictures/bonde-pro-max-aba-reto.png
 import bondeProMaxAbaReta from '../../assets/pictures/bonde-pro-max-aba-reta.png';
 import type { BondeAvatarStudioContent } from '../../types/index.ts';
 
-const LOCAL_AVATAR_URL = '/avatar/index.html';
+const ITCH_AVATAR_EMBED_URL = 'https://itch.io/embed-upload/19160506?color=333333';
+const ITCH_AVATAR_PAGE_URL = 'https://kombits.itch.io/maxavatar2026';
 
 const previewAvatars = [
   { src: bondeProMaxAbaReto, label: 'Exemplo de avatar Aba Reto' },
@@ -14,12 +15,7 @@ const previewAvatars = [
 ] as const;
 
 const panelClassName =
-  'relative flex min-h-[28rem] w-full flex-col lg:min-h-[clamp(28rem,70vh,42rem)]';
-
-function isAppleTouchDevice() {
-  if (typeof navigator === 'undefined') return false;
-  return /iPhone|iPad|iPod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-}
+  'relative w-full min-h-[28rem] aspect-[980/580] max-h-[min(80dvh,45rem)] lg:min-h-0';
 
 function AvatarPreview({ src, label }: { src: string; label: string }) {
   return (
@@ -39,36 +35,6 @@ function AvatarPreview({ src, label }: { src: string; label: string }) {
   );
 }
 
-function AvatarLaunch({ href, onStart }: { href: string; onStart: () => void }) {
-  const ios = isAppleTouchDevice();
-
-  return (
-    <div className={`${panelClassName} items-center justify-center gap-4 bg-[#f2efe7] px-6 text-center`}>
-      {ios ? (
-        <a
-          href={href}
-          className="inline-flex min-h-11 items-center justify-center rounded-[10px] bg-yellow-500 px-8 py-3 font-nav text-base font-bold text-navy-500"
-        >
-          Iniciar criador
-        </a>
-      ) : (
-        <button
-          type="button"
-          onClick={onStart}
-          className="inline-flex min-h-11 items-center justify-center rounded-[10px] bg-yellow-500 px-8 py-3 font-nav text-base font-bold text-navy-500"
-        >
-          Iniciar criador
-        </button>
-      )}
-      <p className="max-w-sm font-nav text-sm leading-relaxed text-navy-500/80">
-        {ios
-          ? 'No iPhone o gerador abre em tela cheia para não travar a página.'
-          : 'Toque para carregar o gerador de avatares.'}
-      </p>
-    </div>
-  );
-}
-
 interface BondeAvatarStudioProps extends BondeAvatarStudioContent {}
 
 export function BondeAvatarStudio({
@@ -77,7 +43,7 @@ export function BondeAvatarStudio({
   description,
   embedTitle,
 }: BondeAvatarStudioProps) {
-  const embedUrl = import.meta.env.VITE_BONDE_AVATAR_EMBED_URL || LOCAL_AVATAR_URL;
+  const embedUrl = import.meta.env.VITE_BONDE_AVATAR_EMBED_URL || ITCH_AVATAR_EMBED_URL;
   const [isEmbedActive, setIsEmbedActive] = useState(false);
 
   return (
@@ -100,20 +66,39 @@ export function BondeAvatarStudio({
             ))}
           </div>
 
-          <div className="flex w-full min-w-0 flex-col overflow-hidden border-y border-white/10 bg-[#f2efe7] shadow-[0_24px_64px_rgba(0,0,0,0.28)] lg:rounded-2xl lg:border">
+          <div className="flex w-full min-w-0 flex-col overflow-hidden border-y border-white/10 bg-[#333333] shadow-[0_24px_64px_rgba(0,0,0,0.28)] lg:rounded-2xl lg:border">
             {isEmbedActive ? (
               <div className={panelClassName}>
                 <iframe
                   src={embedUrl}
                   title={embedTitle}
-                  className="absolute inset-0 h-full w-full border-0 bg-[#f2efe7]"
+                  className="absolute inset-0 h-full w-full border-0 bg-[#333333]"
                   allow="clipboard-write; fullscreen"
                   allowFullScreen
                   referrerPolicy="strict-origin-when-cross-origin"
                 />
               </div>
             ) : (
-              <AvatarLaunch href={LOCAL_AVATAR_URL} onStart={() => setIsEmbedActive(true)} />
+              <div className={`${panelClassName} flex flex-col items-center justify-center gap-4 px-6 text-center`}>
+                <button
+                  type="button"
+                  onClick={() => setIsEmbedActive(true)}
+                  className="inline-flex min-h-11 items-center justify-center rounded-[10px] bg-yellow-500 px-8 py-3 font-nav text-base font-bold text-navy-500"
+                >
+                  Iniciar criador
+                </button>
+                <p className="max-w-sm font-nav text-sm leading-relaxed text-cream/80">
+                  Toque para carregar o gerador de avatares.
+                </p>
+                <a
+                  href={ITCH_AVATAR_PAGE_URL}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="font-nav text-sm font-semibold text-yellow-500 underline underline-offset-4"
+                >
+                  Abrir no itch.io
+                </a>
+              </div>
             )}
             <p className="border-t border-white/15 bg-navy-500 px-6 py-4 text-center font-display text-[clamp(1.05rem,3.5vw,1.35rem)] italic leading-snug text-yellow-500">
               Pensado e criado por mentes e mãos humanas
