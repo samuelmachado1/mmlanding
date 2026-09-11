@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import frameQuemEhMax from '../../assets/backgrounds/frame-quem-eh-max.png';
 import bondeAvatarMari from '../../assets/pictures/bonde-avatar-mari.png';
 import bondeProMaxAbaReto from '../../assets/pictures/bonde-pro-max-aba-reto.png';
@@ -11,6 +12,14 @@ const previewAvatars = [
   { src: bondeProMaxAbaReta, label: 'Exemplo de avatar Aba Reta' },
   { src: bondeAvatarMari, label: 'Exemplo de avatar Mari' },
 ] as const;
+
+const panelClassName =
+  'relative flex min-h-[28rem] w-full flex-col lg:min-h-[clamp(28rem,70vh,42rem)]';
+
+function isAppleTouchDevice() {
+  if (typeof navigator === 'undefined') return false;
+  return /iPhone|iPad|iPod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+}
 
 function AvatarPreview({ src, label }: { src: string; label: string }) {
   return (
@@ -30,6 +39,36 @@ function AvatarPreview({ src, label }: { src: string; label: string }) {
   );
 }
 
+function AvatarLaunch({ href, onStart }: { href: string; onStart: () => void }) {
+  const ios = isAppleTouchDevice();
+
+  return (
+    <div className={`${panelClassName} items-center justify-center gap-4 bg-[#f2efe7] px-6 text-center`}>
+      {ios ? (
+        <a
+          href={href}
+          className="inline-flex min-h-11 items-center justify-center rounded-[10px] bg-yellow-500 px-8 py-3 font-nav text-base font-bold text-navy-500"
+        >
+          Iniciar criador
+        </a>
+      ) : (
+        <button
+          type="button"
+          onClick={onStart}
+          className="inline-flex min-h-11 items-center justify-center rounded-[10px] bg-yellow-500 px-8 py-3 font-nav text-base font-bold text-navy-500"
+        >
+          Iniciar criador
+        </button>
+      )}
+      <p className="max-w-sm font-nav text-sm leading-relaxed text-navy-500/80">
+        {ios
+          ? 'No iPhone o gerador abre em tela cheia para não travar a página.'
+          : 'Toque para carregar o gerador de avatares.'}
+      </p>
+    </div>
+  );
+}
+
 interface BondeAvatarStudioProps extends BondeAvatarStudioContent {}
 
 export function BondeAvatarStudio({
@@ -39,9 +78,10 @@ export function BondeAvatarStudio({
   embedTitle,
 }: BondeAvatarStudioProps) {
   const embedUrl = import.meta.env.VITE_BONDE_AVATAR_EMBED_URL || LOCAL_AVATAR_URL;
+  const [isEmbedActive, setIsEmbedActive] = useState(false);
 
   return (
-    <section id="criar-avatar" className="scroll-mt-[101px] bg-navy-500 py-20">
+    <section id="criar-avatar" className="scroll-mt-24 overflow-x-hidden bg-navy-500 py-20">
       <div className="mx-auto max-w-6xl px-6 sm:px-8">
         <p className="font-nav text-[17px] font-semibold uppercase tracking-[0.05em] text-cream/80">
           {eyebrow}
@@ -61,15 +101,20 @@ export function BondeAvatarStudio({
           </div>
 
           <div className="flex w-full min-w-0 flex-col overflow-hidden border-y border-white/10 bg-[#f2efe7] shadow-[0_24px_64px_rgba(0,0,0,0.28)] lg:rounded-2xl lg:border">
-            <div className="relative w-full max-lg:h-[calc(100dvh-101px)] lg:min-h-[clamp(28rem,70vh,45rem)] lg:flex-1">
-              <iframe
-                src={embedUrl}
-                title={embedTitle}
-                className="absolute inset-0 h-full w-full border-0 bg-[#f2efe7]"
-                allow="clipboard-write; fullscreen"
-                referrerPolicy="strict-origin-when-cross-origin"
-              />
-            </div>
+            {isEmbedActive ? (
+              <div className={panelClassName}>
+                <iframe
+                  src={embedUrl}
+                  title={embedTitle}
+                  className="absolute inset-0 h-full w-full border-0 bg-[#f2efe7]"
+                  allow="clipboard-write; fullscreen"
+                  allowFullScreen
+                  referrerPolicy="strict-origin-when-cross-origin"
+                />
+              </div>
+            ) : (
+              <AvatarLaunch href={LOCAL_AVATAR_URL} onStart={() => setIsEmbedActive(true)} />
+            )}
             <p className="border-t border-white/15 bg-navy-500 px-6 py-4 text-center font-display text-[clamp(1.05rem,3.5vw,1.35rem)] italic leading-snug text-yellow-500">
               Pensado e criado por mentes e mãos humanas
             </p>
