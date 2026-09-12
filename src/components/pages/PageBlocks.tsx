@@ -11,6 +11,7 @@ import type {
   PamphletItem,
   PrincipleCard,
   ProposalCard,
+  CampaignProposal,
   HighlightStatCard,
   StatCard,
 } from '../../types/index.ts';
@@ -49,6 +50,26 @@ export function PrincipleGrid({ cards }: { cards: PrincipleCard[] }) {
         </li>
       ))}
     </ul>
+  );
+}
+
+export function CampaignProposalList({ items }: { items: CampaignProposal[] }) {
+  return (
+    <ol className="grid gap-4 sm:grid-cols-2">
+      {items.map((item) => (
+        <li
+          key={item.number}
+          id={`proposta-${item.number}`}
+          className="scroll-mt-28 rounded-2xl border border-brand-black/10 bg-white p-5 sm:p-6"
+        >
+          <p className="font-nav text-sm font-bold uppercase tracking-[0.12em] text-navy-500">
+            {String(item.number).padStart(2, '0')}
+          </p>
+          <h3 className="pt-2 font-nav text-lg font-bold leading-snug text-brand-black">{item.title}</h3>
+          <p className="pt-2 text-sm leading-[1.625] text-brand-black/85">{item.description}</p>
+        </li>
+      ))}
+    </ol>
   );
 }
 

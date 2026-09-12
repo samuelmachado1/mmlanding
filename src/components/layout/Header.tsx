@@ -49,7 +49,7 @@ export function Header({ variant = 'landing' }: HeaderProps) {
           />
         </AppLink>
 
-        <nav className="hidden items-center gap-4 lg:flex" aria-label="Principal">
+        <nav className="hidden items-center gap-4 xl:flex" aria-label="Principal">
           {items.map((item) => (
             <NavLink key={item.href} href={item.href} className={linkClass(item)}>
               {item.label}
@@ -59,7 +59,7 @@ export function Header({ variant = 'landing' }: HeaderProps) {
 
         <button
           type="button"
-          className="mr-0 inline-flex min-h-11 min-w-11 shrink-0 items-center justify-center rounded-lg text-brand-black hover:text-navy-500 lg:hidden"
+          className="mr-0 inline-flex min-h-11 min-w-11 shrink-0 items-center justify-center rounded-lg text-brand-black hover:text-navy-500 xl:hidden"
           aria-expanded={open}
           aria-controls="mobile-menu"
           aria-label={open ? 'Fechar menu' : 'Abrir menu'}
@@ -73,7 +73,7 @@ export function Header({ variant = 'landing' }: HeaderProps) {
       {open ? (
         <nav
           id="mobile-menu"
-          className={`bg-yellow-500 py-4 lg:hidden ${PAGE_GRID_OUTER}`}
+          className={`bg-yellow-500 py-4 xl:hidden ${PAGE_GRID_OUTER}`}
           aria-label="Mobile"
         >
           <ul className="flex flex-col gap-2">

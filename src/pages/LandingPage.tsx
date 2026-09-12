@@ -4,6 +4,7 @@ import { Footer } from '../components/layout/Footer.tsx';
 import { SitePageCtaSection } from '../components/pages/InternalPageParts.tsx';
 import { Hero } from '../components/sections/Hero.tsx';
 import { Manifest } from '../components/sections/Manifest.tsx';
+import { Propostas } from '../components/sections/Propostas.tsx';
 import { Biography } from '../components/sections/Biography.tsx';
 import { Crew } from '../components/sections/Crew.tsx';
 import { Clipping } from '../components/sections/Clipping.tsx';
@@ -20,6 +21,7 @@ export default function LandingPage() {
         <Hero />
         <Biography />
         <Manifest />
+        <Propostas />
         <Crew />
         <Clipping />
         <ZeroFare />

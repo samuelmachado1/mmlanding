@@ -168,6 +168,12 @@ export interface LawItem {
   description: string;
 }
 
+export interface CampaignProposal {
+  number: number;
+  title: string;
+  description: string;
+}
+
 export interface InvestmentRow {
   area: string;
   amount: string;

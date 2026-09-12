@@ -18,6 +18,7 @@ import type {
   SocialBarLink,
   PageContent,
   LawItem,
+  CampaignProposal,
   InvestmentRow,
   PamphletItem,
   ChannelItem,
@@ -65,6 +66,7 @@ export const siteConfig = {
 export const navItems: NavItem[] = [
   { label: 'Quem é Max', href: '/quem-e-max' },
   { label: 'Mandato Aba Reta', href: '/mandato' },
+  { label: 'Propostas', href: '/propostas' },
   { label: 'Maximizando o DF', href: '/maximizando-df' },
   { label: 'Bonde Pro Max', href: '/bonde-pro-max' },
   { label: 'Max na Mídia', href: '/midia' },
@@ -75,6 +77,7 @@ export const navItems: NavItem[] = [
 export const internalNavItems: NavItem[] = [
   { label: 'Quem é Max', href: '/quem-e-max' },
   { label: 'Mandato Aba Reta', href: '/mandato' },
+  { label: 'Propostas', href: '/propostas' },
   { label: 'Maximizando o DF', href: '/maximizando-df' },
   { label: 'Bonde Pro Max', href: '/bonde-pro-max' },
   { label: 'Max na Mídia', href: '/midia' },
@@ -91,6 +94,7 @@ export const heroContent = {
 export const heroQuickLinks: QuickLink[] = [
   { label: 'Quem é Max', href: '#quem-e-max' },
   { label: 'Bonde Pro Max', href: '#bonde-pro-max' },
+  { label: 'Propostas', href: '#propostas' },
   { label: 'Notícias', href: '#noticias' },
   { label: 'Maximizando o DF', href: '#maximizando-df' },
   { label: 'Tarifa Zero é possível', href: '#tarifa-zero' },
@@ -705,6 +709,164 @@ export const maximizandoDfPage = {
     { area: 'Esporte, Turismo, Segurança e Patrimônio', amount: 'R$ 2.036.298,00', percent: '1,8%' },
   ] satisfies InvestmentRow[],
   total: { area: 'TOTAL INVESTIDO', amount: 'R$ 116.132.000,00', percent: '100%' } satisfies InvestmentRow,
+};
+
+export const propostasPage = {
+  eyebrow: 'Propostas',
+  title: 'Outro DF é possível',
+  subtitle: '26 propostas para maximizar nossas cidades',
+  intro: [
+    'A cabeça pensa onde os pés pisam e a política de verdade se faz no dia a dia, com muita luta e colocando o povo que faz a capital federal funcionar no centro do orçamento.',
+    'O nosso mandato existe para inverter a lógica da desigualdade e botar a quebrada na linha de frente.',
+  ],
+  listEyebrow: 'Se liga nas nossas propostas para maximizar o DF',
+  items: [
+    {
+      number: 1,
+      title: 'Tarifa Zero todos os dias',
+      description:
+        'Chega de gastar até 30% da renda para usar transporte público! Vamos lutar por gratuidade no transporte público 7 dias por semana com fontes permanentes de custeio público.',
+    },
+    {
+      number: 2,
+      title: 'Proteção e autonomia para as mulheres do DF',
+      description:
+        'Vamos lutar por apoio multidisciplinar e multiprofissional, com liberação do aluguel social e auxílio financeiro para as mulheres vítimas de violência.',
+    },
+    {
+      number: 3,
+      title: 'Ônibus 24h em todas as cidades',
+      description:
+        'O transporte público amplia o direito à cidade. Lutaremos por mais frota circulando na hora um e durante toda a madrugada.',
+    },
+    {
+      number: 4,
+      title: 'Saúde pública de qualidade e perto de você',
+      description:
+        'Lutaremos pelo fortalecimento da Atenção Primária e da Saúde Mental, com equipes completas para cuidar do povo antes que a dor vire emergência.',
+    },
+    {
+      number: 5,
+      title: 'Metrô-DF público e de qualidade',
+      description: 'Expansão das linhas, novos trens e concurso para recompor o quadro de trabalhadores.',
+    },
+    {
+      number: 6,
+      title: 'Assistência social fortalecida',
+      description:
+        'Chega de filas de madrugada e de falta de atendimento no CRAS e CREAS; vamos lutar ainda por mais orçamento para a assistência social.',
+    },
+    {
+      number: 7,
+      title: 'Cozinha Solidária em todo o DF',
+      description:
+        'Pressionaremos o GDF pela aplicação imediata da Lei da Cozinha Solidária, garantindo verba pública para botar refeição saudável no prato de quem vive em extrema vulnerabilidade.',
+    },
+    {
+      number: 8,
+      title: 'Educação pública integral, equipada e sem mordaça',
+      description:
+        'Verba direta no caixa escolar, para garantir infraestrutura de ponta e gestão democrática, para as nossas crianças, adolescentes, adultos e idosos aprenderem com dignidade.',
+    },
+    {
+      number: 9,
+      title: 'Economia girando na quebrada',
+      description:
+        'A periferia transborda inovação, tecnologia e cultura, mas os incentivos não chegam até lá. Queremos financiamento direto para empreendedores e coletivos locais gerarem trabalho e renda.',
+    },
+    {
+      number: 10,
+      title: 'Cerrado em primeiro lugar',
+      description:
+        'Queremos a luta por justiça climática fortalecida no DF, exigindo que o GDF invista na preservação do Cerrado e no fortalecimento do serviço público.',
+    },
+    {
+      number: 11,
+      title: 'Trabalho digno e oportunidade para juventude periférica',
+      description:
+        'Basta de subemprego e exploração. Lutaremos por programas de primeiro emprego, formação profissional de verdade e garantia de direitos para os jovens e trabalhadores de todo o DF.',
+    },
+    {
+      number: 12,
+      title: 'Dignidade para ambulantes e entregadores',
+      description:
+        'Quem movimenta o DF não pode continuar sem o básico para trabalhar. Lutaremos pela implementação de pontos de apoio públicos com estrutura para descanso, água e banheiro.',
+    },
+    {
+      number: 13,
+      title: 'Transparência total com o dinheiro público',
+      description: 'Dados abertos e fiscalização rigorosa para priorizar a população.',
+    },
+    {
+      number: 14,
+      title: 'Mais arborização na quebrada',
+      description:
+        'Iremos cobrar que todas as obras do GDF passem a contar com espaços verdes e arborizados, de acordo com as Soluções Baseadas na Natureza.',
+    },
+    {
+      number: 15,
+      title: 'Suporte para mães atípicas',
+      description: 'Acesso ampliado e desburocratizado a terapias, transporte e auxílios.',
+    },
+    {
+      number: 16,
+      title: 'Hortas urbanas e quintais produtivos no DF',
+      description: 'Fortalecimento da agricultura comunitária e soberania alimentar.',
+    },
+    {
+      number: 17,
+      title: 'Economia criativa no centro',
+      description: 'Criação de Distritos Criativos e fomento ao turismo, inovação e cultura.',
+    },
+    {
+      number: 18,
+      title: 'Saúde e proteção animal',
+      description:
+        'Vamos fortalecer o Hospital Veterinário do DF e lutar para que sejam construídas novas clínicas veterinárias públicas para ampliar o acesso ao atendimento veterinário.',
+    },
+    {
+      number: 19,
+      title: 'Periferia nas universidades',
+      description: 'Isenção de taxa no PAS e vestibulares da UnB e UnDF para a rede pública.',
+    },
+    {
+      number: 20,
+      title: 'Melhores condições de trabalho para rodoviários e metroviários',
+      description: 'Estrutura digna, segurança e fortalecimento da TCB.',
+    },
+    {
+      number: 21,
+      title: 'Ciclovias integradas e funcionais',
+      description: 'Rotas conectando quadras residenciais a estações e terminais.',
+    },
+    {
+      number: 22,
+      title: 'Paradas de ônibus seguras e iluminadas',
+      description: 'Iluminação em LED, horários em tempo real e ponto de emergência.',
+    },
+    {
+      number: 23,
+      title: 'Acessibilidade de verdade nos terminais',
+      description: 'Calçadas e rampas adequadas num raio de 500 metros dos terminais.',
+    },
+    {
+      number: 24,
+      title: 'Transporte de vizinhança fortalecido',
+      description:
+        'Criação de rotas diretas entre as Regiões Administrativas para reduzir o tempo de deslocamento e devolver horas de descanso aos usuários do sistema de transporte.',
+    },
+    {
+      number: 25,
+      title: 'Envelhecer com dignidade e cuidado na quebrada',
+      description:
+        'Quem construiu o DF não pode ser esquecido. Envelhecer na periferia exige respeito, cuidado e sustentabilidade. Defendemos uma política distrital de longevidade ativa, inclusiva e intergeracional.',
+    },
+    {
+      number: 26,
+      title: 'Valorização do campo e da agricultura familiar',
+      description: 'Apoio à EMATER-DF, infraestrutura viária e energia fotovoltaica rural.',
+    },
+  ] satisfies CampaignProposal[],
 };
 
 export const bondeProMaxPage: PageContent = {

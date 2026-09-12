@@ -8,6 +8,7 @@ import TarifaZeroPage from './pages/mandato/TarifaZeroPage.tsx';
 import ProjetosDeLeiPage from './pages/mandato/ProjetosDeLeiPage.tsx';
 import CtmUPage from './pages/mandato/CtmUPage.tsx';
 import MaximizandoDfPage from './pages/MaximizandoDfPage.tsx';
+import PropostasPage from './pages/PropostasPage.tsx';
 import BondeProMaxPage from './pages/BondeProMaxPage.tsx';
 import MateriaisPage from './pages/MateriaisPage.tsx';
 import ApoiePage from './pages/ApoiePage.tsx';
@@ -28,6 +29,7 @@ export default function App() {
         <Route path="/mandato/tarifa-zero" element={<TarifaZeroPage />} />
         <Route path="/mandato/projetos-de-lei" element={<ProjetosDeLeiPage />} />
         <Route path="/mandato/ctmu" element={<CtmUPage />} />
+        <Route path="/propostas" element={<PropostasPage />} />
         <Route path="/maximizando-df" element={<MaximizandoDfPage />} />
         <Route path="/bonde-pro-max" element={<BondeProMaxPage />} />
       <Route path="/materiais" element={<MateriaisPage />} />
