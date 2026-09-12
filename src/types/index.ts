@@ -180,11 +180,6 @@ export interface InvestmentRow {
   percent: string;
 }
 
-export interface PamphletItem {
-  title: string;
-  href: string;
-}
-
 export interface ChannelItem {
   name: string;
   href: string;

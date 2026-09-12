@@ -10,7 +10,6 @@ import CtmUPage from './pages/mandato/CtmUPage.tsx';
 import MaximizandoDfPage from './pages/MaximizandoDfPage.tsx';
 import PropostasPage from './pages/PropostasPage.tsx';
 import BondeProMaxPage from './pages/BondeProMaxPage.tsx';
-import MateriaisPage from './pages/MateriaisPage.tsx';
 import ApoiePage from './pages/ApoiePage.tsx';
 import MidiaPage from './pages/MidiaPage.tsx';
 import MidiaArticlePage from './pages/MidiaArticlePage.tsx';
@@ -32,7 +31,6 @@ export default function App() {
         <Route path="/propostas" element={<PropostasPage />} />
         <Route path="/maximizando-df" element={<MaximizandoDfPage />} />
         <Route path="/bonde-pro-max" element={<BondeProMaxPage />} />
-      <Route path="/materiais" element={<MateriaisPage />} />
       <Route path="/apoie" element={<ApoiePage />} />
       <Route path="/midia" element={<MidiaPage />} />
       <Route path="/midia/a/:id" element={<MidiaArticlePage />} />

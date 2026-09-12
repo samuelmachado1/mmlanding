@@ -20,7 +20,6 @@ import type {
   LawItem,
   CampaignProposal,
   InvestmentRow,
-  PamphletItem,
   ChannelItem,
   MidiaSection,
   PageLink,
@@ -54,6 +53,8 @@ const siteIdentity = {
     chatUrl: 'https://wa.me/5561982521212',
     bondeGroupUrl: 'https://lnkl.st/orv_mo8fy9',
   },
+  materialsDriveUrl:
+    'https://drive.google.com/drive/folders/1eATqqLuC6FWu7tNtOaujmnBjWrbjm-oz?usp=sharing',
 } as const;
 
 export const siteConfig = {
@@ -287,7 +288,7 @@ export const crewCards: CrewCard[] = [
     description:
       'Leve nossas ideias para as ruas e para as redes. Baixe cards, vídeos e materiais para compartilhar com sua comunidade.',
     cta: 'Acessar materiais',
-    href: '/materiais',
+    href: siteConfig.materialsDriveUrl,
   },
   {
     id: 'grupo-apoiadores',
@@ -915,7 +916,7 @@ export const bondePageContent = {
         description:
           'Baixe cards, vídeos e artes prontas para compartilhar nas redes sociais e fortalecer nossas ideias.',
         cta: 'Acessar materiais',
-        href: '/materiais',
+        href: siteConfig.materialsDriveUrl,
       },
       {
         icon: '🎨',
@@ -963,18 +964,6 @@ export const bondePageContent = {
       },
     ],
   },
-};
-
-export const materiaisPage = {
-  title: 'Nossos materiais',
-  intro: 'Leia e dissemine a palavra aba reta para construir o DF que queremos:',
-  pamphlets: [
-    { title: 'Panfleto — Quem é Max Maciel', href: '#' },
-    { title: 'Panfleto — Tarifa Zero', href: '#' },
-    { title: 'Panfleto — Mandato Aba Reta', href: '#' },
-    { title: 'Adesivo — Bonde Pro Max', href: '#' },
-    { title: 'Banner para redes sociais', href: '#' },
-  ] satisfies PamphletItem[],
 };
 
 export const canaisPage = {

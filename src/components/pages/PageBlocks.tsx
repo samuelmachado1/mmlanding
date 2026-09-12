@@ -8,7 +8,6 @@ import type {
   MissionCard,
   PageLink,
   PageTimelineItem,
-  PamphletItem,
   PrincipleCard,
   ProposalCard,
   CampaignProposal,
@@ -525,34 +524,6 @@ export function HubLinkGrid({ links }: { links: PageLink[] }) {
             </h3>
             <span className="mt-auto pt-4 font-nav text-sm font-bold text-navy-500">Ver mais →</span>
           </AppLink>
-        </li>
-      ))}
-    </ul>
-  );
-}
-
-export function PamphletGrid({ items }: { items: PamphletItem[] }) {
-  return (
-    <ul className="grid gap-6 sm:grid-cols-2">
-      {items.map((item) => (
-        <li key={item.title}>
-          <a
-            href={item.href}
-            target="_blank"
-            rel="noreferrer"
-            className="group flex h-full flex-col rounded-2xl border border-brand-black/10 bg-white p-6 transition hover:border-navy-500"
-          >
-            <span className="text-3xl" aria-hidden>
-              📄
-            </span>
-            <h3 className="pt-3 font-nav text-lg font-bold text-brand-black group-hover:text-navy-500">
-              {item.title}
-            </h3>
-            <p className="pt-2 text-sm text-brand-black/60">
-              {item.href === '#' ? 'Arquivo em breve' : 'Clique para baixar o arquivo'}
-            </p>
-            <span className="mt-auto pt-4 font-nav text-sm font-bold text-navy-500">Baixar →</span>
-          </a>
         </li>
       ))}
     </ul>
