@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import frameQuemEhMax from '../../assets/backgrounds/frame-quem-eh-max.png';
 import bondeAvatarMari from '../../assets/pictures/bonde-avatar-mari.png';
 import bondeProMaxAbaReto from '../../assets/pictures/bonde-pro-max-aba-reto.png';
@@ -17,8 +18,10 @@ const previewAvatars = [
 const launchClassName =
   'relative flex w-full min-h-[28rem] aspect-[980/580] max-h-[min(80dvh,45rem)] flex-col items-center justify-center gap-4 px-6 text-center lg:min-h-0';
 
-const frameClassName =
-  'relative h-[100svh] w-full min-h-[40rem] lg:h-auto lg:min-h-0 lg:aspect-[980/580] lg:max-h-[min(80dvh,45rem)]';
+const desktopFrameClassName = 'relative aspect-[980/580] max-h-[min(80dvh,45rem)]';
+
+const mobileFrameClassName =
+  'fixed inset-0 z-[60] flex h-[100dvh] w-full flex-col bg-[#333333] pb-[env(safe-area-inset-bottom)]';
 
 function AvatarPreview({ src, label }: { src: string; label: string }) {
   return (
@@ -38,6 +41,58 @@ function AvatarPreview({ src, label }: { src: string; label: string }) {
   );
 }
 
+function AvatarEmbed({ embedUrl, embedTitle }: { embedUrl: string; embedTitle: string }) {
+  return (
+    <iframe
+      src={embedUrl}
+      title={embedTitle}
+      className="absolute inset-0 h-full w-full border-0 bg-[#333333]"
+      allow="clipboard-write; fullscreen"
+      allowFullScreen
+      referrerPolicy="strict-origin-when-cross-origin"
+    />
+  );
+}
+
+function AvatarFrame({
+  embedUrl,
+  embedTitle,
+  fullscreen,
+  onClose,
+}: {
+  embedUrl: string;
+  embedTitle: string;
+  fullscreen: boolean;
+  onClose: () => void;
+}) {
+  const frame = fullscreen ? (
+    <div className={mobileFrameClassName}>
+      <div className="flex shrink-0 items-center bg-navy-500 px-4 pt-[max(0.5rem,env(safe-area-inset-top))] pb-2">
+        <button
+          type="button"
+          onClick={onClose}
+          className="inline-flex min-h-11 items-center font-nav text-sm font-bold text-yellow-500"
+        >
+          Fechar
+        </button>
+      </div>
+      <div className="relative min-h-0 w-full flex-1">
+        <AvatarEmbed embedUrl={embedUrl} embedTitle={embedTitle} />
+      </div>
+    </div>
+  ) : (
+    <div className={desktopFrameClassName}>
+      <AvatarEmbed embedUrl={embedUrl} embedTitle={embedTitle} />
+    </div>
+  );
+
+  if (fullscreen && typeof document !== 'undefined') {
+    return createPortal(frame, document.body);
+  }
+
+  return frame;
+}
+
 interface BondeAvatarStudioProps extends BondeAvatarStudioContent {}
 
 export function BondeAvatarStudio({
@@ -48,6 +103,27 @@ export function BondeAvatarStudio({
 }: BondeAvatarStudioProps) {
   const embedUrl = import.meta.env.VITE_BONDE_AVATAR_EMBED_URL || ITCH_AVATAR_EMBED_URL;
   const [isEmbedActive, setIsEmbedActive] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(
+    () => typeof window !== 'undefined' && window.matchMedia('(min-width: 1024px)').matches,
+  );
+
+  useEffect(() => {
+    const media = window.matchMedia('(min-width: 1024px)');
+    const update = () => setIsDesktop(media.matches);
+    update();
+    media.addEventListener('change', update);
+    return () => media.removeEventListener('change', update);
+  }, []);
+
+  useEffect(() => {
+    if (!isEmbedActive || isDesktop) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [isEmbedActive, isDesktop]);
 
   return (
     <section id="criar-avatar" className="scroll-mt-24 overflow-x-hidden bg-navy-500 py-20">
@@ -71,16 +147,12 @@ export function BondeAvatarStudio({
 
           <div className="flex w-full min-w-0 flex-col overflow-hidden border-y border-white/10 bg-[#333333] shadow-[0_24px_64px_rgba(0,0,0,0.28)] lg:rounded-2xl lg:border">
             {isEmbedActive ? (
-              <div className={frameClassName}>
-                <iframe
-                  src={embedUrl}
-                  title={embedTitle}
-                  className="absolute inset-0 h-full w-full border-0 bg-[#333333]"
-                  allow="clipboard-write; fullscreen"
-                  allowFullScreen
-                  referrerPolicy="strict-origin-when-cross-origin"
-                />
-              </div>
+              <AvatarFrame
+                embedUrl={embedUrl}
+                embedTitle={embedTitle}
+                fullscreen={!isDesktop}
+                onClose={() => setIsEmbedActive(false)}
+              />
             ) : (
               <div className={launchClassName}>
                 <button
