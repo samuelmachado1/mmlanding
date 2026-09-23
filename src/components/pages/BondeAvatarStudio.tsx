@@ -14,8 +14,11 @@ const previewAvatars = [
   { src: bondeAvatarMari, label: 'Exemplo de avatar Mari' },
 ] as const;
 
-const panelClassName =
-  'relative w-full min-h-[28rem] aspect-[980/580] max-h-[min(80dvh,45rem)] lg:min-h-0';
+const launchClassName =
+  'relative flex w-full min-h-[28rem] aspect-[980/580] max-h-[min(80dvh,45rem)] flex-col items-center justify-center gap-4 px-6 text-center lg:min-h-0';
+
+const frameClassName =
+  'relative h-[100svh] w-full min-h-[40rem] lg:h-auto lg:min-h-0 lg:aspect-[980/580] lg:max-h-[min(80dvh,45rem)]';
 
 function AvatarPreview({ src, label }: { src: string; label: string }) {
   return (
@@ -68,7 +71,7 @@ export function BondeAvatarStudio({
 
           <div className="flex w-full min-w-0 flex-col overflow-hidden border-y border-white/10 bg-[#333333] shadow-[0_24px_64px_rgba(0,0,0,0.28)] lg:rounded-2xl lg:border">
             {isEmbedActive ? (
-              <div className={panelClassName}>
+              <div className={frameClassName}>
                 <iframe
                   src={embedUrl}
                   title={embedTitle}
@@ -79,7 +82,7 @@ export function BondeAvatarStudio({
                 />
               </div>
             ) : (
-              <div className={`${panelClassName} flex flex-col items-center justify-center gap-4 px-6 text-center`}>
+              <div className={launchClassName}>
                 <button
                   type="button"
                   onClick={() => setIsEmbedActive(true)}
