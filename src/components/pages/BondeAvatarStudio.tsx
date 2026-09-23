@@ -5,7 +5,7 @@ import bondeProMaxAbaReto from '../../assets/pictures/bonde-pro-max-aba-reto.png
 import bondeProMaxAbaReta from '../../assets/pictures/bonde-pro-max-aba-reta.png';
 import type { BondeAvatarStudioContent } from '../../types/index.ts';
 
-const ITCH_AVATAR_EMBED_URL = 'https://itch.io/embed-upload/19160506?color=333333';
+const ITCH_AVATAR_EMBED_URL = 'https://itch.io/embed-upload/19346758?color=333333';
 const ITCH_AVATAR_PAGE_URL = 'https://kombits.itch.io/maxavatar2026';
 
 const previewAvatars = [
