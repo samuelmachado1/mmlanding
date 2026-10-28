@@ -13,7 +13,7 @@ export default function App() {
       <img
         src={REELEITO_IMAGE}
         alt="Max Maciel é reeleito deputado distrital com 92.234 votos"
-        className="relative z-10 mx-auto h-full w-full max-h-[100dvh] max-w-[100vw] origin-center object-contain object-center max-md:-translate-x-8 max-md:-translate-y-15 max-md:scale-[1.47] md:translate-x-0 md:translate-y-0 md:scale-100"
+        className="relative z-10 mx-auto h-full w-full max-h-[100dvh] max-w-[100vw] origin-center object-contain object-center max-md:-translate-x-8 max-md:-translate-y-15 max-md:scale-[1.397] md:translate-x-0 md:translate-y-0 md:scale-100"
         decoding="async"
         fetchPriority="high"
       />
